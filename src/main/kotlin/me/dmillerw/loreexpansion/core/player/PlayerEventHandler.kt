@@ -11,7 +11,7 @@ import net.minecraftforge.fml.relauncher.Side
 /**
  * @author dmillerw
  */
-object EventHandler {
+object PlayerEventHandler {
 
     @SubscribeEvent
     public fun onPlayerSpawn(event: LivingSpawnEvent) {
