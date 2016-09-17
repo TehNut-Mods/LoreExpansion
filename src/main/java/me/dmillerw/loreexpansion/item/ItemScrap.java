@@ -28,7 +28,7 @@ public class ItemScrap extends Item {
         for (Lore lore : LoreLoader.LOADED_LORE) {
             ItemStack stack = new ItemStack(item);
             NBTTagCompound tagCompound = new NBTTagCompound();
-            tagCompound.setString("lore", lore.getId());
+            tagCompound.setString("lore", lore.getKey().getId());
             stack.setTagCompound(tagCompound);
             subItems.add(stack);
         }
@@ -36,7 +36,7 @@ public class ItemScrap extends Item {
         if (subItems.isEmpty()) {
             ItemStack stack = new ItemStack(item);
             NBTTagCompound tagCompound = new NBTTagCompound();
-            tagCompound.setString("lore", Lore.NULL_LORE.getId());
+            tagCompound.setString("lore", Lore.NULL_LORE.getKey().getId());
             stack.setTagCompound(tagCompound);
             subItems.add(stack);
         }
@@ -52,7 +52,7 @@ public class ItemScrap extends Item {
         Lore lore = LoreLoader.getLore(loreKey);
         if (lore == null)
             lore = Lore.NULL_LORE;
-        tooltip.add("Category: " + lore.getCategory());
+        tooltip.add("Category: " + lore.getKey().getCategory());
     }
 
     @Override

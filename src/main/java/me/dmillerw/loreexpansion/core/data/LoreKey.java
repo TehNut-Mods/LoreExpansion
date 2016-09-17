@@ -2,12 +2,12 @@ package me.dmillerw.loreexpansion.core.data;
 
 import com.google.common.base.Objects;
 
-public class Reference {
+public class LoreKey {
 
     private final String id;
     private final String category;
 
-    public Reference(String id, String category) {
+    public LoreKey(String id, String category) {
         this.id = id;
         this.category = category;
     }
@@ -31,12 +31,12 @@ public class Reference {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Reference)) return false;
+        if (!(o instanceof LoreKey)) return false;
 
-        Reference reference = (Reference) o;
+        LoreKey loreKey = (LoreKey) o;
 
-        if (getId() != null ? !getId().equals(reference.getId()) : reference.getId() != null) return false;
-        return getCategory() != null ? getCategory().equals(reference.getCategory()) : reference.getCategory() == null;
+        if (getId() != null ? !getId().equals(loreKey.getId()) : loreKey.getId() != null) return false;
+        return getCategory() != null ? getCategory().equals(loreKey.getCategory()) : loreKey.getCategory() == null;
 
     }
 

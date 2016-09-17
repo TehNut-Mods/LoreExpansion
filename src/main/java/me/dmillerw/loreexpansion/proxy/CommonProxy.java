@@ -4,6 +4,7 @@ import me.dmillerw.loreexpansion.LoreExpansion;
 import me.dmillerw.loreexpansion.core.LoreLoader;
 import me.dmillerw.loreexpansion.core.player.PlayerEventHandler;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class CommonProxy {
@@ -18,7 +19,7 @@ public class CommonProxy {
     }
 
     public void init() {
-
+        NetworkRegistry.INSTANCE.registerGuiHandler(LoreExpansion.INSTANCE, new GuiHandler());
     }
 
     public void postInit() {

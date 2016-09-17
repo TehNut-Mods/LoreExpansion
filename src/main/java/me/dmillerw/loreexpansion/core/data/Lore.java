@@ -7,45 +7,42 @@ import java.util.Set;
 
 public class Lore {
 
-    public static final Lore NULL_LORE = new Lore("NULL", "NULL", new Content("NULL", "NULL", "NULL"), Sets.<Reference>newHashSet());
+    public static final Lore NULL_LORE = new Lore("NULL", "NULL", new Content("NULL", "NULL", "NULL"), Sets.<LoreKey>newHashSet());
 
-    private final String id;
-    private final String category;
+    private final LoreKey key;
     private final Content content;
-    private final Set<Reference> requirements;
+    private final Set<LoreKey> requirements;
 
-    public Lore(String id, String category, Content content, Set<Reference> requirements) {
-        this.id = id;
-        this.category = category;
+    public Lore(LoreKey key, Content content, Set<LoreKey> requirements) {
+        this.key = key;
         this.content = content;
         this.requirements = requirements;
     }
 
+    public Lore(String id, String category, Content content, Set<LoreKey> requirements) {
+        this(new LoreKey(id, category), content, requirements);
+    }
+
     public boolean isNull() {
-        return this.equals(NULL_LORE) || getId().equalsIgnoreCase("NULL") || getCategory().equalsIgnoreCase("NULL");
+        return this.equals(NULL_LORE) || getKey().getId().equalsIgnoreCase("NULL") || getKey().getCategory().equalsIgnoreCase("NULL");
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getCategory() {
-        return category;
+    public LoreKey getKey() {
+        return key;
     }
 
     public Content getContent() {
         return content;
     }
 
-    public Set<Reference> getRequirements() {
+    public Set<LoreKey> getRequirements() {
         return requirements;
     }
 
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
-                .add("id", getId())
-                .add("category", getCategory())
+                .add("key", getKey())
                 .add("content", getContent())
                 .add("requirements", getRequirements())
                 .toString();
@@ -58,9 +55,7 @@ public class Lore {
 
         Lore lore = (Lore) o;
 
-        if (getId() != null ? !getId().equals(lore.getId()) : lore.getId() != null) return false;
-        if (getCategory() != null ? !getCategory().equals(lore.getCategory()) : lore.getCategory() != null)
-            return false;
+        if (getKey() != null ? !getKey().equals(lore.getKey()) : lore.getKey() != null) return false;
         if (getContent() != null ? !getContent().equals(lore.getContent()) : lore.getContent() != null) return false;
         return getRequirements() != null ? getRequirements().equals(lore.getRequirements()) : lore.getRequirements() == null;
 
@@ -68,8 +63,7 @@ public class Lore {
 
     @Override
     public int hashCode() {
-        int result = getId() != null ? getId().hashCode() : 0;
-        result = 31 * result + (getCategory() != null ? getCategory().hashCode() : 0);
+        int result = getKey() != null ? getKey().hashCode() : 0;
         result = 31 * result + (getContent() != null ? getContent().hashCode() : 0);
         result = 31 * result + (getRequirements() != null ? getRequirements().hashCode() : 0);
         return result;

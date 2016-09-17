@@ -1,13 +1,11 @@
 package me.dmillerw.loreexpansion.core;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
+import com.google.common.collect.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.dmillerw.loreexpansion.LoreExpansion;
 import me.dmillerw.loreexpansion.core.data.Lore;
+import me.dmillerw.loreexpansion.core.data.LoreKey;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 
 import java.io.File;
@@ -25,7 +23,7 @@ public class LoreLoader {
             .disableHtmlEscaping()
             .create();
 
-    public static Set<String> categories = Sets.newHashSet();
+    public static List<String> categories = Lists.newArrayList();
     private static Map<String, Lore> lore = Maps.newHashMap();
     private static Map<String, Set<Lore>> sortedLore = Maps.newHashMap();
 
@@ -49,8 +47,8 @@ public class LoreLoader {
         try {
             for (File file : jsonFiles) {
                 Lore lore = GSON.fromJson(new FileReader(file), Lore.class);
-                if (names.contains(lore.getId())) {
-                    LoreExpansion.LOGGER.error("Duplicate Lore id: {}", lore.getId());
+                if (names.contains(lore.getKey().getId())) {
+                    LoreExpansion.LOGGER.error("Duplicate Lore id: {}", lore.getKey().getId());
                 } else {
                     LOADED_LORE.add(lore);
                 }
@@ -60,11 +58,11 @@ public class LoreLoader {
         }
 
         ImmutableMap.Builder<String, Lore> loreBuilder = ImmutableMap.builder();
-        ImmutableSet.Builder<String> categoryBuilder = ImmutableSet.builder();
+        ImmutableList.Builder<String> categoryBuilder = ImmutableList.builder();
 
         for (Lore lore : LOADED_LORE) {
-            loreBuilder.put(lore.getId(), lore);
-            categoryBuilder.add(lore.getCategory());
+            loreBuilder.put(lore.getKey().getId(), lore);
+            categoryBuilder.add(lore.getKey().getCategory());
         }
 
         lore = loreBuilder.build();
@@ -74,7 +72,7 @@ public class LoreLoader {
         for (String category : categories) {
             Set<Lore> lores = Sets.newHashSet();
             for (Lore lore : LOADED_LORE)
-                if (lore.getCategory().equalsIgnoreCase(category))
+                if (lore.getKey().getCategory().equalsIgnoreCase(category))
                     lores.add(lore);
 
             sortedBuilder.put(category, lores);
@@ -86,7 +84,13 @@ public class LoreLoader {
         return lore.get(key);
     }
 
+    public static Lore getLore(LoreKey key) {
+        return lore.get(key.getId());
+    }
+
     public static Set<Lore> getLoreForCategory(String category) {
+        if (category.equalsIgnoreCase("global"))
+            return LOADED_LORE;
         return sortedLore.get(category) == null ? Collections.<Lore>emptySet() : sortedLore.get(category);
     }
 }

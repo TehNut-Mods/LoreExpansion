@@ -24,6 +24,8 @@ public class LoreExpansion {
 
     @SidedProxy(clientSide = "me.dmillerw.loreexpansion.proxy.ClientProxy", serverSide = "me.dmillerw.loreexpansion.proxy.CommonProxy")
     public static CommonProxy PROXY;
+    @Mod.Instance(ID)
+    public static LoreExpansion INSTANCE;
 
     public static final Logger LOGGER = LogManager.getLogger(NAME);
     public static final CreativeTabs TAB_LORE = new CreativeTabs("loreexpansion") {
