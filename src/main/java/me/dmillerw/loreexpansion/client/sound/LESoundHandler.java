@@ -38,6 +38,8 @@ public class LESoundHandler {
 
     private void initialize() {
         try {
+            if (!LoreExpansion.audioDir.exists())
+                LoreExpansion.audioDir.mkdirs();
             soundManager = (SoundManager) ReflectionHelper.findField(net.minecraft.client.audio.SoundHandler.class, SOUND_MANAGER_MAPPING).get(Minecraft.getMinecraft().getSoundHandler());
             soundSystem = (SoundSystem) ReflectionHelper.findField(SoundManager.class, SOUND_SYSTEM_MAPPING).get(soundManager);
         } catch (Exception e) {
