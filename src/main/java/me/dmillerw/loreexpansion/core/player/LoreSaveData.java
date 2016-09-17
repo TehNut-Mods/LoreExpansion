@@ -3,6 +3,7 @@ package me.dmillerw.loreexpansion.core.player;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import me.dmillerw.loreexpansion.LoreExpansion;
+import me.dmillerw.loreexpansion.core.data.LoreKey;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -19,7 +20,7 @@ public class LoreSaveData extends WorldSavedData {
 
     public static final ResourceLocation LORE_DATA_ID = new ResourceLocation(LoreExpansion.ID, "playerData");
 
-    private Map<UUID, Set<String>> playerData = new HashMap<UUID, Set<String>>();
+    private Map<UUID, Set<LoreKey>> playerData = new HashMap<UUID, Set<LoreKey>>();
 
     public LoreSaveData() {
         super(LORE_DATA_ID.toString());
@@ -31,10 +32,10 @@ public class LoreSaveData extends WorldSavedData {
         for (int i = 0; i < entries.tagCount(); i++) {
             NBTTagCompound loreTag = entries.getCompoundTagAt(i);
             UUID uuid = UUID.fromString(loreTag.getString("uuid"));
-            Set<String> mapValue = Sets.newHashSet();
-            NBTTagList loreEntries = loreTag.getTagList("loreEntries", 8);
+            Set<LoreKey> mapValue = Sets.newHashSet();
+            NBTTagList loreEntries = loreTag.getTagList("loreEntries", 10);
             for (int k = 0; k < loreEntries.tagCount(); k++)
-                mapValue.add(loreEntries.getStringTagAt(k));
+                mapValue.add(LoreKey.deserialize(loreEntries.getCompoundTagAt(k)));
 
             playerData.put(uuid, mapValue);
         }
@@ -43,12 +44,12 @@ public class LoreSaveData extends WorldSavedData {
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         NBTTagList entries = new NBTTagList();
-        for (Map.Entry<UUID, Set<String>> entry : playerData.entrySet()) {
+        for (Map.Entry<UUID, Set<LoreKey>> entry : playerData.entrySet()) {
             NBTTagCompound loreTag = new NBTTagCompound();
             loreTag.setString("uuid", entry.getKey().toString());
             NBTTagList loreEntries = new NBTTagList();
-            for (String loreEntry : entry.getValue())
-                loreEntries.appendTag(new NBTTagString(loreEntry));
+            for (LoreKey loreKey : entry.getValue())
+                loreEntries.appendTag(loreKey.serialize());
             loreTag.setTag("loreEntries", loreEntries);
 
             entries.appendTag(loreTag);
@@ -59,7 +60,7 @@ public class LoreSaveData extends WorldSavedData {
         return tag;
     }
 
-    public Set<String> getDataForPlayer(EntityPlayer player) {
+    public Set<LoreKey> getDataForPlayer(EntityPlayer player) {
         UUID uuid = player.getGameProfile().getId();
         if (!playerData.containsKey(uuid))
             initPlayer(player);
@@ -69,10 +70,10 @@ public class LoreSaveData extends WorldSavedData {
     public void initPlayer(EntityPlayer player) {
         UUID playerId = player.getGameProfile().getId();
         if (!playerData.containsKey(playerId))
-            playerData.put(playerId, Sets.<String>newHashSet());
+            playerData.put(playerId, Sets.<LoreKey>newHashSet());
     }
 
-    public Map<UUID, Set<String>> getPlayerData() {
+    public Map<UUID, Set<LoreKey>> getPlayerData() {
         return ImmutableMap.copyOf(playerData);
     }
 }

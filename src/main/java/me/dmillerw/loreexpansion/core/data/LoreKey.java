@@ -1,6 +1,7 @@
 package me.dmillerw.loreexpansion.core.data;
 
 import com.google.common.base.Objects;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class LoreKey {
 
@@ -22,6 +23,13 @@ public class LoreKey {
 
     public LoreKey copy() {
         return new LoreKey(getId(), getCategory());
+    }
+
+    public NBTTagCompound serialize() {
+        NBTTagCompound tagCompound = new NBTTagCompound();
+        tagCompound.setString("id", getId());
+        tagCompound.setString("category", getCategory());
+        return tagCompound;
     }
 
     @Override
@@ -49,5 +57,11 @@ public class LoreKey {
         int result = getId() != null ? getId().hashCode() : 0;
         result = 31 * result + (getCategory() != null ? getCategory().hashCode() : 0);
         return result;
+    }
+
+    public static LoreKey deserialize(NBTTagCompound tagCompound) {
+        String id = tagCompound.getString("id");
+        String category = tagCompound.getString("category");
+        return new LoreKey(id, category);
     }
 }

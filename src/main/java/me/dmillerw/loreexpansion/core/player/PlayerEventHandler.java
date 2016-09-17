@@ -1,6 +1,9 @@
 package me.dmillerw.loreexpansion.core.player;
 
+import me.dmillerw.loreexpansion.LoreExpansion;
+import me.dmillerw.loreexpansion.network.MessageSyncLore;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -28,7 +31,14 @@ public class PlayerEventHandler {
         loreSaveData.initPlayer(event.getEntityPlayer());
     }
 
-    private LoreSaveData getData(World world) {
+    @SubscribeEvent
+    public void playerLoggedIn(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent event) {
+        EntityPlayer player = event.player;
+        if (player instanceof EntityPlayerMP)
+            LoreExpansion.NETWORK_WRAPPER.sendTo(new MessageSyncLore((EntityPlayerMP) player), (EntityPlayerMP) player);
+    }
+
+    public static LoreSaveData getData(World world) {
         LoreSaveData loreSaveData = (LoreSaveData) world.getMapStorage().getOrLoadData(LoreSaveData.class, LoreSaveData.LORE_DATA_ID.toString());
         if (loreSaveData == null) {
             loreSaveData = new LoreSaveData();

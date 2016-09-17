@@ -11,6 +11,7 @@ import me.dmillerw.loreexpansion.proxy.ClientProxy;
 import me.dmillerw.loreexpansion.util.StringHelper;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -110,7 +111,7 @@ public class GuiJournal extends GuiScreen {
         onWheelScrolled(x, y, Mouse.getDWheel());
 
         // VARIABLES
-        int left = (width - TOTAL_SIZE.getLeft()) / 2;
+        int left = (width - TOTAL_SIZE.getLeft()) + 17;
         int top = (height - TOTAL_SIZE.getRight()) / 2;
 
         Lore current = null;
@@ -126,10 +127,8 @@ public class GuiJournal extends GuiScreen {
 
         // BACKGROUND
         GlStateManager.color(1F, 1F, 1F, 1F);
-        mc.getTextureManager().bindTexture(JOURNAL_LEFT);
-        drawTexturedModalRect(left, top, 0, 0, LEFT_SIZE.getLeft(), LEFT_SIZE.getRight());
-        mc.getTextureManager().bindTexture(JOURNAL_RIGHT);
-        drawTexturedModalRect(left + LEFT_SIZE.getLeft(), top, 0, 0, RIGHT_SIZE.getLeft(), RIGHT_SIZE.getRight());
+        PAGE_LEFT.draw(left, top, 0);
+        PAGE_RIGHT.draw(left + LEFT_SIZE.getLeft(), top, 0);
 
         // LORE DRAWING
         int index = 1;
@@ -259,26 +258,22 @@ public class GuiJournal extends GuiScreen {
                 if (page > 0 && page < 35) {
                     int drawX = (((page - 1) % 5) * LORE_BOX_GAP);
                     int drawY = 0;
-                    if ((page - 1) > 4) {
+                    if ((page - 1) > 4)
                         drawY = (((page - 1) / 5) * LORE_BOX_GAP);
-                    }
 
                     // TOOLTIPS
-                    if (inBounds(left + BOX_START.getLeft() + drawX, top + BOX_START.getRight() + drawY, 16, 16, x, y)) {
+                    if (inBounds(left + BOX_START.getLeft() + drawX, top + BOX_START.getRight() + drawY, 16, 16, x, y))
                         drawHoveringText(Collections.singletonList(lore.getContent().getTitle()), x, y, mc.fontRendererObj);
-                    }
                 }
             }
         }
 
         // ARROWS - DIMENSION
-        if (inBounds(left + TAB_BACK.getLeft(), top + TAB_BACK.getRight(), TAB_SIZE.getLeft(), TAB_SIZE.getRight(), x, y)) {
-            drawHoveringText(Collections.singletonList("Previous Category"), x, y, mc.fontRendererObj);
-        }
+        if (inBounds(left + TAB_BACK.getLeft(), top + TAB_BACK.getRight(), TAB_SIZE.getLeft(), TAB_SIZE.getRight(), x, y))
+            drawHoveringText(Collections.singletonList(I18n.format("gui.loreexpansion.previous")), x, y, mc.fontRendererObj);
 
-        if (inBounds(left + TAB_FORWARD.getLeft(), top + TAB_FORWARD.getRight(), TAB_SIZE.getLeft(), TAB_SIZE.getRight(), x, y)) {
-            drawHoveringText(Collections.singletonList("Next Category"), x, y, mc.fontRendererObj);
-        }
+        if (inBounds(left + TAB_FORWARD.getLeft(), top + TAB_FORWARD.getRight(), TAB_SIZE.getLeft(), TAB_SIZE.getRight(), x, y))
+            drawHoveringText(Collections.singletonList(I18n.format("gui.loreexpansion.previous")), x, y, mc.fontRendererObj);
     }
 
     @Override
@@ -293,9 +288,8 @@ public class GuiJournal extends GuiScreen {
         if (selectedLore != null) {
             current = LoreLoader.getLore(selectedLore);
 
-            if (current == null) {
+            if (current == null)
                 selectedLore = null;
-            }
         }
 
         Set<Lore> all = LoreLoader.getLoreForCategory(currentCategory);

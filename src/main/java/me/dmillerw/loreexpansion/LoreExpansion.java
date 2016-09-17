@@ -2,6 +2,7 @@ package me.dmillerw.loreexpansion;
 
 import me.dmillerw.loreexpansion.item.ItemJournal;
 import me.dmillerw.loreexpansion.item.ItemScrap;
+import me.dmillerw.loreexpansion.network.MessageSyncLore;
 import me.dmillerw.loreexpansion.proxy.CommonProxy;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -10,6 +11,8 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,6 +37,7 @@ public class LoreExpansion {
             return LORE_JOURNAL;
         }
     };
+    public static final SimpleNetworkWrapper NETWORK_WRAPPER = new SimpleNetworkWrapper(ID);
     public static final ItemScrap LORE_PAGE = new ItemScrap();
     public static final ItemJournal LORE_JOURNAL = new ItemJournal();
 
@@ -44,6 +48,9 @@ public class LoreExpansion {
     public void preInit(FMLPreInitializationEvent event) {
         loreDir = new File(event.getModConfigurationDirectory(), ID + File.separator + "lore");
         audioDir = new File(loreDir, "audio");
+
+        NETWORK_WRAPPER.registerMessage(MessageSyncLore.Handler.class, MessageSyncLore.class, 0, Side.CLIENT);
+
         PROXY.preInit();
     }
 
