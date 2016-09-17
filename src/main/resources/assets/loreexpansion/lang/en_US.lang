@@ -5,6 +5,9 @@ itemGroup.loreexpansion=Lore Expansion
 item.loreexpansion.scrap.name=Lore Page
 item.loreexpansion.journal.name=Journal
 
+# CHAT
+chat.loreexpansion.lore.added=Added lore page '%s'
+
 # GUI
 gui.loreexpansion.previous=Previous Category
 gui.loreexpansion.next=Next Category
