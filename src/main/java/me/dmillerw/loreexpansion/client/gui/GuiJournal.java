@@ -390,10 +390,12 @@ public class GuiJournal extends GuiScreen {
     }
 
     public void changeLore(LoreKey key) {
+        currentLore = LoreLoader.getLore(key);
+        if (currentLore == null)
+            return;
+
         currentLoreText.clear();
         selectedLore = key;
-
-        currentLore = LoreLoader.getLore(key);
 
         String[] lore = currentLore.getContent().getBody().split("[\r\n]");
         List<String> newList = new ArrayList<String>();

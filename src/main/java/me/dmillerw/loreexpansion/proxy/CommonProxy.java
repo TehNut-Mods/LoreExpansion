@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class CommonProxy {
 
     public void preInit() {
-        LoreLoader.init(LoreExpansion.loreDir);
+        LoreLoader.init(LoreExpansion.loreDir, true);
 
         GameRegistry.register(LoreExpansion.LORE_JOURNAL.setRegistryName("lore_journal"));
         GameRegistry.register(LoreExpansion.LORE_PAGE.setRegistryName("lore_scrap"));

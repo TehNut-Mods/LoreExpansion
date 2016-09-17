@@ -8,10 +8,7 @@ import me.dmillerw.loreexpansion.core.data.Lore;
 import me.dmillerw.loreexpansion.core.data.LoreKey;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
 import java.util.*;
 
 public class LoreLoader {
@@ -27,8 +24,8 @@ public class LoreLoader {
     private static Map<String, Lore> lore = Maps.newHashMap();
     private static SetMultimap<String, Lore> sortedLore = HashMultimap.create();
 
-    public static void init(File loreDir) {
-        if (!loreDir.exists() && loreDir.mkdirs()) {
+    public static void init(File loreDir, boolean initialRun) {
+        if (initialRun && !loreDir.exists() && loreDir.mkdirs()) {
             try {
                 String json = GSON.toJson(Lore.NULL_LORE);
                 FileWriter writer = new FileWriter(new File(loreDir, "null.json"));
@@ -39,6 +36,13 @@ public class LoreLoader {
             }
         }
 
+        if (!initialRun) {
+            LOADED_LORE.clear();
+            categories = Lists.newArrayList();
+            lore = Maps.newHashMap();
+            sortedLore = HashMultimap.create();
+        }
+
         Set<String> names = Sets.newHashSet();
         File[] jsonFiles = loreDir.listFiles((FileFilter) FileFilterUtils.suffixFileFilter(".json"));
         if (jsonFiles == null)
@@ -46,7 +50,7 @@ public class LoreLoader {
 
         try {
             for (File file : jsonFiles) {
-                Lore lore = GSON.fromJson(new FileReader(file), Lore.class);
+                Lore lore = GSON.fromJson(new InputStreamReader(new FileInputStream(file), "UTF-8"), Lore.class);
                 if (names.contains(lore.getKey().getId())) {
                     LoreExpansion.LOGGER.error("Duplicate Lore id: {}", lore.getKey().getId());
                 } else {
