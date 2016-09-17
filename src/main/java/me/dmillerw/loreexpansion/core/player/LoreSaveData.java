@@ -61,7 +61,9 @@ public class LoreSaveData extends WorldSavedData {
 
     public Set<String> getDataForPlayer(EntityPlayer player) {
         UUID uuid = player.getGameProfile().getId();
-        return playerData.get(uuid) == null ? Sets.<String>newHashSet() : playerData.get(uuid);
+        if (!playerData.containsKey(uuid))
+            initPlayer(player);
+        return playerData.get(uuid);
     }
 
     public void initPlayer(EntityPlayer player) {
