@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Keyboard;
 
 import java.util.List;
 
@@ -53,6 +54,9 @@ public class ItemScrap extends Item {
         if (lore == null)
             lore = Lore.NULL_LORE;
         tooltip.add("Category: " + lore.getKey().getCategory());
+
+        if (advanced && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
+            tooltip.add(lore.getContent().getBody());
     }
 
     @Override

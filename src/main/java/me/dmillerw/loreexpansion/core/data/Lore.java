@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class Lore {
 
-    public static final Lore NULL_LORE = new Lore("NULL", "NULL", new Content("NULL", "NULL", "NULL"), Sets.<LoreKey>newHashSet());
+    public static final Lore NULL_LORE = new Lore("NULL", "NULL", new Content("NULL", "NULL", "NULL"), Sets.newHashSet(new LoreKey("blah", "blah")));
 
     private final LoreKey key;
     private final Content content;

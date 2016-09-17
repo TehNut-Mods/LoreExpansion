@@ -25,7 +25,7 @@ public class LoreLoader {
 
     public static List<String> categories = Lists.newArrayList();
     private static Map<String, Lore> lore = Maps.newHashMap();
-    private static Map<String, Set<Lore>> sortedLore = Maps.newHashMap();
+    private static SetMultimap<String, Lore> sortedLore = HashMultimap.create();
 
     public static void init(File loreDir) {
         if (!loreDir.exists() && loreDir.mkdirs()) {
@@ -68,16 +68,11 @@ public class LoreLoader {
         lore = loreBuilder.build();
         categories = categoryBuilder.build();
 
-        ImmutableMap.Builder<String, Set<Lore>> sortedBuilder = ImmutableMap.builder();
-        for (String category : categories) {
-            Set<Lore> lores = Sets.newHashSet();
+
+        for (String category : categories)
             for (Lore lore : LOADED_LORE)
                 if (lore.getKey().getCategory().equalsIgnoreCase(category))
-                    lores.add(lore);
-
-            sortedBuilder.put(category, lores);
-        }
-        sortedLore = sortedBuilder.build();
+                    sortedLore.put(category, lore);
     }
 
     public static Lore getLore(String key) {
