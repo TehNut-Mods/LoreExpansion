@@ -99,13 +99,13 @@ public class GuiJournal extends GuiScreen {
     public void initGui() {
         if (selectedLore != null) {
             LoreKey copy = selectedLore.copy();
-            changeCategory(selectedLore.getCategory());
+            if (!currentCategory.equalsIgnoreCase(selectedLore.getCategory()))
+                changeCategory(selectedLore.getCategory());
             changeLore(copy);
             ClientProxy.pickedUpPage = null;
         } else {
-            if (currentCategory == null || currentCategory.isEmpty()) {
+            if (currentCategory == null || currentCategory.isEmpty())
                 changeCategory(Lore.GLOBAL);
-            }
         }
     }
 
