@@ -1,75 +1,153 @@
 buildscript {
-    ext {
-        minecraft_version = '1.8.9'
-        forge_version = '11.15.1.1722'
-        kotlin_version = '1.0.0-beta-4589'
-        mod_version = '1.0.0'
-    }
-
     repositories {
-        jcenter()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
         mavenCentral()
+        maven { url "http://files.minecraftforge.net/maven" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
     }
 }
 
+plugins {
+    id "net.minecraftforge.gradle.forge" version "2.0.2"
+    id 'com.matthewprenger.cursegradle' version '1.0.7'
+}
 
-apply plugin: 'kotlin'
-apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'maven-publish'
 
-configurations {
-    shade
-    compile.extendsFrom shade
+def build_number = 'CUSTOM'
+
+if (System.getenv('BUILD_NUMBER') != null)
+    build_number = System.getenv('BUILD_NUMBER')
+
+def username = 'LoreDevspansion'
+
+if (project.hasProperty('dev_username'))
+    username = "${dev_username}"
+
+group = package_group
+archivesBaseName = mod_name
+version = "${mc_version}-${mod_version}-${build_number}"
+
+repositories {
+
 }
 
 dependencies {
-    shade "org.jetbrains.kotlin:kotlin-stdlib:${kotlin_version}"
-    shade "org.jetbrains.kotlin:kotlin-reflect:${kotlin_version}"
-    testCompile "junit:junit:4.+"
-}
 
-version = mod_version
-group= "me.dmillerw.loreexpansion"
-archivesBaseName = "LoreExpansion"
+}
 
 minecraft {
-    version = minecraft_version + "-" + forge_version
+    version = "${mc_version}-${forge_version}"
     runDir = "run"
-    mappings = "stable_20"
 
-    replace '%MOD_VERSION%', mod_version
-    replace '%KOTLIN_VERSION%', kotlin_version
+    replace "@VERSION@", project.version
+    replaceIn "LoreExpansion.java"
+
+    clientRunArgs += "--username=${username}"
+
+    if (project.hasProperty('mappings_version'))
+        mappings = project.mappings_version
 }
 
-processResources  {
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "mod_version", mod_version
-    inputs.property "minecraft_version", minecraft_version
-    inputs.property 'kotlin_version', kotlin_version
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
 
-    // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-                
-        expand 'mod_version':mod_version, 'minecraft_version':minecraft_version, 'kotlin_version':kotlin_version
+        include '**/*.info'
+        include '**/*.properties'
+
+        expand 'version': project.version, 'mcversion': project.minecraft.version
     }
-        
-    // copy everything else, thats not the mcmod.info
+
     from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
+        exclude '**/*.info'
+        exclude '**/*.properties'
     }
 }
-repositories {
-    mavenCentral()
+
+if (JavaVersion.current().isJava8Compatible()) {
+    allprojects {
+        tasks.withType(Javadoc) {
+            options.addStringOption('Xdoclint:none', '-quiet')
+        }
+    }
 }
-sourceSets {
-    main.java.srcDirs += 'src/main/kotlin'
+
+jar {
+    classifier = ''
+    manifest.mainAttributes(
+            "Built-By": System.getProperty('user.name'),
+            "Created-By": "${System.getProperty('java.vm.version')} + (${System.getProperty('java.vm.vendor')})",
+            "Implementation-Title": project.name,
+            "Implementation-Version": project.version,
+            "Built-On": "${mc_version}-${forge_version}"
+    )
+}
+
+tasks.withType(JavaCompile) { task ->
+    task.options.encoding = 'UTF-8'
+}
+
+publishing {
+    tasks.publish.dependsOn 'build'
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+            artifact sourceJar
+        }
+    }
+    repositories {
+        if (project.hasProperty('maven_repo')) {
+            maven { url maven_repo }
+        } else {
+            mavenLocal()
+        }
+    }
+}
+
+String getChangelogText() {
+    def changelogFile = new File('changelog.txt')
+    String str = ''
+    String separator = '---'
+    int lineCount = 0
+    boolean done = false
+    changelogFile.eachLine {
+        if (done || it == null) {
+            return
+        }
+        if (lineCount < 3) {
+            lineCount++
+            if (it.startsWith(separator)) {
+                return
+            }
+        }
+        if (!it.startsWith(separator)) {
+            str += "$it" + (lineCount < 3 ? ':\n\n' : '\n')
+            return
+        }
+        done = true // once we go past the first version block, parse no more
+    }
+    return str
+}
+
+def curseRelations = {
+
+}
+
+curseforge {
+    if (project.hasProperty('curse_key'))
+        apiKey = project.curse_key
+
+    project {
+        id = "${curse_id}"
+        changelog = getChangelogText()
+        releaseType = 'release'
+
+        relations curseRelations
+
+        addArtifact sourceJar
+    }
 }

@@ -1,0 +1,9 @@
+{
+  "title": "Tutorials are fun!",
+  "body": "Stuff 'n things, yo...",
+  "sound": "tutorial",
+  "commands": {
+    "command": "/say hello",
+    "delay": 200
+  }
+}
