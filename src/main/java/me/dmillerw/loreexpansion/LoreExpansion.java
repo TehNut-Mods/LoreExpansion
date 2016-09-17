@@ -1,5 +1,6 @@
 package me.dmillerw.loreexpansion;
 
+import me.dmillerw.loreexpansion.command.CommandLoreExpansion;
 import me.dmillerw.loreexpansion.item.ItemJournal;
 import me.dmillerw.loreexpansion.item.ItemScrap;
 import me.dmillerw.loreexpansion.network.MessageSyncLore;
@@ -11,6 +12,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.LogManager;
@@ -62,5 +64,10 @@ public class LoreExpansion {
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         PROXY.postInit();
+    }
+
+    @Mod.EventHandler
+    public void serverStarting(FMLServerStartingEvent event) {
+        event.registerServerCommand(new CommandLoreExpansion());
     }
 }

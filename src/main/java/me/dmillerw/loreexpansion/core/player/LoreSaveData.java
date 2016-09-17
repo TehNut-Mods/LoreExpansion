@@ -67,6 +67,21 @@ public class LoreSaveData extends WorldSavedData {
         return playerData.get(uuid);
     }
 
+    public boolean addData(EntityPlayer player, LoreKey loreKey) {
+        Set<LoreKey> playerData = getDataForPlayer(player);
+        if (playerData.contains(loreKey))
+            return false;
+
+        playerData.add(loreKey);
+        markDirty();
+        return true;
+    }
+
+    public void clearPlayer(EntityPlayer player) {
+        getDataForPlayer(player).clear();
+        markDirty();
+    }
+
     public void initPlayer(EntityPlayer player) {
         UUID playerId = player.getGameProfile().getId();
         if (!playerData.containsKey(playerId))
