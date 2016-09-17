@@ -2,7 +2,7 @@
 itemGroup.loreexpansion=Lore Expansion
 
 # ITEM
-item.loreexpansion.scrap.name=Lore Page
+item.loreexpansion.scrap.name=Scrap of Lore
 item.loreexpansion.journal.name=Journal
 
 # CHAT
@@ -12,3 +12,7 @@ chat.loreexpansion.lore.reloaded=Reloaded lore from disk
 # GUI
 gui.loreexpansion.previous=Previous Category
 gui.loreexpansion.next=Next Category
+
+# TOOLTIP
+tooltip.loreexpansion.title=Title: %s
+tooltip.loreexpansion.category=Category: %s

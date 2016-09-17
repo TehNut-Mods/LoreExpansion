@@ -6,6 +6,7 @@ import me.dmillerw.loreexpansion.core.data.Lore;
 import me.dmillerw.loreexpansion.core.data.LoreKey;
 import me.dmillerw.loreexpansion.core.saving.LoreSaveData;
 import me.dmillerw.loreexpansion.core.saving.PlayerEventHandler;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -18,7 +19,6 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.input.Keyboard;
 
 import java.util.List;
 
@@ -85,21 +85,7 @@ public class ItemScrap extends Item {
         Lore lore = LoreLoader.getLore(loreKey);
         if (lore == null)
             lore = Lore.NULL_LORE;
-        tooltip.add("Category: " + lore.getKey().getCategory());
-
-        if (advanced && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
-            tooltip.add(lore.getContent().getBody());
-    }
-
-    @Override
-    public String getItemStackDisplayName(ItemStack stack) {
-        if (!stack.hasTagCompound() || !stack.getTagCompound().hasKey("lore"))
-            return super.getItemStackDisplayName(stack);
-
-        String loreKey = stack.getTagCompound().getString("lore");
-        Lore lore = LoreLoader.getLore(loreKey);
-        if (lore == null)
-            lore = Lore.NULL_LORE;
-        return "Lore: " + lore.getContent().getTitle();
+        tooltip.add(I18n.format("tooltip.loreexpansion.title", lore.getContent().getTitle()));
+        tooltip.add(I18n.format("tooltip.loreexpansion.category", lore.getKey().getCategory()));
     }
 }
