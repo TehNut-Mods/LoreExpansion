@@ -25,7 +25,7 @@ public class SubTexture {
         this.textureHeight = textureHeight;
     }
 
-    public void draw(double zLevel, int xPos, int yPos) {
+    public void draw(int xPos, int yPos, double zLevel) {
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);
         float f = 0.00390625F;
         Tessellator tessellator = Tessellator.getInstance();

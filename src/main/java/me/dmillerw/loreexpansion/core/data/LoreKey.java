@@ -20,6 +20,10 @@ public class LoreKey {
         return category;
     }
 
+    public LoreKey copy() {
+        return new LoreKey(getId(), getCategory());
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)

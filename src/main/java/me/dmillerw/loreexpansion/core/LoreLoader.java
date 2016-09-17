@@ -23,7 +23,7 @@ public class LoreLoader {
             .disableHtmlEscaping()
             .create();
 
-    public static List<String> categories = Lists.newArrayList();
+    private static List<String> categories = Lists.newArrayList();
     private static Map<String, Lore> lore = Maps.newHashMap();
     private static SetMultimap<String, Lore> sortedLore = HashMultimap.create();
 
@@ -87,5 +87,9 @@ public class LoreLoader {
         if (category.equalsIgnoreCase("global"))
             return LOADED_LORE;
         return sortedLore.get(category) == null ? Collections.<Lore>emptySet() : sortedLore.get(category);
+    }
+
+    public static List<String> getCategories() {
+        return ImmutableList.copyOf(categories);
     }
 }

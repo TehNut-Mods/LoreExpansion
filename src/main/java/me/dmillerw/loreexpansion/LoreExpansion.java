@@ -38,10 +38,12 @@ public class LoreExpansion {
     public static final ItemJournal LORE_JOURNAL = new ItemJournal();
 
     public static File loreDir;
+    public static File audioDir;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         loreDir = new File(event.getModConfigurationDirectory(), ID + File.separator + "lore");
+        audioDir = new File(loreDir, "audio");
         PROXY.preInit();
     }
 

@@ -8,10 +8,15 @@ import java.util.Set;
 public class Lore {
 
     public static final Lore NULL_LORE = new Lore("NULL", "NULL", new Content("NULL", "NULL", "NULL"), Sets.newHashSet(new LoreKey("blah", "blah")));
+    public static final String GLOBAL = "GLOBAL";
 
     private final LoreKey key;
     private final Content content;
     private final Set<LoreKey> requirements;
+
+    private boolean hidden;
+    private boolean autoplay;
+    private boolean notify;
 
     public Lore(LoreKey key, Content content, Set<LoreKey> requirements) {
         this.key = key;
@@ -37,6 +42,30 @@ public class Lore {
 
     public Set<LoreKey> getRequirements() {
         return requirements;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public boolean isAutoplay() {
+        return autoplay;
+    }
+
+    public boolean isNotify() {
+        return notify;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
+    }
+
+    public void setAutoplay(boolean autoplay) {
+        this.autoplay = autoplay;
+    }
+
+    public void setNotify(boolean notify) {
+        this.notify = notify;
     }
 
     @Override

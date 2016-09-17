@@ -17,6 +17,6 @@ public class GuiHandler implements IGuiHandler {
     @SideOnly(Side.CLIENT)
     @Override
     public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-        return new GuiJournal(player);
+        return new GuiJournal();
     }
 }
