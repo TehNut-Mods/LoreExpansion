@@ -16,3 +16,4 @@ gui.loreexpansion.next=Next Category
 # TOOLTIP
 tooltip.loreexpansion.title=Title: %s
 tooltip.loreexpansion.category=Category: %s
+tooltip.loreexpansion.torn=Torn

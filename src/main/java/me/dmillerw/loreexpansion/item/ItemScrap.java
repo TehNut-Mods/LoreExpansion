@@ -16,6 +16,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -34,7 +35,7 @@ public class ItemScrap extends Item {
     @Override
     public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
         if (world.isRemote || !stack.hasTagCompound())
-            return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+            return ActionResult.newResult(EnumActionResult.FAIL, stack);
 
         Lore lore = LoreLoader.getLore(stack.getTagCompound().getString("lore"));
         if (lore == null)
@@ -77,9 +78,11 @@ public class ItemScrap extends Item {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-        if (!stack.hasTagCompound())
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
+        if (!stack.hasTagCompound()) {
+            tooltip.add(TextFormatting.RED + I18n.format("tooltip.loreexpansion.torn"));
             return;
+        }
 
         String loreKey = stack.getTagCompound().getString("lore");
         Lore lore = LoreLoader.getLore(loreKey);
