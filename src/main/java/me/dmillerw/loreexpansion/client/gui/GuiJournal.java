@@ -2,6 +2,7 @@ package me.dmillerw.loreexpansion.client.gui;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import me.dmillerw.loreexpansion.LoreExpansion;
 import me.dmillerw.loreexpansion.client.sound.LESoundHandler;
 import me.dmillerw.loreexpansion.client.texture.SubTexture;
 import me.dmillerw.loreexpansion.core.LoreLoader;
@@ -12,6 +13,7 @@ import me.dmillerw.loreexpansion.util.StringHelper;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -111,7 +113,7 @@ public class GuiJournal extends GuiScreen {
         onWheelScrolled(x, y, Mouse.getDWheel());
 
         // VARIABLES
-        int left = (width - TOTAL_SIZE.getLeft()) + 17;
+        int left = (width - TOTAL_SIZE.getLeft()) / 2;
         int top = (height - TOTAL_SIZE.getRight()) / 2;
 
         Lore current = null;
@@ -155,12 +157,8 @@ public class GuiJournal extends GuiScreen {
                     }
 
                     // ICONS
-                    // TODO - Add lore page texture to sprite sheet
-//                    if (playerLore.contains(lore.getKey())) {
-//                        mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-//                        final IIcon icon = LoreExpansion.LORE_PAGE.getIconFromDamage(0);
-//                        drawTexturedModelRectFromIcon(left + BOX_START.getLeft() + drawX + 1, top + BOX_START.getRight() + drawY + 1, icon, 16, 16);
-//                    }
+                    if (playerLore.contains(lore.getKey()))
+                        mc.getRenderItem().renderItemIntoGUI(new ItemStack(LoreExpansion.LORE_PAGE), left + BOX_START.getLeft() + drawX + 1, top + BOX_START.getRight() + drawY + 1);
                 }
             }
         }
@@ -262,7 +260,7 @@ public class GuiJournal extends GuiScreen {
                         drawY = (((page - 1) / 5) * LORE_BOX_GAP);
 
                     // TOOLTIPS
-                    if (inBounds(left + BOX_START.getLeft() + drawX, top + BOX_START.getRight() + drawY, 16, 16, x, y))
+                    if (inBounds(left + BOX_START.getLeft() + drawX, top + BOX_START.getRight() + drawY, 17, 17, x, y))
                         drawHoveringText(Collections.singletonList(lore.getContent().getTitle()), x, y, mc.fontRendererObj);
                 }
             }
@@ -313,7 +311,7 @@ public class GuiJournal extends GuiScreen {
                         drawY = (((page - 1) / 5) * LORE_BOX_GAP);
                     }
 
-                    if (inBounds(left + BOX_START.getLeft() + drawX, top + BOX_START.getRight() + drawY, 16, 16, x, y)) {
+                    if (inBounds(left + BOX_START.getLeft() + drawX, top + BOX_START.getRight() + drawY, 17, 17, x, y)) {
                         selectedLore = lore.getKey();
                         changeLore(selectedLore);
                     }
