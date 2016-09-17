@@ -1,4 +1,4 @@
-package me.dmillerw.loreexpansion.json.data;
+package me.dmillerw.loreexpansion.core.data;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;

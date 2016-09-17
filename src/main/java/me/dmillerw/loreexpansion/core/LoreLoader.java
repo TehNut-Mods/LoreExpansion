@@ -4,9 +4,10 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import me.dmillerw.loreexpansion.LoreExpansion;
-import me.dmillerw.loreexpansion.json.JsonHelper;
-import me.dmillerw.loreexpansion.json.data.Lore;
+import me.dmillerw.loreexpansion.core.data.Lore;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 
 import java.io.File;
@@ -18,6 +19,11 @@ import java.util.*;
 public class LoreLoader {
 
     public static final Set<Lore> LOADED_LORE = Sets.newHashSet();
+    public static final Gson GSON = new GsonBuilder()
+            .setPrettyPrinting()
+            .serializeNulls()
+            .disableHtmlEscaping()
+            .create();
 
     public static Set<String> categories = Sets.newHashSet();
     private static Map<String, Lore> lore = Maps.newHashMap();
@@ -26,7 +32,7 @@ public class LoreLoader {
     public static void init(File loreDir) {
         if (!loreDir.exists() && loreDir.mkdirs()) {
             try {
-                String json = JsonHelper.GSON.toJson(Lore.NULL_LORE);
+                String json = GSON.toJson(Lore.NULL_LORE);
                 FileWriter writer = new FileWriter(new File(loreDir, "null.json"));
                 writer.write(json);
                 writer.close();
@@ -42,7 +48,7 @@ public class LoreLoader {
 
         try {
             for (File file : jsonFiles) {
-                Lore lore = JsonHelper.GSON.fromJson(new FileReader(file), Lore.class);
+                Lore lore = GSON.fromJson(new FileReader(file), Lore.class);
                 if (names.contains(lore.getId())) {
                     LoreExpansion.LOGGER.error("Duplicate Lore id: {}", lore.getId());
                 } else {

@@ -2,7 +2,7 @@ package me.dmillerw.loreexpansion.item;
 
 import me.dmillerw.loreexpansion.LoreExpansion;
 import me.dmillerw.loreexpansion.core.LoreLoader;
-import me.dmillerw.loreexpansion.json.data.Lore;
+import me.dmillerw.loreexpansion.core.data.Lore;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
