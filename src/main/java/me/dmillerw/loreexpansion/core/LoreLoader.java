@@ -24,7 +24,7 @@ public class LoreLoader {
     private static Map<String, Set<Lore>> sortedLore = Maps.newHashMap();
 
     public static void init(File loreDir) {
-        if (!loreDir.exists() && loreDir.mkdir()) {
+        if (!loreDir.exists() && loreDir.mkdirs()) {
             try {
                 String json = JsonHelper.GSON.toJson(Lore.NULL_LORE);
                 FileWriter writer = new FileWriter(new File(loreDir, "null.json"));

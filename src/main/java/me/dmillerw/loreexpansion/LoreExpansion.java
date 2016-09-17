@@ -39,7 +39,7 @@ public class LoreExpansion {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        loreDir = new File(event.getModConfigurationDirectory(), ID);
+        loreDir = new File(event.getModConfigurationDirectory(), ID + File.separator + "lore");
         PROXY.preInit();
     }
 
