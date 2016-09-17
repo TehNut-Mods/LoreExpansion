@@ -1,5 +1,6 @@
 package me.dmillerw.loreexpansion.client.gui;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import me.dmillerw.loreexpansion.LoreExpansion;
@@ -164,7 +165,7 @@ public class GuiJournal extends GuiScreen {
         }
 
         // AUDIO CONTROL
-        if (current != null && !current.getContent().getAudio().isEmpty()) {
+        if (current != null && !Strings.isNullOrEmpty(current.getContent().getAudio())) {
             String sound = current.getContent().getAudio();
             if (LESoundHandler.INSTANCE.isPlaying(sound)) {
                 STOP_BUTTON_ACTIVE.draw(left + LEFT_SIZE.getLeft() + STOP_POS.getLeft(), top + STOP_POS.getRight(), (int) zLevel);
@@ -322,7 +323,7 @@ public class GuiJournal extends GuiScreen {
         // AUDIO CONTROL
         if (current != null) {
             String sound = current.getContent().getAudio();
-            if (!sound.isEmpty()) {
+            if (!Strings.isNullOrEmpty(sound)) {
                 if (LESoundHandler.INSTANCE.isPlaying(sound)) {
                     if (inBounds(left + LEFT_SIZE.getLeft() + STOP_POS.getLeft(), top + STOP_POS.getRight(), 5, 5, x, y)) {
                         LESoundHandler.INSTANCE.stop();
