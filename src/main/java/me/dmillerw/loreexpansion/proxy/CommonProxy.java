@@ -2,7 +2,7 @@ package me.dmillerw.loreexpansion.proxy;
 
 import me.dmillerw.loreexpansion.LoreExpansion;
 import me.dmillerw.loreexpansion.core.LoreLoader;
-import me.dmillerw.loreexpansion.core.player.PlayerEventHandler;
+import me.dmillerw.loreexpansion.core.saving.PlayerEventHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;

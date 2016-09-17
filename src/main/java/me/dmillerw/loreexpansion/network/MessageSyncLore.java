@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 import me.dmillerw.loreexpansion.client.gui.GuiJournal;
 import me.dmillerw.loreexpansion.client.sound.LESoundHandler;
 import me.dmillerw.loreexpansion.core.data.LoreKey;
-import me.dmillerw.loreexpansion.core.player.PlayerEventHandler;
+import me.dmillerw.loreexpansion.core.saving.PlayerEventHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;

@@ -1,4 +1,4 @@
-package me.dmillerw.loreexpansion.core.player;
+package me.dmillerw.loreexpansion.core.saving;
 
 import me.dmillerw.loreexpansion.LoreExpansion;
 import me.dmillerw.loreexpansion.network.MessageSyncLore;

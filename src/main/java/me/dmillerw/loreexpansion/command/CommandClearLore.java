@@ -1,7 +1,7 @@
 package me.dmillerw.loreexpansion.command;
 
-import me.dmillerw.loreexpansion.core.player.LoreSaveData;
-import me.dmillerw.loreexpansion.core.player.PlayerEventHandler;
+import me.dmillerw.loreexpansion.core.saving.LoreSaveData;
+import me.dmillerw.loreexpansion.core.saving.PlayerEventHandler;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;

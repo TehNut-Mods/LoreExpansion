@@ -1,4 +1,4 @@
-package me.dmillerw.loreexpansion.core.player;
+package me.dmillerw.loreexpansion.core.saving;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
@@ -7,7 +7,6 @@ import me.dmillerw.loreexpansion.core.data.LoreKey;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.WorldSavedData;
 
@@ -22,8 +21,12 @@ public class LoreSaveData extends WorldSavedData {
 
     private Map<UUID, Set<LoreKey>> playerData = new HashMap<UUID, Set<LoreKey>>();
 
+    public LoreSaveData(String id) {
+        super(id);
+    }
+
     public LoreSaveData() {
-        super(LORE_DATA_ID.toString());
+        this(LORE_DATA_ID.toString());
     }
 
     @Override
