@@ -95,6 +95,12 @@ public class GuiJournal extends GuiScreen {
     private static Lore currentLore;
     private List<String> currentLoreText = Lists.newArrayList();
 
+    private boolean encyclopediaMode;
+
+    public GuiJournal(boolean encyclopediaMode) {
+        this.encyclopediaMode = encyclopediaMode;
+    }
+
     @Override
     public void initGui() {
         if (selectedLore != null) {
@@ -158,7 +164,7 @@ public class GuiJournal extends GuiScreen {
                     }
 
                     // ICONS
-                    if (playerLore.contains(lore.getKey()))
+                    if (playerLore.contains(lore.getKey()) || encyclopediaMode)
                         mc.getRenderItem().renderItemIntoGUI(new ItemStack(LoreExpansion.LORE_PAGE), left + BOX_START.getLeft() + drawX + 1, top + BOX_START.getRight() + drawY + 1);
                 }
             }
@@ -243,7 +249,7 @@ public class GuiJournal extends GuiScreen {
         index = 1;
         for (Lore lore : all) {
             if (lore != null && !lore.isHidden()) {
-                if (!playerLore.contains(lore.getKey())) {
+                if (!playerLore.contains(lore.getKey()) && !encyclopediaMode) {
                     index++;
                     continue;
                 }
@@ -296,7 +302,7 @@ public class GuiJournal extends GuiScreen {
         int index = 1;
         for (Lore lore : all) {
             if (lore != null && !lore.isHidden()) {
-                if (!playerLore.contains(lore.getKey())) {
+                if (!playerLore.contains(lore.getKey()) && !encyclopediaMode) {
                     index++;
                     continue;
                 }

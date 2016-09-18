@@ -3,6 +3,7 @@ package me.dmillerw.loreexpansion.client.sound;
 import com.google.common.collect.Sets;
 import me.dmillerw.loreexpansion.LoreExpansion;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -40,7 +41,7 @@ public class LESoundHandler {
         try {
             if (!LoreExpansion.audioDir.exists())
                 LoreExpansion.audioDir.mkdirs();
-            soundManager = (SoundManager) ReflectionHelper.findField(net.minecraft.client.audio.SoundHandler.class, SOUND_MANAGER_MAPPING).get(Minecraft.getMinecraft().getSoundHandler());
+            soundManager = (SoundManager) ReflectionHelper.findField(SoundHandler.class, SOUND_MANAGER_MAPPING).get(Minecraft.getMinecraft().getSoundHandler());
             soundSystem = (SoundSystem) ReflectionHelper.findField(SoundManager.class, SOUND_SYSTEM_MAPPING).get(soundManager);
         } catch (Exception e) {
             e.printStackTrace();
