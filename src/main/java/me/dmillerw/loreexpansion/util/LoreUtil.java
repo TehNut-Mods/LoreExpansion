@@ -1,9 +1,11 @@
 package me.dmillerw.loreexpansion.util;
 
+import me.dmillerw.loreexpansion.LoreExpansion;
 import me.dmillerw.loreexpansion.core.LoreLoader;
 import me.dmillerw.loreexpansion.core.data.Lore;
 import me.dmillerw.loreexpansion.core.data.LoreKey;
 import me.dmillerw.loreexpansion.core.saving.LoreSaveData;
+import me.dmillerw.loreexpansion.network.MessageOverlayLore;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -20,10 +22,8 @@ public class LoreUtil {
                 if (!loreSaveData.getDataForPlayer(player).contains(requirement))
                     hasRequirement = false;
 
-            if (hasRequirement && loreSaveData.addData(player, lore.getKey())) {
-                // TODO - Replace with overlay text
-                player.addChatComponentMessage(new TextComponentTranslation("chat.loreexpansion.lore.added", lore.getContent().getTitle()));
-            }
+            if (hasRequirement && loreSaveData.addData(player, lore.getKey()))
+                LoreExpansion.NETWORK_WRAPPER.sendTo(new MessageOverlayLore(new TextComponentTranslation("chat.loreexpansion.lore.added", lore.getContent().getTitle()).getFormattedText()), (EntityPlayerMP) player);
         }
     }
 

@@ -3,6 +3,7 @@ package me.dmillerw.loreexpansion;
 import me.dmillerw.loreexpansion.command.CommandLoreExpansion;
 import me.dmillerw.loreexpansion.item.ItemJournal;
 import me.dmillerw.loreexpansion.item.ItemScrap;
+import me.dmillerw.loreexpansion.network.MessageOverlayLore;
 import me.dmillerw.loreexpansion.network.MessageSyncLore;
 import me.dmillerw.loreexpansion.proxy.CommonProxy;
 import net.minecraft.creativetab.CreativeTabs;
@@ -52,6 +53,7 @@ public class LoreExpansion {
         audioDir = new File(loreDir, "audio");
 
         NETWORK_WRAPPER.registerMessage(MessageSyncLore.Handler.class, MessageSyncLore.class, 0, Side.CLIENT);
+        NETWORK_WRAPPER.registerMessage(MessageOverlayLore.Handler.class, MessageOverlayLore.class, 1, Side.CLIENT);
 
         PROXY.preInit();
     }
