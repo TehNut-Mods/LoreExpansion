@@ -5,11 +5,13 @@ import me.dmillerw.loreexpansion.core.LoreLoader;
 import me.dmillerw.loreexpansion.core.data.Lore;
 import me.dmillerw.loreexpansion.core.data.LoreKey;
 import me.dmillerw.loreexpansion.core.saving.LoreSaveData;
+import me.dmillerw.loreexpansion.event.LoreObtainedEvent;
 import me.dmillerw.loreexpansion.network.MessageOverlayLore;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 
 public class LoreUtil {
 
@@ -22,7 +24,9 @@ public class LoreUtil {
                 if (!loreSaveData.getDataForPlayer(player).contains(requirement))
                     hasRequirement = false;
 
-            if (hasRequirement && loreSaveData.addData(player, lore.getKey()))
+            LoreObtainedEvent event = new LoreObtainedEvent((EntityPlayerMP) player, lore);
+
+            if (hasRequirement && loreSaveData.addData(player, lore.getKey()) && !MinecraftForge.EVENT_BUS.post(event))
                 LoreExpansion.NETWORK_WRAPPER.sendTo(new MessageOverlayLore(new TextComponentTranslation("chat.loreexpansion.lore.added", lore.getContent().getTitle()).getFormattedText()), (EntityPlayerMP) player);
         }
     }
