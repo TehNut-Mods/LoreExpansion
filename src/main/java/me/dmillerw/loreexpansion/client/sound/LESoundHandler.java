@@ -5,6 +5,7 @@ import me.dmillerw.loreexpansion.LoreExpansion;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
@@ -17,6 +18,7 @@ import java.net.URL;
 import java.util.Set;
 
 @SideOnly(Side.CLIENT)
+@Mod.EventBusSubscriber
 public class LESoundHandler {
 
     public static final LESoundHandler INSTANCE = new LESoundHandler();
