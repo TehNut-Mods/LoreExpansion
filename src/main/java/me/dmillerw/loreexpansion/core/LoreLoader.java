@@ -38,9 +38,9 @@ public class LoreLoader {
 
         if (!initialRun) {
             LOADED_LORE.clear();
-            categories = Lists.newArrayList();
-            lore = Maps.newHashMap();
-            sortedLore = HashMultimap.create();
+            categories.clear();
+            lore.clear();
+            sortedLore.clear();
         }
 
         Set<String> names = Sets.newHashSet();
@@ -61,17 +61,11 @@ public class LoreLoader {
             e.printStackTrace();
         }
 
-        ImmutableMap.Builder<String, Lore> loreBuilder = ImmutableMap.builder();
-        ImmutableList.Builder<String> categoryBuilder = ImmutableList.builder();
-
-        for (Lore lore : LOADED_LORE) {
-            loreBuilder.put(lore.getKey().getId(), lore);
-            categoryBuilder.add(lore.getKey().getCategory());
+        for (Lore loadedLore : LOADED_LORE) {
+            lore.put(loadedLore .getKey().getId(), loadedLore );
+            if (!categories.contains(loadedLore.getKey().getCategory()))
+                categories.add(loadedLore.getKey().getCategory());
         }
-
-        lore = loreBuilder.build();
-        categories = categoryBuilder.build();
-
 
         for (String category : categories)
             for (Lore lore : LOADED_LORE)

@@ -7,25 +7,27 @@ import java.util.Set;
 
 public class Lore {
 
-    public static final Lore NULL_LORE = new Lore("NULL", "NULL", new Content("NULL", "NULL", "NULL"), Sets.newHashSet(new LoreKey("blah", "blah")));
+    public static final Lore NULL_LORE = new Lore("NULL", "NULL", new Content("NULL", "NULL", "NULL"), 0, Sets.newHashSet(new LoreKey("blah", "blah")));
     public static final String GLOBAL = "GLOBAL";
 
     private final LoreKey key;
     private final Content content;
+    private final int sortingIndex;
     private final Set<LoreKey> requirements;
 
     private boolean hidden;
     private boolean autoplay;
     private boolean notify;
 
-    public Lore(LoreKey key, Content content, Set<LoreKey> requirements) {
+    public Lore(LoreKey key, Content content, int sortingIndex, Set<LoreKey> requirements) {
         this.key = key;
         this.content = content;
+        this.sortingIndex = sortingIndex;
         this.requirements = requirements;
     }
 
-    public Lore(String id, String category, Content content, Set<LoreKey> requirements) {
-        this(new LoreKey(id, category), content, requirements);
+    public Lore(String id, String category, Content content, int sortingIndex, Set<LoreKey> requirements) {
+        this(new LoreKey(id, category), content, sortingIndex, requirements);
     }
 
     public boolean isNull() {
@@ -38,6 +40,10 @@ public class Lore {
 
     public Content getContent() {
         return content;
+    }
+
+    public int getSortingIndex() {
+        return sortingIndex;
     }
 
     public Set<LoreKey> getRequirements() {
