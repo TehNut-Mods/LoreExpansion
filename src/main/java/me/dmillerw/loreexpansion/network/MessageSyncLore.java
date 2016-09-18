@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 import me.dmillerw.loreexpansion.client.gui.GuiJournal;
 import me.dmillerw.loreexpansion.client.sound.LESoundHandler;
 import me.dmillerw.loreexpansion.core.data.LoreKey;
-import me.dmillerw.loreexpansion.core.saving.PlayerEventHandler;
+import me.dmillerw.loreexpansion.util.LoreUtil;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -24,7 +24,7 @@ public class MessageSyncLore implements IMessage {
 
     public MessageSyncLore(EntityPlayerMP player) {
         World world = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityWorld();
-        this.playerLore = Lists.newArrayList(PlayerEventHandler.getData(world).getDataForPlayer(player));
+        this.playerLore = Lists.newArrayList(LoreUtil.getData(world).getDataForPlayer(player));
     }
 
     public MessageSyncLore() {

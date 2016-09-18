@@ -1,7 +1,7 @@
 package me.dmillerw.loreexpansion.command;
 
 import me.dmillerw.loreexpansion.core.saving.LoreSaveData;
-import me.dmillerw.loreexpansion.core.saving.PlayerEventHandler;
+import me.dmillerw.loreexpansion.util.LoreUtil;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -26,7 +26,7 @@ public class CommandClearLore extends CommandBase {
         if (world.isRemote)
             return;
 
-        LoreSaveData loreSaveData = PlayerEventHandler.getData(world);
+        LoreSaveData loreSaveData = LoreUtil.getData(world);
         loreSaveData.clearPlayer(getCommandSenderAsPlayer(sender));
     }
 }

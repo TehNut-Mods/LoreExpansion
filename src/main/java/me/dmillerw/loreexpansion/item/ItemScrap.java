@@ -5,7 +5,7 @@ import me.dmillerw.loreexpansion.core.LoreLoader;
 import me.dmillerw.loreexpansion.core.data.Lore;
 import me.dmillerw.loreexpansion.core.data.LoreKey;
 import me.dmillerw.loreexpansion.core.saving.LoreSaveData;
-import me.dmillerw.loreexpansion.core.saving.PlayerEventHandler;
+import me.dmillerw.loreexpansion.util.LoreUtil;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,18 +41,7 @@ public class ItemScrap extends Item {
         if (lore == null)
             return ActionResult.newResult(EnumActionResult.FAIL, stack);
 
-        LoreSaveData loreSaveData = PlayerEventHandler.getData(world);
-        boolean hasReq = true;
-
-        for (LoreKey requirement : lore.getRequirements())
-            if (!loreSaveData.getDataForPlayer(player).contains(requirement))
-                hasReq = false;
-
-        if (hasReq) {
-            loreSaveData.addData(player, lore.getKey());
-            player.addChatComponentMessage(new TextComponentTranslation("chat.loreexpansion.lore.added", lore.getContent().getTitle()));
-            return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-        }
+        LoreUtil.provideLore(player, lore);
         return super.onItemRightClick(stack, world, player, hand);
     }
 
