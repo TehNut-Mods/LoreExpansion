@@ -11,9 +11,11 @@ import me.dmillerw.loreexpansion.core.data.Lore;
 import me.dmillerw.loreexpansion.core.data.LoreKey;
 import me.dmillerw.loreexpansion.proxy.ClientProxy;
 import me.dmillerw.loreexpansion.util.StringHelper;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -360,10 +362,12 @@ public class GuiJournal extends GuiScreen {
         // ARROWS - DIMENSION
         if (inBounds(left + TAB_BACK.getLeft(), top + TAB_BACK.getRight(), TAB_SIZE.getLeft(), TAB_SIZE.getRight(), x, y)) {
             changeCategory(categoryIndex - 1);
+            mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
         }
 
         if (inBounds(left + TAB_FORWARD.getLeft(), top + TAB_FORWARD.getRight(), TAB_SIZE.getLeft(), TAB_SIZE.getRight(), x, y)) {
             changeCategory(categoryIndex + 1);
+            mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
         }
     }
 
