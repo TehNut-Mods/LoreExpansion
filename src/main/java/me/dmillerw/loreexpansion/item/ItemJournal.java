@@ -1,12 +1,15 @@
 package me.dmillerw.loreexpansion.item;
 
 import me.dmillerw.loreexpansion.LoreExpansion;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -33,5 +36,20 @@ public class ItemJournal extends Item {
     public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
         player.openGui(LoreExpansion.INSTANCE, stack.getItemDamage(), world, 0, 0, 0);
         return super.onItemRightClick(stack, world, player, hand);
+    }
+
+    @Override
+    public EnumRarity getRarity(ItemStack stack) {
+        if (stack.getItemDamage() == 1)
+            return EnumRarity.UNCOMMON;
+
+        return super.getRarity(stack);
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+        if (stack.getItemDamage() == 1)
+            tooltip.add(TextFormatting.GOLD + I18n.format("tooltip.loreexpansion.creatve"));
     }
 }
