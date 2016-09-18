@@ -397,6 +397,7 @@ public class GuiJournal extends GuiScreen {
 
         currentLoreText.clear();
         selectedLore = key;
+        textScrollIndex = 0;
 
         String[] lore = currentLore.getContent().getBody().split("[\r\n]");
         List<String> newList = new ArrayList<String>();
