@@ -236,11 +236,12 @@ public class GuiJournal extends GuiScreen {
             prettyCatCache.put(currentCategory, pretty);
         }
 
-        drawCenteredString(pretty, (left + (LEFT_SIZE.getLeft() - 8) / 2) + 8, top + TITLE_Y, 0x000000);
+        String leftText = I18n.hasKey(currentCategory) ? I18n.format(currentCategory) : pretty;
+        drawCenteredString(leftText, (left + (LEFT_SIZE.getLeft() - 8) / 2) + 8, top + TITLE_Y, 0x000000);
 
         // TEXT - RIGHT
         if (current != null) {
-            drawCenteredString(current.getContent().getTitle(), left + LEFT_SIZE.getLeft() + (RIGHT_SIZE.getLeft() / 2), top + TITLE_Y, 0x000000);
+            drawCenteredString(StringHelper.getLocalizedText(current.getContent().getTitle()), left + LEFT_SIZE.getLeft() + (RIGHT_SIZE.getLeft() / 2), top + TITLE_Y, 0x000000);
             for (int i = textScrollIndex; i < Math.min(textScrollIndex + LORE_ROW_COUNT, currentLoreText.size()); i++) {
                 String lore = currentLoreText.get(i);
                 drawString(lore, left + LEFT_SIZE.getLeft() + BODY_X, (top + BODY_y + ClientProxy.fontRendererSmall.FONT_HEIGHT) + ClientProxy.fontRendererSmall.FONT_HEIGHT * (i - textScrollIndex), TEXT_SCALE, 0x000000, true);
@@ -270,7 +271,7 @@ public class GuiJournal extends GuiScreen {
 
                     // TOOLTIPS
                     if (inBounds(left + BOX_START.getLeft() + drawX, top + BOX_START.getRight() + drawY, 17, 17, x, y))
-                        drawHoveringText(Collections.singletonList(lore.getContent().getTitle()), x, y, mc.fontRendererObj);
+                        drawHoveringText(Collections.singletonList(StringHelper.getLocalizedText(lore.getContent().getTitle())), x, y, mc.fontRendererObj);
                 }
             }
         }
@@ -409,7 +410,7 @@ public class GuiJournal extends GuiScreen {
         selectedLore = key;
         textScrollIndex = 0;
 
-        String[] lore = currentLore.getContent().getBody().split("[\r\n]");
+        String[] lore = StringHelper.getLocalizedText(currentLore.getContent().getBody()).split("[\r\n]");
         List<String> newList = new ArrayList<String>();
 
         for (int i = 0; i < lore.length; i++) {

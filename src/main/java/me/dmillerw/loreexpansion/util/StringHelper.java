@@ -1,5 +1,9 @@
 package me.dmillerw.loreexpansion.util;
 
+import net.minecraft.client.resources.I18n;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 public class StringHelper {
 
     public static boolean isInteger(String str) {
@@ -39,5 +43,10 @@ public class StringHelper {
         }
 
         return stringBuilder.toString();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static String getLocalizedText(String text, Object... formatting) {
+        return I18n.hasKey(text) ? I18n.format(text, formatting) : text;
     }
 }

@@ -6,6 +6,7 @@ import me.dmillerw.loreexpansion.core.data.Lore;
 import me.dmillerw.loreexpansion.core.data.LoreKey;
 import me.dmillerw.loreexpansion.core.saving.LoreSaveData;
 import me.dmillerw.loreexpansion.util.LoreUtil;
+import me.dmillerw.loreexpansion.util.StringHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -67,7 +68,7 @@ public class ItemScrap extends Item {
         if (lore == null)
             lore = Lore.NULL_LORE;
 
-        tooltip.add(I18n.format("tooltip.loreexpansion.title", lore.getContent().getTitle()));
-        tooltip.add(I18n.format("tooltip.loreexpansion.category", lore.getKey().getCategory()));
+        tooltip.add(I18n.format("tooltip.loreexpansion.title", StringHelper.getLocalizedText(lore.getContent().getTitle())));
+        tooltip.add(I18n.format("tooltip.loreexpansion.category", StringHelper.getLocalizedText(lore.getKey().getCategory())));
     }
 }
