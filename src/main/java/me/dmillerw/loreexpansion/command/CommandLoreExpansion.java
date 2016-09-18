@@ -9,6 +9,7 @@ public class CommandLoreExpansion extends CommandTreeBase {
         addSubcommand(new CommandClearLore());
         addSubcommand(new CommandReloadLore());
         addSubcommand(new CommandDebug());
+        addSubcommand(new CommandGiveLore());
     }
 
     @Override

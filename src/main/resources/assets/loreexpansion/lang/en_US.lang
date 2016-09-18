@@ -8,6 +8,9 @@ item.loreexpansion.journal.name=Journal
 # CHAT
 chat.loreexpansion.lore.added=Added lore page '%s'
 chat.loreexpansion.lore.reloaded=Reloaded lore from disk
+chat.loreexpansion.lore.given=Provided lore %s to %s
+chat.loreexpansion.lore.given.fail=Requested lore does not exist
+chat.loreexpansion.lore.cleared=Cleared lore data for %s
 
 # GUI
 gui.loreexpansion.previous=Previous Category
