@@ -22,7 +22,7 @@ public class LoreLoader {
 
     private static List<String> categories = Lists.newArrayList();
     private static Map<String, Lore> lore = Maps.newHashMap();
-    private static SetMultimap<String, Lore> sortedLore = HashMultimap.create();
+    private static ArrayListMultimap<String, Lore> sortedLore = ArrayListMultimap.create();
 
     public static void init(File loreDir, boolean initialRun) {
         if (initialRun && !loreDir.exists() && loreDir.mkdirs()) {
@@ -67,10 +67,13 @@ public class LoreLoader {
                 categories.add(loadedLore.getKey().getCategory());
         }
 
-        for (String category : categories)
+        for (String category : categories) {
             for (Lore lore : LOADED_LORE)
                 if (lore.getKey().getCategory().equalsIgnoreCase(category))
                     sortedLore.put(category, lore);
+
+            Collections.sort(sortedLore.get(category));
+        }
     }
 
     public static Lore getLore(String key) {
@@ -81,10 +84,8 @@ public class LoreLoader {
         return lore.get(key.getId());
     }
 
-    public static Set<Lore> getLoreForCategory(String category) {
-        if (category.equalsIgnoreCase("global"))
-            return LOADED_LORE;
-        return sortedLore.get(category) == null ? Collections.<Lore>emptySet() : sortedLore.get(category);
+    public static List<Lore> getLoreForCategory(String category) {
+        return sortedLore.get(category) == null ? Collections.<Lore>emptyList() : sortedLore.get(category);
     }
 
     public static List<String> getCategories() {

@@ -134,7 +134,7 @@ public class GuiJournal extends GuiScreen {
             }
         }
 
-        Set<Lore> all = LoreLoader.getLoreForCategory(currentCategory);
+        List<Lore> all = LoreLoader.getLoreForCategory(currentCategory);
 
         // BACKGROUND
         GlStateManager.color(1F, 1F, 1F, 1F);
@@ -300,7 +300,7 @@ public class GuiJournal extends GuiScreen {
                 selectedLore = null;
         }
 
-        Set<Lore> all = LoreLoader.getLoreForCategory(currentCategory);
+        List<Lore> all = LoreLoader.getLoreForCategory(currentCategory);
 
         int index = 1;
         for (Lore lore : all) {

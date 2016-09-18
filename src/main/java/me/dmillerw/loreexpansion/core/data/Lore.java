@@ -5,7 +5,7 @@ import com.google.common.collect.Sets;
 
 import java.util.Set;
 
-public class Lore {
+public class Lore implements Comparable<Lore> {
 
     public static final Lore NULL_LORE = new Lore("NULL", "NULL", new Content("NULL", "NULL", "NULL"), 0, Sets.newHashSet(new LoreKey("blah", "blah")));
     public static final String GLOBAL = "GLOBAL";
@@ -72,6 +72,17 @@ public class Lore {
 
     public void setNotify(boolean notify) {
         this.notify = notify;
+    }
+
+    @Override
+    public int compareTo(Lore o) {
+        if (getSortingIndex() > o.getSortingIndex())
+            return 1;
+
+        if (getSortingIndex() < o.getSortingIndex())
+            return -1;
+
+        return 0;
     }
 
     @Override
