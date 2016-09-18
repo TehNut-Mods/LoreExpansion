@@ -37,8 +37,8 @@ public class ItemScrap extends Item {
         if (world.isRemote || !stack.hasTagCompound())
             return ActionResult.newResult(EnumActionResult.FAIL, stack);
 
-        Lore lore = LoreLoader.getLore(stack.getTagCompound().getString("lore"));
-        if (lore == null)
+        Lore lore = LoreUtil.readLore(stack);
+        if (lore == null || lore.isNull())
             return ActionResult.newResult(EnumActionResult.FAIL, stack);
 
         LoreUtil.provideLore(player, lore);
@@ -48,21 +48,11 @@ public class ItemScrap extends Item {
     @SideOnly(Side.CLIENT)
     @Override
     public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> subItems) {
-        for (Lore lore : LoreLoader.LOADED_LORE) {
-            ItemStack stack = new ItemStack(item);
-            NBTTagCompound tagCompound = new NBTTagCompound();
-            tagCompound.setString("lore", lore.getKey().getId());
-            stack.setTagCompound(tagCompound);
-            subItems.add(stack);
-        }
+        for (Lore lore : LoreLoader.LOADED_LORE)
+            subItems.add(LoreUtil.attachLore(new ItemStack(item), lore.getKey()));
 
-        if (subItems.isEmpty()) {
-            ItemStack stack = new ItemStack(item);
-            NBTTagCompound tagCompound = new NBTTagCompound();
-            tagCompound.setString("lore", Lore.NULL_LORE.getKey().getId());
-            stack.setTagCompound(tagCompound);
-            subItems.add(stack);
-        }
+        if (subItems.isEmpty())
+            subItems.add(LoreUtil.attachLore(new ItemStack(item), Lore.NULL_LORE.getKey()));
     }
 
     @SideOnly(Side.CLIENT)
@@ -73,10 +63,10 @@ public class ItemScrap extends Item {
             return;
         }
 
-        String loreKey = stack.getTagCompound().getString("lore");
-        Lore lore = LoreLoader.getLore(loreKey);
+        Lore lore = LoreUtil.readLore(stack);
         if (lore == null)
             lore = Lore.NULL_LORE;
+
         tooltip.add(I18n.format("tooltip.loreexpansion.title", lore.getContent().getTitle()));
         tooltip.add(I18n.format("tooltip.loreexpansion.category", lore.getKey().getCategory()));
     }
