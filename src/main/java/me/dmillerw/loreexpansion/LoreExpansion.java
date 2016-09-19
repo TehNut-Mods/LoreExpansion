@@ -21,7 +21,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
-@Mod(modid = LoreExpansion.ID, name = LoreExpansion.NAME, version = LoreExpansion.VERSION)
+@Mod(modid = LoreExpansion.ID, name = LoreExpansion.NAME, version = LoreExpansion.VERSION, dependencies = "required-after:Forge@[12.18.1.2092,);")
 public class LoreExpansion {
 
     public static final String ID = "loreexpansion";
