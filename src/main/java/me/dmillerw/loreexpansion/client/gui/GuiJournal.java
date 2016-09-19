@@ -122,7 +122,7 @@ public class GuiJournal extends GuiScreen {
         onWheelScrolled(x, y, Mouse.getDWheel());
 
         // VARIABLES
-        int left = (width - TOTAL_SIZE.getLeft()) / 2;
+        int left = (width - (TOTAL_SIZE.getLeft() - 55)) / 2;
         int top = (height - TOTAL_SIZE.getRight()) / 2;
 
         Lore current = null;
@@ -289,7 +289,7 @@ public class GuiJournal extends GuiScreen {
         if (button != 0)
             return;
 
-        int left = (width - TOTAL_SIZE.getLeft()) / 2;
+        int left = (width - (TOTAL_SIZE.getLeft() - 55)) / 2;
         int top = (height - TOTAL_SIZE.getRight()) / 2;
 
         Lore current = null;
@@ -433,7 +433,7 @@ public class GuiJournal extends GuiScreen {
     }
 
     public void onWheelScrolled(int x, int y, int wheel) {
-        int left = (width - TOTAL_SIZE.getLeft()) / 2;
+        int left = (width - (TOTAL_SIZE.getLeft() - 55)) / 2;
         int top = (height - TOTAL_SIZE.getRight()) / 2;
 
         if (inBounds(left, top, LEFT_SIZE.getLeft(), LEFT_SIZE.getRight(), x, y)) {
