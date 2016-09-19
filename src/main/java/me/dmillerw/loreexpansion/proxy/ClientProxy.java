@@ -36,7 +36,7 @@ public class ClientProxy extends CommonProxy {
     public void postInit() {
         super.postInit();
 
-        fontRendererSmall = new SmallFontRenderer(Minecraft.getMinecraft().gameSettings,  new ResourceLocation("textures/font/ascii.png"), Minecraft.getMinecraft().renderEngine, false);
+        fontRendererSmall = new SmallFontRenderer(Minecraft.getMinecraft().gameSettings, new ResourceLocation("textures/font/ascii.png"), Minecraft.getMinecraft().renderEngine, false);
     }
 
     private void setModel(Item item, int meta, ResourceLocation location) {

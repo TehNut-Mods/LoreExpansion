@@ -7,9 +7,9 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 
 /**
  * This event is fired whenever a player obtains a piece of lore and is only fired on the server side.
- *
+ * <p>
  * This even is cancellable. Cancelling this event will stop the player from obtaining the lore.
- *
+ * <p>
  * {@link #player} - The player obtaining the lore.
  * {@link #lore} - The lore being obtained.
  */

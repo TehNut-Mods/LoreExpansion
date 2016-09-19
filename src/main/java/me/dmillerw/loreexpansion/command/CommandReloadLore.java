@@ -25,4 +25,9 @@ public class CommandReloadLore extends CommandBase {
         LoreLoader.init(LoreExpansion.loreDir, false);
         sender.addChatMessage(new TextComponentTranslation("chat.loreexpansion.lore.reloaded"));
     }
+
+    @Override
+    public int getRequiredPermissionLevel() {
+        return 3;
+    }
 }

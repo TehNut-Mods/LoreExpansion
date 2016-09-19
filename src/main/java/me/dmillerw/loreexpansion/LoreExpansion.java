@@ -27,22 +27,21 @@ public class LoreExpansion {
     public static final String ID = "loreexpansion";
     public static final String NAME = "LoreExpansion";
     public static final String VERSION = "@VERSION@";
-
-    @SidedProxy(clientSide = "me.dmillerw.loreexpansion.proxy.ClientProxy", serverSide = "me.dmillerw.loreexpansion.proxy.CommonProxy")
-    public static CommonProxy PROXY;
-    @Mod.Instance(ID)
-    public static LoreExpansion INSTANCE;
-
     public static final Logger LOGGER = LogManager.getLogger(NAME);
+    public static final SimpleNetworkWrapper NETWORK_WRAPPER = new SimpleNetworkWrapper(ID);
+    public static final ItemScrap LORE_PAGE = new ItemScrap();
+    public static final ItemJournal LORE_JOURNAL = new ItemJournal();
     public static final CreativeTabs TAB_LORE = new CreativeTabs("loreexpansion") {
         @Override
         public Item getTabIconItem() {
             return LORE_JOURNAL;
         }
     };
-    public static final SimpleNetworkWrapper NETWORK_WRAPPER = new SimpleNetworkWrapper(ID);
-    public static final ItemScrap LORE_PAGE = new ItemScrap();
-    public static final ItemJournal LORE_JOURNAL = new ItemJournal();
+
+    @SidedProxy(clientSide = "me.dmillerw.loreexpansion.proxy.ClientProxy", serverSide = "me.dmillerw.loreexpansion.proxy.CommonProxy")
+    public static CommonProxy PROXY;
+    @Mod.Instance(ID)
+    public static LoreExpansion INSTANCE;
 
     public static File loreDir;
     public static File audioDir;

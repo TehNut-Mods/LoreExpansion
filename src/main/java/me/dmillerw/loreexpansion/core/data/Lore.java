@@ -54,20 +54,20 @@ public class Lore implements Comparable<Lore> {
         return hidden;
     }
 
-    public boolean isAutoplay() {
-        return autoplay;
-    }
-
-    public boolean isNotify() {
-        return notify;
-    }
-
     public void setHidden(boolean hidden) {
         this.hidden = hidden;
     }
 
+    public boolean isAutoplay() {
+        return autoplay;
+    }
+
     public void setAutoplay(boolean autoplay) {
         this.autoplay = autoplay;
+    }
+
+    public boolean isNotify() {
+        return notify;
     }
 
     public void setNotify(boolean notify) {

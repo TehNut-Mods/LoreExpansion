@@ -9,7 +9,10 @@ import me.dmillerw.loreexpansion.core.data.LoreKey;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 
 import java.io.*;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class LoreLoader {
 
@@ -62,7 +65,7 @@ public class LoreLoader {
         }
 
         for (Lore loadedLore : LOADED_LORE) {
-            lore.put(loadedLore .getKey().getId(), loadedLore );
+            lore.put(loadedLore.getKey().getId(), loadedLore);
             if (!categories.contains(loadedLore.getKey().getCategory()))
                 categories.add(loadedLore.getKey().getCategory());
         }

@@ -27,144 +27,139 @@ import java.util.Random;
 @SideOnly(Side.CLIENT)
 public class SmallFontRenderer implements IResourceManagerReloadListener {
 
-        private static final ResourceLocation[] unicodePageLocations = new ResourceLocation[256];
+    private static final ResourceLocation[] unicodePageLocations = new ResourceLocation[256];
+    private final ResourceLocation locationFontTexture;
+    /**
+     * the height in pixels of default text
+     */
+    public int FONT_HEIGHT = 9;
+    public Random fontRandom = new Random();
+    /**
+     * Array of width of all the characters in default.png
+     */
+    private int[] charWidth = new int[256];
+    /**
+     * Array of the start/end column (in upper/lower nibble) for every glyph in the /font directory.
+     */
+    private byte[] glyphWidth = new byte[65536];
+    /**
+     * Array of RGB triplets defining the 16 standard chat colors followed by 16 darker version of the same colors for
+     * drop shadows.
+     */
+    private int[] colorCode = new int[32];
+    /**
+     * The RenderEngine used to load and setup glyph textures.
+     */
+    private TextureManager renderEngine;
 
-        /**
-         * Array of width of all the characters in default.png
-         */
-        private int[] charWidth = new int[256];
+    /**
+     * Current X coordinate at which to draw the next character.
+     */
+    private float posX;
 
-        /**
-         * the height in pixels of default text
-         */
-        public int FONT_HEIGHT = 9;
-        public Random fontRandom = new Random();
+    /**
+     * Current Y coordinate at which to draw the next character.
+     */
+    private float posY;
 
-        /**
-         * Array of the start/end column (in upper/lower nibble) for every glyph in the /font directory.
-         */
-        private byte[] glyphWidth = new byte[65536];
+    /**
+     * If true, strings should be rendered with Unicode fonts instead of the default.png font
+     */
+    private boolean unicodeFlag;
 
-        /**
-         * Array of RGB triplets defining the 16 standard chat colors followed by 16 darker version of the same colors for
-         * drop shadows.
-         */
-        private int[] colorCode = new int[32];
-        private final ResourceLocation locationFontTexture;
+    /**
+     * If true, the Unicode Bidirectional Algorithm should be run before rendering any string.
+     */
+    private boolean bidiFlag;
 
-        /**
-         * The RenderEngine used to load and setup glyph textures.
-         */
-        private TextureManager renderEngine;
+    /**
+     * Used to specify new red value for the current color.
+     */
+    private float red;
 
-        /**
-         * Current X coordinate at which to draw the next character.
-         */
-        private float posX;
+    /**
+     * Used to specify new blue value for the current color.
+     */
+    private float blue;
 
-        /**
-         * Current Y coordinate at which to draw the next character.
-         */
-        private float posY;
+    /**
+     * Used to specify new green value for the current color.
+     */
+    private float green;
 
-        /**
-         * If true, strings should be rendered with Unicode fonts instead of the default.png font
-         */
-        private boolean unicodeFlag;
+    /**
+     * Used to speify new alpha value for the current color.
+     */
+    private float alpha;
 
-        /**
-         * If true, the Unicode Bidirectional Algorithm should be run before rendering any string.
-         */
-        private boolean bidiFlag;
+    /**
+     * Text color of the currently rendering string.
+     */
+    private int textColor;
 
-        /**
-         * Used to specify new red value for the current color.
-         */
-        private float red;
+    /**
+     * Set if the "k" style (random) is active in currently rendering string
+     */
+    private boolean randomStyle;
 
-        /**
-         * Used to specify new blue value for the current color.
-         */
-        private float blue;
+    /**
+     * Set if the "l" style (bold) is active in currently rendering string
+     */
+    private boolean boldStyle;
 
-        /**
-         * Used to specify new green value for the current color.
-         */
-        private float green;
+    /**
+     * Set if the "o" style (italic) is active in currently rendering string
+     */
+    private boolean italicStyle;
 
-        /**
-         * Used to speify new alpha value for the current color.
-         */
-        private float alpha;
+    /**
+     * Set if the "n" style (underlined) is active in currently rendering string
+     */
+    private boolean underlineStyle;
 
-        /**
-         * Text color of the currently rendering string.
-         */
-        private int textColor;
-
-        /**
-         * Set if the "k" style (random) is active in currently rendering string
-         */
-        private boolean randomStyle;
-
-        /**
-         * Set if the "l" style (bold) is active in currently rendering string
-         */
-        private boolean boldStyle;
-
-        /**
-         * Set if the "o" style (italic) is active in currently rendering string
-         */
-        private boolean italicStyle;
-
-        /**
-         * Set if the "n" style (underlined) is active in currently rendering string
-         */
-        private boolean underlineStyle;
-
-        /**
-         * Set if the "m" style (strikethrough) is active in currently rendering string
-         */
-        private boolean strikethroughStyle;
+    /**
+     * Set if the "m" style (strikethrough) is active in currently rendering string
+     */
+    private boolean strikethroughStyle;
 
     public SmallFontRenderer(GameSettings par1GameSettings, ResourceLocation par2ResourceLocation, TextureManager par3TextureManager, boolean par4) {
-            this.locationFontTexture = par2ResourceLocation;
-            //logger.error(this.locationFontTexture.toString() + "    " + this.locationFontTexture.getResourcePath());
-            this.renderEngine = par3TextureManager;
-            this.unicodeFlag = true;
-            if (this.renderEngine != null)
-                this.renderEngine.bindTexture(par2ResourceLocation);
-            if (this.renderEngine == null)
-                for (int i = 0; i < 32; ++i) {
-                    int j = (i >> 3 & 1) * 85;
-                    int k = (i >> 2 & 1) * 170 + j;
-                    int l = (i >> 1 & 1) * 170 + j;
-                    int i1 = (i >> 0 & 1) * 170 + j;
+        this.locationFontTexture = par2ResourceLocation;
+        //logger.error(this.locationFontTexture.toString() + "    " + this.locationFontTexture.getResourcePath());
+        this.renderEngine = par3TextureManager;
+        this.unicodeFlag = true;
+        if (this.renderEngine != null)
+            this.renderEngine.bindTexture(par2ResourceLocation);
+        if (this.renderEngine == null)
+            for (int i = 0; i < 32; ++i) {
+                int j = (i >> 3 & 1) * 85;
+                int k = (i >> 2 & 1) * 170 + j;
+                int l = (i >> 1 & 1) * 170 + j;
+                int i1 = (i >> 0 & 1) * 170 + j;
 
-                    if (i == 6) {
-                        k += 85;
-                    }
-
-                    if (par1GameSettings.anaglyph) {
-                        int j1 = (k * 30 + l * 59 + i1 * 11) / 100;
-                        int k1 = (k * 30 + l * 70) / 100;
-                        int l1 = (k * 30 + i1 * 70) / 100;
-                        k = j1;
-                        l = k1;
-                        i1 = l1;
-                    }
-
-                    if (i >= 16) {
-                        k /= 4;
-                        l /= 4;
-                        i1 /= 4;
-                    }
-
-                    this.colorCode[i] = (k & 255) << 16 | (l & 255) << 8 | i1 & 255;
+                if (i == 6) {
+                    k += 85;
                 }
 
-            this.readGlyphSizes();
-        }
+                if (par1GameSettings.anaglyph) {
+                    int j1 = (k * 30 + l * 59 + i1 * 11) / 100;
+                    int k1 = (k * 30 + l * 70) / 100;
+                    int l1 = (k * 30 + i1 * 70) / 100;
+                    k = j1;
+                    l = k1;
+                    i1 = l1;
+                }
+
+                if (i >= 16) {
+                    k /= 4;
+                    l /= 4;
+                    i1 /= 4;
+                }
+
+                this.colorCode[i] = (k & 255) << 16 | (l & 255) << 8 | i1 & 255;
+            }
+
+        this.readGlyphSizes();
+    }
 
     public void onResourceManagerReload(IResourceManager par1ResourceManager) {
         this.readFontTexture();
@@ -764,14 +759,6 @@ public class SmallFontRenderer implements IResourceManagerReloadListener {
     }
 
     /**
-     * Set unicodeFlag controlling whether strings should be rendered with Unicode fonts instead of the default.png
-     * font.
-     */
-    public void setUnicodeFlag(boolean par1) {
-        this.unicodeFlag = par1;
-    }
-
-    /**
      * Get unicodeFlag controlling whether strings should be rendered with Unicode fonts instead of the default.png
      * font.
      */
@@ -780,10 +767,11 @@ public class SmallFontRenderer implements IResourceManagerReloadListener {
     }
 
     /**
-     * Set bidiFlag to control if the Unicode Bidirectional Algorithm should be run before rendering any string.
+     * Set unicodeFlag controlling whether strings should be rendered with Unicode fonts instead of the default.png
+     * font.
      */
-    public void setBidiFlag(boolean par1) {
-        this.bidiFlag = par1;
+    public void setUnicodeFlag(boolean par1) {
+        this.unicodeFlag = par1;
     }
 
     /**
@@ -867,6 +855,20 @@ public class SmallFontRenderer implements IResourceManagerReloadListener {
     }
 
     /**
+     * Get bidiFlag that controls if the Unicode Bidirectional Algorithm should be run before rendering any string
+     */
+    public boolean getBidiFlag() {
+        return this.bidiFlag;
+    }
+
+    /**
+     * Set bidiFlag to control if the Unicode Bidirectional Algorithm should be run before rendering any string.
+     */
+    public void setBidiFlag(boolean par1) {
+        this.bidiFlag = par1;
+    }
+
+    /**
      * Checks if the char code is a hexadecimal character, used to set colour.
      */
     private static boolean isFormatColor(char par0) {
@@ -901,12 +903,5 @@ public class SmallFontRenderer implements IResourceManagerReloadListener {
         }
 
         return s1;
-    }
-
-    /**
-     * Get bidiFlag that controls if the Unicode Bidirectional Algorithm should be run before rendering any string
-     */
-    public boolean getBidiFlag() {
-        return this.bidiFlag;
     }
 }

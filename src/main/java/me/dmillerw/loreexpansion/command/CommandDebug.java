@@ -26,4 +26,9 @@ public class CommandDebug extends CommandBase {
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         LoreExpansion.LOGGER.info(Objects.toStringHelper(Map.class).add("playerData", LoreUtil.getData(server.getEntityWorld()).getPlayerData()));
     }
+
+    @Override
+    public int getRequiredPermissionLevel() {
+        return 3;
+    }
 }

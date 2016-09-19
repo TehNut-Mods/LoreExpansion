@@ -14,7 +14,7 @@ public class CommandLoreExpansion extends CommandTreeBase {
 
     @Override
     public int getRequiredPermissionLevel() {
-        return 2;
+        return 0;
     }
 
     @Override
