@@ -43,13 +43,18 @@ public class LoreExpansion {
     @Mod.Instance(ID)
     public static LoreExpansion INSTANCE;
 
+    public static File configDir;
     public static File loreDir;
     public static File audioDir;
+    public static File themeDir;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        loreDir = new File(event.getModConfigurationDirectory(), ID + File.separator + "lore");
+        configDir = new File(event.getModConfigurationDirectory(), ID);
+        loreDir = new File(configDir, "lore");
         audioDir = new File(loreDir, "audio");
+        themeDir = new File(configDir, "theme");
+        LoreConfiguration.init(new File(configDir, ID + ".cfg"));
 
         NETWORK_WRAPPER.registerMessage(MessageSyncLore.Handler.class, MessageSyncLore.class, 0, Side.CLIENT);
         NETWORK_WRAPPER.registerMessage(MessageOverlayLore.Handler.class, MessageOverlayLore.class, 1, Side.CLIENT);
