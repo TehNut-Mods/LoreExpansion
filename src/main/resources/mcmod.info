@@ -1,0 +1,15 @@
+[
+  {
+    "modid": "loreexpansion",
+    "name": "Lore Expansion",
+    "description": "Add a narrative to your world.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "https://minecraft.curseforge.com/projects/lore-expansion",
+    "authorList": [ "TehNut", "CyanideX", "dmillerw" ],
+    "credits": "",
+    "logoFile": "/logo.png",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
