@@ -7,8 +7,8 @@ import java.util.Set;
 
 public class Lore implements Comparable<Lore> {
 
-    public static final Lore NULL_LORE = new Lore("NULL", "NULL", new Content("NULL", "NULL", "NULL"), 0, Sets.newHashSet(new LoreKey("blah", "blah")));
-    public static final String GLOBAL = "global";
+    public static final Lore NULL_LORE = new Lore("NULL", "NULL", new Content("NULL", "NULL", "NULL", false), 0, Sets.newHashSet(new LoreKey("blah", "blah")));
+    public static final String GLOBAL = "GLOBAL";
 
     private final LoreKey key;
     private final Content content;
@@ -16,7 +16,6 @@ public class Lore implements Comparable<Lore> {
     private final Set<LoreKey> requirements;
 
     private boolean hidden;
-    private boolean autoplay;
     private boolean notify;
 
     public Lore(LoreKey key, Content content, int sortingIndex, Set<LoreKey> requirements) {
@@ -56,14 +55,6 @@ public class Lore implements Comparable<Lore> {
 
     public void setHidden(boolean hidden) {
         this.hidden = hidden;
-    }
-
-    public boolean isAutoplay() {
-        return autoplay;
-    }
-
-    public void setAutoplay(boolean autoplay) {
-        this.autoplay = autoplay;
     }
 
     public boolean isNotify() {

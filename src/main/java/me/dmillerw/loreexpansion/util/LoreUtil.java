@@ -1,5 +1,6 @@
 package me.dmillerw.loreexpansion.util;
 
+import com.google.common.base.Strings;
 import me.dmillerw.loreexpansion.LoreExpansion;
 import me.dmillerw.loreexpansion.core.LoreLoader;
 import me.dmillerw.loreexpansion.core.data.Lore;
@@ -7,6 +8,7 @@ import me.dmillerw.loreexpansion.core.data.LoreKey;
 import me.dmillerw.loreexpansion.core.saving.LoreSaveData;
 import me.dmillerw.loreexpansion.event.LoreObtainedEvent;
 import me.dmillerw.loreexpansion.network.MessageOverlayLore;
+import me.dmillerw.loreexpansion.network.MessagePlayLore;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -30,8 +32,11 @@ public class LoreUtil {
 
             LoreObtainedEvent event = new LoreObtainedEvent((EntityPlayerMP) player, lore);
 
-            if (hasRequirement && loreSaveData.addData(player, lore.getKey()) && !MinecraftForge.EVENT_BUS.post(event))
+            if (hasRequirement && loreSaveData.addData(player, lore.getKey()) && !MinecraftForge.EVENT_BUS.post(event)) {
                 LoreExpansion.NETWORK_WRAPPER.sendTo(new MessageOverlayLore("chat.loreexpansion.lore.added", lore.getContent().getTitle()), (EntityPlayerMP) player);
+                if (!Strings.isNullOrEmpty(lore.getContent().getAudio()) && lore.getContent().shouldAutoplay())
+                    LoreExpansion.NETWORK_WRAPPER.sendTo(new MessagePlayLore(lore.getKey()), (EntityPlayerMP) player);
+            }
         }
     }
 
