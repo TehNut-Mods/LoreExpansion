@@ -8,7 +8,7 @@ import java.util.Set;
 public class Lore implements Comparable<Lore> {
 
     public static final Lore NULL_LORE = new Lore("NULL", "NULL", new Content("NULL", "NULL", "NULL", false), 0, Sets.newHashSet(new LoreKey("blah", "blah")));
-    public static final String GLOBAL = "GLOBAL";
+    public static final String GLOBAL = "global";
 
     private final LoreKey key;
     private final Content content;
