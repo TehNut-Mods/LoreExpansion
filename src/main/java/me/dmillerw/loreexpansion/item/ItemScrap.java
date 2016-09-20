@@ -39,6 +39,8 @@ public class ItemScrap extends Item {
             return ActionResult.newResult(EnumActionResult.FAIL, stack);
 
         LoreUtil.provideLore(player, lore);
+        if (!player.capabilities.isCreativeMode)
+            stack.stackSize--;
         return super.onItemRightClick(stack, world, player, hand);
     }
 
