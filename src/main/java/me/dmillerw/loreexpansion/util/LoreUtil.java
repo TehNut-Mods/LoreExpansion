@@ -9,6 +9,7 @@ import me.dmillerw.loreexpansion.core.saving.LoreSaveData;
 import me.dmillerw.loreexpansion.event.LoreObtainedEvent;
 import me.dmillerw.loreexpansion.network.MessageOverlayLore;
 import me.dmillerw.loreexpansion.network.MessagePlayLore;
+import me.dmillerw.loreexpansion.network.MessageSyncLore;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -34,6 +35,7 @@ public class LoreUtil {
 
             if (hasRequirement && loreSaveData.addData(player, lore.getKey()) && !MinecraftForge.EVENT_BUS.post(event)) {
                 LoreExpansion.NETWORK_WRAPPER.sendTo(new MessageOverlayLore("chat.loreexpansion.lore.added", lore.getContent().getTitle()), (EntityPlayerMP) player);
+                LoreExpansion.NETWORK_WRAPPER.sendTo(new MessageSyncLore((EntityPlayerMP) player), (EntityPlayerMP) player);
                 if (!Strings.isNullOrEmpty(lore.getContent().getAudio()) && lore.getContent().shouldAutoplay())
                     LoreExpansion.NETWORK_WRAPPER.sendTo(new MessagePlayLore(lore.getKey()), (EntityPlayerMP) player);
             }

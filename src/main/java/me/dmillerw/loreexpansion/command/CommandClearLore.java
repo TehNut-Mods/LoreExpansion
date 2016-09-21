@@ -1,11 +1,14 @@
 package me.dmillerw.loreexpansion.command;
 
+import me.dmillerw.loreexpansion.LoreExpansion;
 import me.dmillerw.loreexpansion.core.saving.LoreSaveData;
+import me.dmillerw.loreexpansion.network.MessageSyncLore;
 import me.dmillerw.loreexpansion.util.LoreUtil;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -41,6 +44,7 @@ public class CommandClearLore extends CommandBase {
 
         LoreSaveData loreSaveData = LoreUtil.getData(world);
         loreSaveData.clearPlayer(player);
+        LoreExpansion.NETWORK_WRAPPER.sendTo(new MessageSyncLore((EntityPlayerMP) player), (EntityPlayerMP) player);
         sender.addChatMessage(new TextComponentTranslation("chat.loreexpansion.lore.cleared", player.getName()));
     }
 
