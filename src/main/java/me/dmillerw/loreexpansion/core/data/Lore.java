@@ -2,31 +2,33 @@ package me.dmillerw.loreexpansion.core.data;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
+import me.dmillerw.loreexpansion.core.trigger.TriggerData;
 
+import javax.annotation.Nullable;
 import java.util.Set;
 
 public class Lore implements Comparable<Lore> {
 
-    public static final Lore NULL_LORE = new Lore("NULL", "NULL", new Content("NULL", "NULL", "NULL", false), 0, Sets.newHashSet(new LoreKey("blah", "blah")));
+    public static final Lore NULL_LORE = new Lore("NULL", "NULL", new Content("NULL", "NULL", "NULL", false), 0, Sets.newHashSet(new LoreKey("blah", "blah")), null);
     public static final String GLOBAL = "global";
 
     private final LoreKey key;
     private final Content content;
     private final int sortingIndex;
     private final Set<LoreKey> requirements;
+    @Nullable
+    private final TriggerData loreTrigger;
 
-    private boolean hidden;
-    private boolean notify;
-
-    public Lore(LoreKey key, Content content, int sortingIndex, Set<LoreKey> requirements) {
+    public Lore(LoreKey key, Content content, int sortingIndex, Set<LoreKey> requirements, @Nullable TriggerData loreTrigger) {
         this.key = key;
         this.content = content;
         this.sortingIndex = sortingIndex;
         this.requirements = requirements;
+        this.loreTrigger = loreTrigger;
     }
 
-    public Lore(String id, String category, Content content, int sortingIndex, Set<LoreKey> requirements) {
-        this(new LoreKey(id, category), content, sortingIndex, requirements);
+    public Lore(String id, String category, Content content, int sortingIndex, Set<LoreKey> requirements, @Nullable TriggerData loreTrigger) {
+        this(new LoreKey(id, category), content, sortingIndex, requirements, loreTrigger);
     }
 
     public boolean isNull() {
@@ -49,20 +51,9 @@ public class Lore implements Comparable<Lore> {
         return requirements;
     }
 
-    public boolean isHidden() {
-        return hidden;
-    }
-
-    public void setHidden(boolean hidden) {
-        this.hidden = hidden;
-    }
-
-    public boolean isNotify() {
-        return notify;
-    }
-
-    public void setNotify(boolean notify) {
-        this.notify = notify;
+    @Nullable
+    public TriggerData getLoreTrigger() {
+        return loreTrigger;
     }
 
     @Override

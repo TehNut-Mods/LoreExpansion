@@ -2,6 +2,7 @@ package me.dmillerw.loreexpansion.proxy;
 
 import me.dmillerw.loreexpansion.LoreConfiguration;
 import me.dmillerw.loreexpansion.LoreExpansion;
+import me.dmillerw.loreexpansion.client.sound.LESoundHandler;
 import me.dmillerw.loreexpansion.client.texture.SmallFontRenderer;
 import me.dmillerw.loreexpansion.core.data.LoreKey;
 import net.minecraft.client.Minecraft;
@@ -11,6 +12,7 @@ import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -32,6 +34,8 @@ public class ClientProxy extends CommonProxy {
         setModel(LoreExpansion.LORE_JOURNAL, 0, LoreExpansion.LORE_JOURNAL.getRegistryName());
         setModel(LoreExpansion.LORE_JOURNAL, 1, new ResourceLocation(LoreExpansion.ID, LoreExpansion.LORE_JOURNAL.getRegistryName().getResourcePath() + "_creative"));
         setModel(LoreExpansion.LORE_PAGE, 0, LoreExpansion.LORE_PAGE.getRegistryName());
+
+        MinecraftForge.EVENT_BUS.register(LESoundHandler.INSTANCE);
 
         if (!LoreConfiguration.theme.equalsIgnoreCase("default")) {
             File themeFolder = new File(LoreExpansion.themeDir, LoreConfiguration.theme);

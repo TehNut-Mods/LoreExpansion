@@ -2,10 +2,10 @@ package me.dmillerw.loreexpansion.core;
 
 import com.google.common.collect.*;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import me.dmillerw.loreexpansion.LoreExpansion;
 import me.dmillerw.loreexpansion.core.data.Lore;
 import me.dmillerw.loreexpansion.core.data.LoreKey;
+import me.dmillerw.loreexpansion.core.json.Serializers;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 
 import java.io.*;
@@ -17,11 +17,11 @@ import java.util.Set;
 public class LoreLoader {
 
     public static final Set<Lore> LOADED_LORE = Sets.newHashSet();
-    public static final Gson GSON = new GsonBuilder()
-            .setPrettyPrinting()
-            .serializeNulls()
-            .disableHtmlEscaping()
-            .create();
+    public static final Gson GSON = Serializers.getGson(
+            Serializers.LORE,
+            Serializers.TRIGGER_DATA,
+            Serializers.RESOURCE_LOCATION
+    );
 
     private static List<String> categories = Lists.newArrayList();
     private static Map<String, Lore> lore = Maps.newHashMap();
