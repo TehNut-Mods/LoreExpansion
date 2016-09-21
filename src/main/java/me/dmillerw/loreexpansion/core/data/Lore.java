@@ -7,7 +7,7 @@ import me.dmillerw.loreexpansion.core.trigger.TriggerData;
 import javax.annotation.Nullable;
 import java.util.Set;
 
-public class Lore implements Comparable<Lore> {
+public final class Lore implements Comparable<Lore> {
 
     public static final Lore NULL_LORE = new Lore("NULL", "NULL", new Content("NULL", "NULL", "NULL", false), 0, Sets.newHashSet(new LoreKey("blah", "blah")), true, null);
     public static final String GLOBAL = "global";

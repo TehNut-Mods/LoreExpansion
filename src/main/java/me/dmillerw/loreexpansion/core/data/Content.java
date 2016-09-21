@@ -2,7 +2,7 @@ package me.dmillerw.loreexpansion.core.data;
 
 import com.google.common.base.Objects;
 
-public class Content {
+public final class Content {
 
     private final String title;
     private final String body;

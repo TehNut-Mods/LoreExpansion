@@ -3,7 +3,7 @@ package me.dmillerw.loreexpansion.core.data;
 import com.google.common.base.Objects;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class LoreKey {
+public final class LoreKey {
 
     private final String id;
     private final String category;
