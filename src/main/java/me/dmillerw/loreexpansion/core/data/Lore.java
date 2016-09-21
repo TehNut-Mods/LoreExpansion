@@ -9,26 +9,28 @@ import java.util.Set;
 
 public class Lore implements Comparable<Lore> {
 
-    public static final Lore NULL_LORE = new Lore("NULL", "NULL", new Content("NULL", "NULL", "NULL", false), 0, Sets.newHashSet(new LoreKey("blah", "blah")), null);
+    public static final Lore NULL_LORE = new Lore("NULL", "NULL", new Content("NULL", "NULL", "NULL", false), 0, Sets.newHashSet(new LoreKey("blah", "blah")), true, null);
     public static final String GLOBAL = "global";
 
     private final LoreKey key;
     private final Content content;
     private final int sortingIndex;
     private final Set<LoreKey> requirements;
+    private final boolean autoAdd;
     @Nullable
     private final TriggerData loreTrigger;
 
-    public Lore(LoreKey key, Content content, int sortingIndex, Set<LoreKey> requirements, @Nullable TriggerData loreTrigger) {
+    public Lore(LoreKey key, Content content, int sortingIndex, Set<LoreKey> requirements, boolean autoAdd, @Nullable TriggerData loreTrigger) {
         this.key = key;
         this.content = content;
         this.sortingIndex = sortingIndex;
         this.requirements = requirements;
+        this.autoAdd = autoAdd;
         this.loreTrigger = loreTrigger;
     }
 
-    public Lore(String id, String category, Content content, int sortingIndex, Set<LoreKey> requirements, @Nullable TriggerData loreTrigger) {
-        this(new LoreKey(id, category), content, sortingIndex, requirements, loreTrigger);
+    public Lore(String id, String category, Content content, int sortingIndex, Set<LoreKey> requirements, boolean autoAdd, @Nullable TriggerData loreTrigger) {
+        this(new LoreKey(id, category), content, sortingIndex, requirements, autoAdd, loreTrigger);
     }
 
     public boolean isNull() {
@@ -49,6 +51,10 @@ public class Lore implements Comparable<Lore> {
 
     public Set<LoreKey> getRequirements() {
         return requirements;
+    }
+
+    public boolean shouldAutoAdd() {
+        return autoAdd;
     }
 
     @Nullable

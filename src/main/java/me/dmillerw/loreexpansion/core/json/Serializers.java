@@ -31,8 +31,11 @@ public class Serializers {
             Content content = context.deserialize(json.getAsJsonObject().get("content"), Content.class);
             int sortingIndex = json.getAsJsonObject().get("sortingIndex").getAsInt();
             LoreKey[] requirements = context.deserialize(json.getAsJsonObject().get("requirements").getAsJsonArray(), LoreKey[].class);
+            boolean autoAdd = true;
+            if (json.getAsJsonObject().has("autoAdd"))
+                autoAdd = json.getAsJsonObject().get("autoAdd").getAsBoolean();
             TriggerData loreTrigger = context.deserialize(json.getAsJsonObject().get("trigger"), TriggerData.class);
-            return new Lore(loreKey, content, sortingIndex, Sets.newHashSet(requirements), loreTrigger);
+            return new Lore(loreKey, content, sortingIndex, Sets.newHashSet(requirements), autoAdd, loreTrigger);
         }
 
         @Override
@@ -42,6 +45,7 @@ public class Serializers {
             jsonObject.add("content", context.serialize(src.getContent()));
             jsonObject.addProperty("sortingIndex", src.getSortingIndex());
             jsonObject.add("requirements", context.serialize(src.getRequirements()));
+            jsonObject.addProperty("autoAdd", src.shouldAutoAdd());
             jsonObject.add("trigger", context.serialize(src.getLoreTrigger()));
             return jsonObject;
         }
