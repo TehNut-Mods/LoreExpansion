@@ -2,6 +2,7 @@ package me.dmillerw.loreexpansion.proxy;
 
 import me.dmillerw.loreexpansion.LoreConfiguration;
 import me.dmillerw.loreexpansion.LoreExpansion;
+import me.dmillerw.loreexpansion.client.KeyHandler;
 import me.dmillerw.loreexpansion.client.sound.LESoundHandler;
 import me.dmillerw.loreexpansion.client.texture.SmallFontRenderer;
 import me.dmillerw.loreexpansion.core.data.LoreKey;
@@ -36,6 +37,7 @@ public class ClientProxy extends CommonProxy {
         setModel(LoreExpansion.LORE_PAGE, 0, LoreExpansion.LORE_PAGE.getRegistryName());
 
         MinecraftForge.EVENT_BUS.register(LESoundHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(new KeyHandler());
 
         if (!LoreConfiguration.theme.equalsIgnoreCase("default")) {
             File themeFolder = new File(LoreExpansion.themeDir, LoreConfiguration.theme);
