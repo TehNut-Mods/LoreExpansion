@@ -3,13 +3,17 @@ package me.dmillerw.loreexpansion.core.json;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.*;
+import me.dmillerw.loreexpansion.LoreExpansion;
 import me.dmillerw.loreexpansion.core.data.Content;
 import me.dmillerw.loreexpansion.core.data.Lore;
 import me.dmillerw.loreexpansion.core.data.LoreKey;
 import me.dmillerw.loreexpansion.core.trigger.TriggerData;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.stats.Achievement;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.Type;
@@ -24,6 +28,17 @@ public class Serializers {
         gsonBuilder.serializeNulls();
         gsonBuilder.disableHtmlEscaping();
         for (SerializerBase<?> serializer : serializers)
+            gsonBuilder.registerTypeAdapter(serializer.getType(), serializer);
+        return gsonBuilder.create();
+    }
+    public static Gson getStdGson(SerializerBase<?>... serializers) {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.setPrettyPrinting();
+        gsonBuilder.serializeNulls();
+        gsonBuilder.disableHtmlEscaping();
+        for (SerializerBase<?> serializer : serializers)
+            gsonBuilder.registerTypeAdapter(serializer.getType(), serializer);
+        for (SerializerBase<?> serializer : ALL_SERIALIZERS)
             gsonBuilder.registerTypeAdapter(serializer.getType(), serializer);
         return gsonBuilder.create();
     }
@@ -140,5 +155,49 @@ public class Serializers {
         public Type getType() {
             return BlockPos.class;
         }
+    };
+    public static final SerializerBase<ItemStack> ITEMSTACK = new SerializerBase<ItemStack>() {
+        @Override
+        public ItemStack deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            ResourceLocation registryName = context.deserialize(json.getAsJsonObject().get("id"), ResourceLocation.class);
+            int amount = 0;
+            if (json.getAsJsonObject().has("amount"))
+                amount = json.getAsJsonObject().get("amount").getAsInt();
+            int meta = 1;
+            if (json.getAsJsonObject().has("meta"))
+                meta = json.getAsJsonObject().get("meta").getAsInt();
+            ItemStack stack = new ItemStack(ForgeRegistries.ITEMS.getValue(registryName), amount, meta);
+            try {
+                if (json.getAsJsonObject().has("nbt"))
+                    stack.setTagCompound(JsonToNBT.getTagFromJson(json.getAsJsonObject().get("json").toString()));
+            } catch (Exception e) {
+                LoreExpansion.LOGGER.error("Error parsing NBT JSON for a stack containing {}", registryName);
+            }
+            return stack;
+        }
+
+        @Override
+        public JsonElement serialize(ItemStack src, Type typeOfSrc, JsonSerializationContext context) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.add("id", context.serialize(src.getItem().getRegistryName()));
+            jsonObject.addProperty("amount", src.stackSize);
+            jsonObject.addProperty("meta", src.getItemDamage());
+            if (src.hasTagCompound())
+                jsonObject.addProperty("nbt", src.getTagCompound().toString());
+            return jsonObject;
+        }
+
+        @Override
+        public Type getType() {
+            return ItemStack.class;
+        }
+    };
+    public static final SerializerBase[] ALL_SERIALIZERS = new SerializerBase[] {
+            LORE,
+            RESOURCE_LOCATION,
+            TRIGGER_DATA,
+            BLOCKPOS,
+            ACHIEVEMENT,
+            ITEMSTACK
     };
 }

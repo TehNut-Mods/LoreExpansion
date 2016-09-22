@@ -26,7 +26,7 @@ public final class TriggerData {
     public Object getTarget() {
         if (target == null) {
             LoreTrigger<?> trigger = Triggers.LORE_TRIGGERS.get(getTriggerId());
-            target = Serializers.getGson(Serializers.TRIGGER_DATA, trigger.getSerializer()).fromJson(targetJson, trigger.getType());
+            target = Serializers.getStdGson(trigger.getSerializer()).fromJson(targetJson, trigger.getType());
         }
 
         return target;
