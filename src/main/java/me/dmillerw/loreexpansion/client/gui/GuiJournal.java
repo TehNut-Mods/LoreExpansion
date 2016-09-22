@@ -284,7 +284,7 @@ public class GuiJournal extends GuiScreen {
             drawHoveringText(Collections.singletonList(I18n.format("gui.loreexpansion.previous")), x, y, mc.fontRendererObj);
 
         if (inBounds(left + TAB_FORWARD.getLeft(), top + TAB_FORWARD.getRight(), TAB_SIZE.getLeft(), TAB_SIZE.getRight(), x, y))
-            drawHoveringText(Collections.singletonList(I18n.format("gui.loreexpansion.previous")), x, y, mc.fontRendererObj);
+            drawHoveringText(Collections.singletonList(I18n.format("gui.loreexpansion.next")), x, y, mc.fontRendererObj);
     }
 
     @Override
