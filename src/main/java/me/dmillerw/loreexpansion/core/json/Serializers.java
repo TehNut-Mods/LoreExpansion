@@ -1,15 +1,19 @@
 package me.dmillerw.loreexpansion.core.json;
 
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.*;
 import me.dmillerw.loreexpansion.core.data.Content;
 import me.dmillerw.loreexpansion.core.data.Lore;
 import me.dmillerw.loreexpansion.core.data.LoreKey;
 import me.dmillerw.loreexpansion.core.trigger.TriggerData;
+import net.minecraft.stats.Achievement;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.Type;
+import java.util.Map;
 
 public class Serializers {
 
@@ -24,6 +28,7 @@ public class Serializers {
         return gsonBuilder.create();
     }
 
+    public static final Map<String, Achievement> ACHIEVEMENT_MAP = Maps.newHashMap();
     public static final SerializerBase<Lore> LORE = new SerializerBase<Lore>() {
         @Override
         public Lore deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
@@ -95,6 +100,45 @@ public class Serializers {
         @Override
         public Type getType() {
             return TriggerData.class;
+        }
+    };
+    public static final SerializerBase<Achievement> ACHIEVEMENT = new SerializerBase<Achievement>() {
+        @Override
+        public Achievement deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            return ACHIEVEMENT_MAP.get(context.<String>deserialize(json.getAsJsonObject().get("id"), String.class));
+        }
+
+        @Override
+        public JsonElement serialize(Achievement src, Type typeOfSrc, JsonSerializationContext context) {
+            return context.serialize(src.statId);
+        }
+
+        @Override
+        public Type getType() {
+            return Achievement.class;
+        }
+    };
+    public static final SerializerBase<BlockPos> BLOCKPOS = new SerializerBase<BlockPos>() {
+        @Override
+        public BlockPos deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            int x = json.getAsJsonObject().get("xPos").getAsInt();
+            int y = json.getAsJsonObject().get("yPos").getAsInt();
+            int z = json.getAsJsonObject().get("zPos").getAsInt();
+            return new BlockPos(x, y, z);
+        }
+
+        @Override
+        public JsonElement serialize(BlockPos src, Type typeOfSrc, JsonSerializationContext context) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("xPos", src.getX());
+            jsonObject.addProperty("yPos", src.getY());
+            jsonObject.addProperty("zPos", src.getZ());
+            return jsonObject;
+        }
+
+        @Override
+        public Type getType() {
+            return BlockPos.class;
         }
     };
 }

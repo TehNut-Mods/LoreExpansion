@@ -2,11 +2,10 @@ package me.dmillerw.loreexpansion.core.trigger;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import com.google.common.collect.Maps;
-import com.google.gson.*;
 import me.dmillerw.loreexpansion.LoreExpansion;
 import me.dmillerw.loreexpansion.core.data.Lore;
 import me.dmillerw.loreexpansion.core.json.SerializerBase;
+import me.dmillerw.loreexpansion.core.json.Serializers;
 import me.dmillerw.loreexpansion.util.LoreUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.stats.Achievement;
@@ -15,19 +14,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.lang.reflect.Type;
-import java.util.Map;
-
 public class Triggers {
 
     public static final BiMap<ResourceLocation, LoreTrigger<?>> LORE_TRIGGERS = HashBiMap.create();
 
     public static final LoreTrigger<Achievement> ACHIEVEMENT = new LoreTrigger<Achievement>() {
-        Map<String, Achievement> achievementMap = Maps.newHashMap();
-
         @Override
         public boolean trigger(World world, EntityPlayer player, Lore lore, Achievement triggerTarget) {
-            if (achievementMap.size() != AchievementList.ACHIEVEMENTS.size())
+            if (Serializers.ACHIEVEMENT_MAP.size() != AchievementList.ACHIEVEMENTS.size())
                 buildAchievements();
 
             Achievement achievement = (Achievement) lore.getLoreTrigger().getTarget();
@@ -40,22 +34,7 @@ public class Triggers {
 
         @Override
         public SerializerBase<Achievement> getSerializer() {
-            return new SerializerBase<Achievement>() {
-                @Override
-                public Achievement deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return achievementMap.get(context.<String>deserialize(json.getAsJsonObject().get("id"), String.class));
-                }
-
-                @Override
-                public JsonElement serialize(Achievement src, Type typeOfSrc, JsonSerializationContext context) {
-                    return context.serialize(src.statId);
-                }
-
-                @Override
-                public Type getType() {
-                    return Achievement.class;
-                }
-            };
+            return Serializers.ACHIEVEMENT;
         }
 
         @Override
@@ -64,9 +43,9 @@ public class Triggers {
         }
 
         private void buildAchievements() {
-            achievementMap.clear();
+            Serializers.ACHIEVEMENT_MAP.clear();
             for (Achievement achievement : AchievementList.ACHIEVEMENTS)
-                achievementMap.put(achievement.statId, achievement);
+                Serializers.ACHIEVEMENT_MAP.put(achievement.statId, achievement);
         }
     };
     public static final LoreTrigger<BlockPos> BLOCKPOS = new LoreTrigger<BlockPos>() {
@@ -82,29 +61,7 @@ public class Triggers {
 
         @Override
         public SerializerBase<BlockPos> getSerializer() {
-            return new SerializerBase<BlockPos>() {
-                @Override
-                public BlockPos deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    int x = json.getAsJsonObject().get("xPos").getAsInt();
-                    int y = json.getAsJsonObject().get("yPos").getAsInt();
-                    int z = json.getAsJsonObject().get("zPos").getAsInt();
-                    return new BlockPos(x, y, z);
-                }
-
-                @Override
-                public JsonElement serialize(BlockPos src, Type typeOfSrc, JsonSerializationContext context) {
-                    JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("xPos", src.getX());
-                    jsonObject.addProperty("yPos", src.getY());
-                    jsonObject.addProperty("zPos", src.getZ());
-                    return jsonObject;
-                }
-
-                @Override
-                public Type getType() {
-                    return BlockPos.class;
-                }
-            };
+            return Serializers.BLOCKPOS;
         }
 
         @Override
