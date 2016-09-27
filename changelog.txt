@@ -4,3 +4,5 @@ Version 1.1.0
 
 - Port to 1.10.2
 - Now maintained by TehNut
+- Drastically changed the json format. See the wiki for details
+- Added a more powerful trigger system so that lore can be provided to players after specific requirements are met.
