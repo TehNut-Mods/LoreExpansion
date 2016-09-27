@@ -133,20 +133,14 @@ String getChangelogText() {
     return str
 }
 
-def curseRelations = {
-
-}
-
 curseforge {
-    if (project.hasProperty('curse_key'))
-        apiKey = project.curse_key
+    if (project.hasProperty('curse_key_TehNut'))
+        apiKey = project.curse_key_TehNut
 
     project {
         id = "${curse_id}"
         changelog = getChangelogText()
         releaseType = 'release'
-
-        relations curseRelations
 
         addArtifact sourceJar
     }
