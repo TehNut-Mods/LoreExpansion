@@ -173,7 +173,7 @@ public class Serializers {
             ItemStack stack = new ItemStack(ForgeRegistries.ITEMS.getValue(registryName), amount, meta);
             try {
                 if (json.getAsJsonObject().has("nbt"))
-                    stack.setTagCompound(JsonToNBT.getTagFromJson(json.getAsJsonObject().get("json").toString()));
+                    stack.setTagCompound(JsonToNBT.getTagFromJson(json.getAsJsonObject().get("nbt").toString()));
             } catch (Exception e) {
                 LoreExpansion.LOGGER.error("Error parsing NBT JSON for a stack containing {}", registryName);
             }
