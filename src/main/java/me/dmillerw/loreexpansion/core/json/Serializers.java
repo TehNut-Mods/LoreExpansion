@@ -54,8 +54,11 @@ public class Serializers {
             boolean autoAdd = true;
             if (json.getAsJsonObject().has("autoAdd"))
                 autoAdd = json.getAsJsonObject().get("autoAdd").getAsBoolean();
+            boolean defaultLore = false;
+            if (json.getAsJsonObject().has("defaultLore"))
+                defaultLore = json.getAsJsonObject().get("defaultLore").getAsBoolean();
             TriggerData loreTrigger = context.deserialize(json.getAsJsonObject().get("trigger"), TriggerData.class);
-            return new Lore(loreKey, content, sortingIndex, Sets.newHashSet(requirements), autoAdd, loreTrigger);
+            return new Lore(loreKey, content, sortingIndex, Sets.newHashSet(requirements), autoAdd, defaultLore, loreTrigger);
         }
 
         @Override
@@ -66,6 +69,7 @@ public class Serializers {
             jsonObject.addProperty("sortingIndex", src.getSortingIndex());
             jsonObject.add("requirements", context.serialize(src.getRequirements()));
             jsonObject.addProperty("autoAdd", src.shouldAutoAdd());
+            jsonObject.addProperty("defaultLore", src.isDefaultLore());
             jsonObject.add("trigger", context.serialize(src.getLoreTrigger()));
             return jsonObject;
         }

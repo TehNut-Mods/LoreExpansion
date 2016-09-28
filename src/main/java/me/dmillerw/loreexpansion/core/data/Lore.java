@@ -9,7 +9,7 @@ import java.util.Set;
 
 public final class Lore implements Comparable<Lore> {
 
-    public static final Lore NULL_LORE = new Lore("NULL", "NULL", new Content("NULL", "NULL", "NULL", false), 0, Sets.newHashSet(new LoreKey("blah", "blah")), true, null);
+    public static final Lore NULL_LORE = new Lore("NULL", "NULL", new Content("NULL", "NULL", "NULL", false), 0, Sets.newHashSet(new LoreKey("blah", "blah")), true, false, null);
     public static final String GLOBAL = "global";
 
     private final LoreKey key;
@@ -17,20 +17,22 @@ public final class Lore implements Comparable<Lore> {
     private final int sortingIndex;
     private final Set<LoreKey> requirements;
     private final boolean autoAdd;
+    private final boolean defaultLore;
     @Nullable
     private final TriggerData loreTrigger;
 
-    public Lore(LoreKey key, Content content, int sortingIndex, Set<LoreKey> requirements, boolean autoAdd, @Nullable TriggerData loreTrigger) {
+    public Lore(LoreKey key, Content content, int sortingIndex, Set<LoreKey> requirements, boolean autoAdd, boolean defaultLore, @Nullable TriggerData loreTrigger) {
         this.key = key;
         this.content = content;
         this.sortingIndex = sortingIndex;
         this.requirements = requirements;
         this.autoAdd = autoAdd;
+        this.defaultLore = defaultLore;
         this.loreTrigger = loreTrigger;
     }
 
-    public Lore(String id, String category, Content content, int sortingIndex, Set<LoreKey> requirements, boolean autoAdd, @Nullable TriggerData loreTrigger) {
-        this(new LoreKey(id, category), content, sortingIndex, requirements, autoAdd, loreTrigger);
+    public Lore(String id, String category, Content content, int sortingIndex, Set<LoreKey> requirements, boolean autoAdd, boolean defaultLore, @Nullable TriggerData loreTrigger) {
+        this(new LoreKey(id, category), content, sortingIndex, requirements, autoAdd, defaultLore, loreTrigger);
     }
 
     public boolean isNull() {
@@ -55,6 +57,10 @@ public final class Lore implements Comparable<Lore> {
 
     public boolean shouldAutoAdd() {
         return autoAdd;
+    }
+
+    public boolean isDefaultLore() {
+        return defaultLore;
     }
 
     @Nullable

@@ -17,6 +17,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
+import java.util.Set;
+
 public class LoreUtil {
 
     public static void provideLore(EntityPlayer player, Lore lore) {
@@ -75,5 +77,20 @@ public class LoreUtil {
         NBTTagCompound loreTag = stack.getTagCompound().getCompoundTag("lore");
         LoreKey loreKey = new LoreKey(loreTag.getString("id"), loreTag.getString("category"));
         return LoreLoader.getLore(loreKey);
+    }
+
+    public static void checkDefaults(EntityPlayer player) {
+        LoreSaveData loreSaveData = getData(player.getEntityWorld());
+        Set<LoreKey> current = loreSaveData.getDataForPlayer(player);
+        boolean obtained = false;
+        for (Lore lore : LoreLoader.LOADED_LORE) {
+            if (lore.isDefaultLore() && !current.contains(lore.getKey())) {
+                loreSaveData.addData(player, lore.getKey());
+                obtained = true;
+            }
+        }
+
+        if (obtained)
+            LoreExpansion.NETWORK_WRAPPER.sendTo(new MessageSyncLore((EntityPlayerMP) player), (EntityPlayerMP) player);
     }
 }

@@ -20,8 +20,10 @@ public class PlayerEventHandler {
     @SubscribeEvent
     public void playerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         EntityPlayer player = event.player;
-        if (player instanceof EntityPlayerMP)
+        if (player instanceof EntityPlayerMP) {
             LoreExpansion.NETWORK_WRAPPER.sendTo(new MessageSyncLore((EntityPlayerMP) player), (EntityPlayerMP) player);
+            LoreUtil.checkDefaults(player);
+        }
 
         if (LoreConfiguration.spawnWithJournal && !player.getEntityData().hasKey("loreexpansion-spawn")) {
             GeneralUtil.giveStackToPlayer(player, new ItemStack(LoreExpansion.LORE_JOURNAL));
