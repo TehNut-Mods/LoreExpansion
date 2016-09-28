@@ -18,6 +18,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.tuple.Pair;
@@ -246,7 +247,7 @@ public class GuiJournal extends GuiScreen {
         if (current != null) {
             drawCenteredString(StringHelper.getLocalizedText(current.getContent().getTitle()), left + LEFT_SIZE.getLeft() + (RIGHT_SIZE.getLeft() / 2), top + TITLE_Y, 0x000000);
             for (int i = textScrollIndex; i < Math.min(textScrollIndex + LORE_ROW_COUNT, currentLoreText.size()); i++) {
-                String lore = currentLoreText.get(i);
+                String lore = new TextComponentString(currentLoreText.get(i)).getFormattedText();
                 drawString(lore, left + LEFT_SIZE.getLeft() + BODY_X, (top + BODY_y + ClientProxy.fontRendererSmall.FONT_HEIGHT) + ClientProxy.fontRendererSmall.FONT_HEIGHT * (i - textScrollIndex), TEXT_SCALE, 0x000000, true);
             }
         }
