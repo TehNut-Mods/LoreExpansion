@@ -1,8 +1,10 @@
 package me.dmillerw.loreexpansion.core.saving;
 
+import me.dmillerw.loreexpansion.LoreConfiguration;
 import me.dmillerw.loreexpansion.LoreExpansion;
 import me.dmillerw.loreexpansion.core.data.Lore;
 import me.dmillerw.loreexpansion.network.MessageSyncLore;
+import me.dmillerw.loreexpansion.util.GeneralUtil;
 import me.dmillerw.loreexpansion.util.LoreUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -20,6 +22,11 @@ public class PlayerEventHandler {
         EntityPlayer player = event.player;
         if (player instanceof EntityPlayerMP)
             LoreExpansion.NETWORK_WRAPPER.sendTo(new MessageSyncLore((EntityPlayerMP) player), (EntityPlayerMP) player);
+
+        if (LoreConfiguration.spawnWithJournal && !player.getEntityData().hasKey("loreexpansion-spawn")) {
+            GeneralUtil.giveStackToPlayer(player, new ItemStack(LoreExpansion.LORE_JOURNAL));
+            player.getEntityData().setBoolean("loreexpansion-spawn", true);
+        }
     }
 
     @SubscribeEvent

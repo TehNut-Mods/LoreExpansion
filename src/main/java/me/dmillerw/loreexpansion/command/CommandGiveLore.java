@@ -5,6 +5,7 @@ import me.dmillerw.loreexpansion.LoreExpansion;
 import me.dmillerw.loreexpansion.core.LoreLoader;
 import me.dmillerw.loreexpansion.core.data.Lore;
 import me.dmillerw.loreexpansion.core.data.LoreKey;
+import me.dmillerw.loreexpansion.util.GeneralUtil;
 import me.dmillerw.loreexpansion.util.LoreUtil;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -55,21 +56,8 @@ public class CommandGiveLore extends CommandBase {
             useItem = Boolean.parseBoolean(args[3]);
 
         if (useItem) { // Gives lore scrap item to player
-            ItemStack stack = LoreUtil.attachLore(new ItemStack(LoreExpansion.LORE_PAGE), loreKey);
-
-            boolean didGive = player.inventory.addItemStackToInventory(stack);
-            if (didGive) {
-                player.worldObj.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((player.getRNG().nextFloat() - player.getRNG().nextFloat()) * 0.7F + 1.0F) * 2.0F);
-                player.inventoryContainer.detectAndSendChanges();
-            }
-
-            if (!didGive) {
-                EntityItem entityitem = player.dropItem(stack, false);
-                if (entityitem != null) {
-                    entityitem.setNoPickupDelay();
-                    entityitem.setOwner(player.getName());
-                }
-            }
+            ItemStack loreStack = LoreUtil.attachLore(new ItemStack(LoreExpansion.LORE_PAGE), loreKey);
+            GeneralUtil.giveStackToPlayer(player, loreStack);
         } else { // Gives lore directly to player data
             LoreUtil.provideLore(player, loreKey);
         }
