@@ -17,11 +17,7 @@ import java.util.Set;
 public class LoreLoader {
 
     public static final Set<Lore> LOADED_LORE = Sets.newHashSet();
-    public static final Gson GSON = Serializers.getGson(
-            Serializers.LORE,
-            Serializers.TRIGGER_DATA,
-            Serializers.RESOURCE_LOCATION
-    );
+    public static final Gson GSON = Serializers.getStdGson();
 
     private static List<String> categories = Lists.newArrayList();
     private static Map<String, Lore> lore = Maps.newHashMap();

@@ -2,6 +2,7 @@ package me.dmillerw.loreexpansion.core.data;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
+import me.dmillerw.loreexpansion.core.action.ActionData;
 import me.dmillerw.loreexpansion.core.trigger.TriggerData;
 
 import javax.annotation.Nullable;
@@ -9,7 +10,7 @@ import java.util.Set;
 
 public final class Lore implements Comparable<Lore> {
 
-    public static final Lore NULL_LORE = new Lore("NULL", "NULL", new Content("NULL", "NULL", "NULL", false), 0, Sets.newHashSet(new LoreKey("blah", "blah")), true, false, null);
+    public static final Lore NULL_LORE = new Lore("NULL", "NULL", new Content("NULL", "NULL", "NULL", false), 0, Sets.newHashSet(new LoreKey("blah", "blah")), true, false, null, null);
     public static final String GLOBAL = "global";
 
     private final LoreKey key;
@@ -20,8 +21,10 @@ public final class Lore implements Comparable<Lore> {
     private final boolean defaultLore;
     @Nullable
     private final TriggerData loreTrigger;
+    @Nullable
+    private final ActionData loreAction;
 
-    public Lore(LoreKey key, Content content, int sortingIndex, Set<LoreKey> requirements, boolean autoAdd, boolean defaultLore, @Nullable TriggerData loreTrigger) {
+    public Lore(LoreKey key, Content content, int sortingIndex, Set<LoreKey> requirements, boolean autoAdd, boolean defaultLore, @Nullable TriggerData loreTrigger, @Nullable ActionData loreAction) {
         this.key = key;
         this.content = content;
         this.sortingIndex = sortingIndex;
@@ -29,10 +32,11 @@ public final class Lore implements Comparable<Lore> {
         this.autoAdd = autoAdd;
         this.defaultLore = defaultLore;
         this.loreTrigger = loreTrigger;
+        this.loreAction = loreAction;
     }
 
-    public Lore(String id, String category, Content content, int sortingIndex, Set<LoreKey> requirements, boolean autoAdd, boolean defaultLore, @Nullable TriggerData loreTrigger) {
-        this(new LoreKey(id, category), content, sortingIndex, requirements, autoAdd, defaultLore, loreTrigger);
+    public Lore(String id, String category, Content content, int sortingIndex, Set<LoreKey> requirements, boolean autoAdd, boolean defaultLore, @Nullable TriggerData loreTrigger, @Nullable ActionData loreAction) {
+        this(new LoreKey(id, category), content, sortingIndex, requirements, autoAdd, defaultLore, loreTrigger, loreAction);
     }
 
     public boolean isNull() {
@@ -66,6 +70,11 @@ public final class Lore implements Comparable<Lore> {
     @Nullable
     public TriggerData getLoreTrigger() {
         return loreTrigger;
+    }
+
+    @Nullable
+    public ActionData getLoreAction() {
+        return loreAction;
     }
 
     @Override

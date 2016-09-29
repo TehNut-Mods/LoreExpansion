@@ -3,6 +3,8 @@ package me.dmillerw.loreexpansion.util;
 import com.google.common.base.Strings;
 import me.dmillerw.loreexpansion.LoreExpansion;
 import me.dmillerw.loreexpansion.core.LoreLoader;
+import me.dmillerw.loreexpansion.core.action.Actions;
+import me.dmillerw.loreexpansion.core.action.ILoreAction;
 import me.dmillerw.loreexpansion.core.data.Lore;
 import me.dmillerw.loreexpansion.core.data.LoreKey;
 import me.dmillerw.loreexpansion.core.saving.LoreSaveData;
@@ -40,6 +42,9 @@ public class LoreUtil {
                 LoreExpansion.NETWORK_WRAPPER.sendTo(new MessageSyncLore((EntityPlayerMP) player), (EntityPlayerMP) player);
                 if (!Strings.isNullOrEmpty(lore.getContent().getAudio()) && lore.getContent().shouldAutoplay())
                     LoreExpansion.NETWORK_WRAPPER.sendTo(new MessagePlayLore(lore.getKey()), (EntityPlayerMP) player);
+
+                if (lore.getLoreAction() != null)
+                    Actions.LORE_ACTIONS.get(lore.getLoreAction().getActionId()).act(player, lore);
             }
         }
     }

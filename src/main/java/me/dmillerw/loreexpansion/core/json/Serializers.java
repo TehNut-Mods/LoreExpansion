@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.*;
 import me.dmillerw.loreexpansion.LoreExpansion;
+import me.dmillerw.loreexpansion.core.action.ActionData;
 import me.dmillerw.loreexpansion.core.data.Content;
 import me.dmillerw.loreexpansion.core.data.Lore;
 import me.dmillerw.loreexpansion.core.data.LoreKey;
@@ -58,7 +59,8 @@ public class Serializers {
             if (json.getAsJsonObject().has("defaultLore"))
                 defaultLore = json.getAsJsonObject().get("defaultLore").getAsBoolean();
             TriggerData loreTrigger = context.deserialize(json.getAsJsonObject().get("trigger"), TriggerData.class);
-            return new Lore(loreKey, content, sortingIndex, Sets.newHashSet(requirements), autoAdd, defaultLore, loreTrigger);
+            ActionData actionData = context.deserialize(json.getAsJsonObject().get("action"), ActionData.class);
+            return new Lore(loreKey, content, sortingIndex, Sets.newHashSet(requirements), autoAdd, defaultLore, loreTrigger, actionData);
         }
 
         @Override
@@ -119,6 +121,27 @@ public class Serializers {
         @Override
         public Type getType() {
             return TriggerData.class;
+        }
+    };
+    public static final SerializerBase<ActionData> ACTION_DATA = new SerializerBase<ActionData>() {
+        @Override
+        public ActionData deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            ResourceLocation actionId = context.deserialize(json.getAsJsonObject().get("actionId"), ResourceLocation.class);
+            JsonElement data = json.getAsJsonObject().get("data");
+            return new ActionData(actionId, data);
+        }
+
+        @Override
+        public JsonElement serialize(ActionData src, Type typeOfSrc, JsonSerializationContext context) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.add("actionId", context.serialize(src.getActionId()));
+            jsonObject.add("data", src.getActionJson());
+            return jsonObject;
+        }
+
+        @Override
+        public Type getType() {
+            return ActionData.class;
         }
     };
     public static final SerializerBase<Achievement> ACHIEVEMENT = new SerializerBase<Achievement>() {
@@ -200,6 +223,7 @@ public class Serializers {
             LORE,
             RESOURCE_LOCATION,
             TRIGGER_DATA,
+            ACTION_DATA,
             BLOCKPOS,
             ACHIEVEMENT,
             ITEMSTACK
