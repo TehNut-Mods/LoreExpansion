@@ -1,4 +1,17 @@
 ------------------------------------------------------
+Version 1.1.1
+------------------------------------------------------
+
+- Re-implemented some functions from the 1.7.10 version
+    - `hidden`: Hides the entry from the Journal
+    - `default`: New players will start with Lore marked with this
+    - `notify`: Whether or not to display the notification text when Lore is obtained
+    - `action`: In 1.7.10, this was limited to commands. In 1.10 and above, it will be expandable to almost anything.
+        - I'd suggest holding off on using this until I re-add the command delay feature.
+- Journal text is now wrapped in an `ITextComponent` on a per-line basis.
+    - This means that Minecraft's formatting codes (http://minecraft.gamepedia.com/Formatting_codes) can be used.
+
+------------------------------------------------------
 Version 1.1.0
 ------------------------------------------------------
 
