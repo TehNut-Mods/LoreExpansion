@@ -140,7 +140,7 @@ curseforge {
     project {
         id = "${curse_id}"
         changelog = getChangelogText()
-        releaseType = 'release'
+        releaseType = 'beta'
 
         addArtifact sourceJar
     }
