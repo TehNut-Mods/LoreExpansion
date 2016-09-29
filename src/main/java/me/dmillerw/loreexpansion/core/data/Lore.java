@@ -25,6 +25,8 @@ public final class Lore implements Comparable<Lore> {
     @Nullable
     private final ActionData loreAction;
 
+    private boolean hidden;
+
     public Lore(LoreKey key, Content content, int sortingIndex, Set<LoreKey> requirements, boolean autoAdd, boolean defaultLore, boolean notify, @Nullable TriggerData loreTrigger, @Nullable ActionData loreAction) {
         this.key = key;
         this.content = content;
@@ -81,6 +83,15 @@ public final class Lore implements Comparable<Lore> {
     @Nullable
     public ActionData getLoreAction() {
         return loreAction;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public Lore setHidden(boolean hidden) {
+        this.hidden = hidden;
+        return this;
     }
 
     @Override
