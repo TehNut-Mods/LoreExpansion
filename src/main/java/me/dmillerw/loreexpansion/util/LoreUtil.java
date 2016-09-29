@@ -38,7 +38,8 @@ public class LoreUtil {
             LoreObtainedEvent event = new LoreObtainedEvent((EntityPlayerMP) player, lore);
 
             if (hasRequirement && loreSaveData.addData(player, lore.getKey()) && !MinecraftForge.EVENT_BUS.post(event)) {
-                LoreExpansion.NETWORK_WRAPPER.sendTo(new MessageOverlayLore("chat.loreexpansion.lore.added", lore.getContent().getTitle()), (EntityPlayerMP) player);
+                if (lore.shouldNotify())
+                    LoreExpansion.NETWORK_WRAPPER.sendTo(new MessageOverlayLore("chat.loreexpansion.lore.added", lore.getContent().getTitle()), (EntityPlayerMP) player);
                 LoreExpansion.NETWORK_WRAPPER.sendTo(new MessageSyncLore((EntityPlayerMP) player), (EntityPlayerMP) player);
                 if (!Strings.isNullOrEmpty(lore.getContent().getAudio()) && lore.getContent().shouldAutoplay())
                     LoreExpansion.NETWORK_WRAPPER.sendTo(new MessagePlayLore(lore.getKey()), (EntityPlayerMP) player);

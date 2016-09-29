@@ -58,9 +58,12 @@ public class Serializers {
             boolean defaultLore = false;
             if (json.getAsJsonObject().has("defaultLore"))
                 defaultLore = json.getAsJsonObject().get("defaultLore").getAsBoolean();
+            boolean notify = true;
+            if (json.getAsJsonObject().has("notify"))
+                notify = json.getAsJsonObject().get("notify").getAsBoolean();
             TriggerData loreTrigger = context.deserialize(json.getAsJsonObject().get("trigger"), TriggerData.class);
             ActionData actionData = context.deserialize(json.getAsJsonObject().get("action"), ActionData.class);
-            return new Lore(loreKey, content, sortingIndex, Sets.newHashSet(requirements), autoAdd, defaultLore, loreTrigger, actionData);
+            return new Lore(loreKey, content, sortingIndex, Sets.newHashSet(requirements), autoAdd, defaultLore, notify, loreTrigger, actionData);
         }
 
         @Override
