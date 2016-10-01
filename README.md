@@ -1,5 +1,9 @@
 # Lore Expansion
 
+![Logo](https://i.imgur.com/U3dcH9z.png)
+
+[![Build Status](http://tehnut.info/jenkins/buildStatus/icon?job=LoreExpansion/1.10)](http://tehnut.info/jenkins/job/LoreExpansion/1.10) [![](http://cf.way2muchnoise.eu/full_lore-expansion_downloads.svg)](https://minecraft.curseforge.com/projects/lore-expansion) [![](http://cf.way2muchnoise.eu/versions/For%20Minecraft_lore-expansion_all.svg)](https://minecraft.curseforge.com/projects/lore-expansion) ![Badge](https://img.shields.io/badge/Made_with-Memes-red.svg?style=flat-square) [![license](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square)](https://github.com/TehNut/LoreExpansion/blob/1.10/LICENSE.md)
+
 Lore Expansion is a mod designed by CyanideX and brought to fruition by dmillerw. It is now maintained by TehNut. It's sole purpose is to allow modpack authors and mapmakers the ability to expand the narrative behind the lore. While it was intended to be used alongside the Hardcore Questing Mode mod, it can just as easily be used by adventure map makers.
 
 The lore is fully customizable through the use of JSON files and allows players to have complete control over how their story progresses. Change everything from the title, body text to page numbers and even dimension specificity. Record your audio, place the .ogg file in the chosen folder and link the filename (without the extension) to the sound variable in the JSON file. Players can also specify the optional dimension specific tags to fit with your theme; leaving out the tag will label the lore as global and can be received by all players.
