@@ -24,12 +24,12 @@ public class CommandSenderLore implements ICommandSender {
 
     @Override
     public String getName() {
-        return LoreExpansion.NAME;
+        return LoreExpansion.ID;
     }
 
     @Override
     public ITextComponent getDisplayName() {
-        return new TextComponentString(LoreExpansion.NAME);
+        return new TextComponentString(getName());
     }
 
     @Override
