@@ -119,6 +119,9 @@ public class GuiJournal extends GuiScreen {
             if (currentCategory == null || currentCategory.isEmpty())
                 changeCategory(Lore.GLOBAL);
         }
+
+        if (!encyclopediaMode && !playerLore.contains(selectedLore))
+            selectedLore = null;
     }
 
     @Override
