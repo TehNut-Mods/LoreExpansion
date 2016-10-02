@@ -1,6 +1,7 @@
 package me.dmillerw.loreexpansion.proxy;
 
 import me.dmillerw.loreexpansion.LoreExpansion;
+import me.dmillerw.loreexpansion.core.DebugEventHandler;
 import me.dmillerw.loreexpansion.core.LoreLoader;
 import me.dmillerw.loreexpansion.core.saving.PlayerEventHandler;
 import me.dmillerw.loreexpansion.core.trigger.TriggerHandler;
@@ -18,6 +19,7 @@ public class CommonProxy {
 
         MinecraftForge.EVENT_BUS.register(new PlayerEventHandler());
         MinecraftForge.EVENT_BUS.register(new TriggerHandler());
+        MinecraftForge.EVENT_BUS.register(new DebugEventHandler());
     }
 
     public void init() {
