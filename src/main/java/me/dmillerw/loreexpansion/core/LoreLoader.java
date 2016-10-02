@@ -22,7 +22,7 @@ public class LoreLoader {
     public static final Gson GSON = Serializers.getStdGson();
 
     private static List<String> categories = Lists.newArrayList();
-    private static Map<String, Lore> lore = Maps.newHashMap();
+    private static Map<LoreKey, Lore> lore = Maps.newHashMap();
     private static ArrayListMultimap<String, Lore> sortedLore = ArrayListMultimap.create();
 
     public static void init(File loreDir, boolean initialRun) {
@@ -61,7 +61,7 @@ public class LoreLoader {
         }
 
         for (Lore loadedLore : LOADED_LORE) {
-            lore.put(loadedLore.getKey().getId(), loadedLore);
+            lore.put(loadedLore.getKey(), loadedLore);
             if (!categories.contains(loadedLore.getKey().getCategory()))
                 categories.add(loadedLore.getKey().getCategory());
         }
@@ -75,12 +75,8 @@ public class LoreLoader {
         }
     }
 
-    public static Lore getLore(String key) {
-        return lore.get(key);
-    }
-
     public static Lore getLore(LoreKey key) {
-        return lore.get(key.getId());
+        return lore.get(key);
     }
 
     public static List<Lore> getLoreForCategory(String category) {
