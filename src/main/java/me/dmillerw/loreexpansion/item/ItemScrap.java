@@ -47,8 +47,10 @@ public class ItemScrap extends Item {
     @SideOnly(Side.CLIENT)
     @Override
     public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> subItems) {
-        for (Lore lore : LoreLoader.LOADED_LORE)
-            subItems.add(LoreUtil.attachLore(new ItemStack(item), lore.getKey()));
+        for (String category : LoreLoader.getCategories())
+            for (Lore lore : LoreLoader.getLoreForCategory(category))
+                if (!lore.isHidden())
+                    subItems.add(LoreUtil.attachLore(new ItemStack(item), lore.getKey()));
 
         if (subItems.isEmpty())
             subItems.add(LoreUtil.attachLore(new ItemStack(item), Lore.NULL_LORE.getKey()));
