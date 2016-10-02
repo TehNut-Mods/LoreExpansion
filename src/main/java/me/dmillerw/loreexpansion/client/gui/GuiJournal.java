@@ -117,7 +117,7 @@ public class GuiJournal extends GuiScreen {
             ClientProxy.pickedUpPage = null;
         } else {
             if (currentCategory == null || currentCategory.isEmpty())
-                changeCategory(Lore.GLOBAL);
+                changeCategory(LoreLoader.getCategories().size() == 0 ? Lore.GLOBAL : LoreLoader.getCategories().get(0));
         }
 
         if (!encyclopediaMode && !playerLore.contains(selectedLore))
