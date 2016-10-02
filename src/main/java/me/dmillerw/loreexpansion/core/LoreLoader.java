@@ -3,9 +3,11 @@ package me.dmillerw.loreexpansion.core;
 import com.google.common.collect.*;
 import com.google.gson.Gson;
 import me.dmillerw.loreexpansion.LoreExpansion;
+import me.dmillerw.loreexpansion.core.data.Content;
 import me.dmillerw.loreexpansion.core.data.Lore;
 import me.dmillerw.loreexpansion.core.data.LoreKey;
 import me.dmillerw.loreexpansion.core.json.Serializers;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 
 import java.io.*;
@@ -26,10 +28,8 @@ public class LoreLoader {
     public static void init(File loreDir, boolean initialRun) {
         if (initialRun && !loreDir.exists() && loreDir.mkdirs()) {
             try {
-                String json = GSON.toJson(Lore.NULL_LORE);
-                FileWriter writer = new FileWriter(new File(loreDir, "null.json"));
-                writer.write(json);
-                writer.close();
+                FileUtils.copyURLToFile(LoreLoader.class.getResource("/assets/loreexpansion/defaults/lore/tutorial.ogg"), new File(LoreExpansion.audioDir, "tutorial.ogg"));
+                FileUtils.copyURLToFile(LoreLoader.class.getResource("/assets/loreexpansion/defaults/lore/tutorial.json"), new File(LoreExpansion.loreDir, "tutorial.json"));
             } catch (Exception e) {
                 e.printStackTrace();
             }

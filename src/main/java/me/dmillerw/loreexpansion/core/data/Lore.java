@@ -110,7 +110,6 @@ public final class Lore implements Comparable<Lore> {
         return Objects.toStringHelper(this)
                 .add("key", getKey())
                 .add("content", getContent())
-                .add("requirements", getRequirements())
                 .toString();
     }
 
