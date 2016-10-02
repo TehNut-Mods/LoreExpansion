@@ -79,6 +79,7 @@ public class Serializers {
             jsonObject.addProperty("autoAdd", src.shouldAutoAdd());
             jsonObject.addProperty("defaultLore", src.isDefaultLore());
             jsonObject.add("trigger", context.serialize(src.getLoreTrigger()));
+            jsonObject.add("action", context.serialize(src.getLoreAction()));
             return jsonObject;
         }
 
