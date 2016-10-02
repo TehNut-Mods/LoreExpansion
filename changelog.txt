@@ -1,4 +1,16 @@
 ------------------------------------------------------
+Version 1.1.2
+------------------------------------------------------
+
+- The core configuration can now be edited ingame using the Forge ConfigGUI system.
+- Command sender now uses the modid for it's name instead of the modname
+- Themes are now extracted from the mod jar at startup.
+    - Currently there's only the tech and default themes.
+    - More to come, soon-ish.
+- Lore Scraps are now sorted by their category first, then sorting index order.
+- Opening a normal journal after selecting an unlearned Lore in the creative journal will now reset properly
+
+------------------------------------------------------
 Version 1.1.1
 ------------------------------------------------------
 
