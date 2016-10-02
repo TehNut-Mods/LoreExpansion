@@ -3,6 +3,7 @@ package me.dmillerw.loreexpansion.util;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 public class StringHelper {
 
@@ -47,6 +48,6 @@ public class StringHelper {
 
     @SideOnly(Side.CLIENT)
     public static String getLocalizedText(String text, Object... formatting) {
-        return I18n.hasKey(text) ? I18n.format(text, formatting) : text;
+        return I18n.hasKey(text) ? StringEscapeUtils.unescapeJava(I18n.format(text, formatting)) : text;
     }
 }
