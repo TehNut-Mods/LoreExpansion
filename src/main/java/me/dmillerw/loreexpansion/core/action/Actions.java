@@ -6,7 +6,9 @@ import me.dmillerw.loreexpansion.LoreExpansion;
 import me.dmillerw.loreexpansion.core.data.Lore;
 import me.dmillerw.loreexpansion.core.json.SerializerBase;
 import me.dmillerw.loreexpansion.util.CommandSenderLore;
+import me.dmillerw.loreexpansion.util.GeneralUtil;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
@@ -63,8 +65,50 @@ public class Actions {
             return String[].class;
         }
     };
+    public static final ILoreAction<ItemStack[]> REWARD_ITEM = new ILoreAction<ItemStack[]>() {
+        @Override
+        public void act(EntityPlayer player, Lore lore) {
+            ItemStack[] rewards = (ItemStack[]) lore.getLoreAction().getAction();
+            for (ItemStack stack : rewards)
+                GeneralUtil.giveStackToPlayer(player, stack);
+        }
+
+        @Nonnull
+        @Override
+        public SerializerBase<ItemStack[]> getSerializer() {
+            return new SerializerBase<ItemStack[]>() {
+                @Override
+                public ItemStack[] deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    JsonArray rewards = json.getAsJsonObject().getAsJsonArray("rewards");
+                    ItemStack[] ret = new ItemStack[rewards.size()];
+                    for (int i = 0; i < rewards.size(); i++)
+                        ret[i] = context.deserialize(rewards.get(i).getAsJsonObject(), ItemStack.class);
+                    return ret;
+                }
+
+                @Override
+                public JsonElement serialize(ItemStack[] src, Type typeOfSrc, JsonSerializationContext context) {
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.add("rewards", context.serialize(src));
+                    return jsonObject;
+                }
+
+                @Override
+                public Type getType() {
+                    return ItemStack[].class;
+                }
+            };
+        }
+
+        @Nonnull
+        @Override
+        public Type getType() {
+            return ItemStack[].class;
+        }
+    };
 
     static {
         LORE_ACTIONS.put(new ResourceLocation(LoreExpansion.ID, "command"), COMMAND);
+        LORE_ACTIONS.put(new ResourceLocation(LoreExpansion.ID, "reward_item"), REWARD_ITEM);
     }
 }

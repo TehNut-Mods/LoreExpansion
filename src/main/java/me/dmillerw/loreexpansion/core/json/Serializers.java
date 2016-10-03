@@ -194,18 +194,19 @@ public class Serializers {
         @Override
         public ItemStack deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             ResourceLocation registryName = context.deserialize(json.getAsJsonObject().get("id"), ResourceLocation.class);
-            int amount = 0;
+            int amount = 1;
             if (json.getAsJsonObject().has("amount"))
                 amount = json.getAsJsonObject().get("amount").getAsInt();
-            int meta = 1;
+            int meta = 0;
             if (json.getAsJsonObject().has("meta"))
                 meta = json.getAsJsonObject().get("meta").getAsInt();
             ItemStack stack = new ItemStack(ForgeRegistries.ITEMS.getValue(registryName), amount, meta);
             try {
                 if (json.getAsJsonObject().has("nbt"))
-                    stack.setTagCompound(JsonToNBT.getTagFromJson(json.getAsJsonObject().get("nbt").toString()));
+                    stack.setTagCompound(JsonToNBT.getTagFromJson(json.getAsJsonObject().get("nbt").getAsString()));
             } catch (Exception e) {
                 LoreExpansion.LOGGER.error("Error parsing NBT JSON for a stack containing {}", registryName);
+                LoreExpansion.LOGGER.error(e.getLocalizedMessage());
             }
             return stack;
         }
