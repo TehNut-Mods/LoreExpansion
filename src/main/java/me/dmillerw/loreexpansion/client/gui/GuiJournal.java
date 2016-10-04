@@ -88,7 +88,6 @@ public class GuiJournal extends GuiScreen {
     private static final int MAX_PER_PAGE = 36;
 
     public static int maxPage = 0;
-    public static int loreScrollIndex = 0;
     public static int textScrollIndex = 0;
 
     public static List<LoreKey> playerLore = Lists.newArrayList();
@@ -504,7 +503,7 @@ public class GuiJournal extends GuiScreen {
         int top = (height - TOTAL_SIZE.getRight()) / 2;
 
         if (inBounds(left, top, LEFT_SIZE.getLeft(), LEFT_SIZE.getRight(), x, y)) {
-//			scrollLore(-wheel);
+			scrollLore(-wheel);
         } else if (inBounds(left + LEFT_SIZE.getLeft(), top, RIGHT_SIZE.getLeft(), RIGHT_SIZE.getRight(), x, y)) {
             scrollText(-wheel);
         }
@@ -529,19 +528,11 @@ public class GuiJournal extends GuiScreen {
     }
 
     public void scrollLore(int theta) {
-        if (theta < 0) {
-            loreScrollIndex--;
-            if (loreScrollIndex < 0) {
-                loreScrollIndex = 0;
-            }
-        }
+        if (theta < 0)
+            changeCategoryPage(categoryPage - 1);
 
-        if (theta > 0) {
-            loreScrollIndex++;
-            if (loreScrollIndex > Math.max(0, Math.ceil(maxPage / 5))) {
-                loreScrollIndex = (int) Math.max(0, Math.ceil(maxPage / 5));
-            }
-        }
+        if (theta > 0)
+            changeCategoryPage(categoryPage + 1);
     }
 
     public void scrollText(int theta) {
