@@ -1,4 +1,16 @@
 ------------------------------------------------------
+Version 1.1.3
+------------------------------------------------------
+
+- Fix items not displaying in creative tab
+- Compressed logo image down by a couple hundred KB
+- Localized Lore text now supports \\n
+- Lore with the same ID but a different category now display properly in their own categories
+- Journal now defaults to the first registered category instead of "global"
+- Added an action to reward the player with items
+- Categories are now paginated to support more than 35 entries
+
+------------------------------------------------------
 Version 1.1.2
 ------------------------------------------------------
 
