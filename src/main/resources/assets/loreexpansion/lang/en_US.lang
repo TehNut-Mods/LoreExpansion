@@ -13,8 +13,10 @@ chat.loreexpansion.lore.given.fail=Requested lore does not exist
 chat.loreexpansion.lore.cleared=Cleared lore data for %s
 
 # GUI
-gui.loreexpansion.previous=Previous Category
-gui.loreexpansion.next=Next Category
+gui.loreexpansion.previous.page=Previous Page
+gui.loreexpansion.next.page=Next Page
+gui.loreexpansion.previous.category=Previous Category
+gui.loreexpansion.next.category=Next Category
 
 # TOOLTIP
 tooltip.loreexpansion.title=Title: %s

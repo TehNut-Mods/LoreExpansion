@@ -79,12 +79,13 @@ public class GuiJournal extends GuiScreen {
     private static final int INDENTATION = 3;
     private static final int TITLE_Y = 24;
     private static final int BODY_X = 20;
-    private static final int BODY_y = 35;
+    private static final int BODY_Y = 35;
     private static final int LORE_BOX_GAP = 23;
     private static final int LORE_ROW_COUNT = 17;
     private static final int ARROW_SCROLL_X = 78;
     private static final int ARROW_SCROLL_UP_Y = 37;
     private static final int ARROW_SCROLL_DOWN_Y = 203;
+    private static final int MAX_PER_PAGE = 36;
 
     public static int maxPage = 0;
     public static int loreScrollIndex = 0;
@@ -97,6 +98,9 @@ public class GuiJournal extends GuiScreen {
 
     private static int categoryIndex;
     private static String currentCategory;
+    private static List<List<Lore>> loresForPage = new ArrayList<List<Lore>>();
+    private static int categoryPage;
+    private static int maxCategoryPage;
 
     private static Lore currentLore;
     private List<String> currentLoreText = Lists.newArrayList();
@@ -120,6 +124,8 @@ public class GuiJournal extends GuiScreen {
                 changeCategory(LoreLoader.getCategories().size() == 0 ? Lore.GLOBAL : LoreLoader.getCategories().get(0));
         }
 
+        updatePageInfo(currentCategory);
+
         if (!encyclopediaMode && !playerLore.contains(selectedLore))
             selectedLore = null;
     }
@@ -141,7 +147,7 @@ public class GuiJournal extends GuiScreen {
             }
         }
 
-        List<Lore> all = LoreLoader.getLoreForCategory(currentCategory);
+        List<Lore> all = loresForPage.get(categoryPage);
 
         // BACKGROUND
         GlStateManager.color(1F, 1F, 1F, 1F);
@@ -154,11 +160,11 @@ public class GuiJournal extends GuiScreen {
             if (lore != null && !lore.isNull() && !lore.isHidden()) {
                 mc.getTextureManager().bindTexture(JOURNAL_RIGHT);
 
-                int page = Math.min(index, 35);
+                int page = Math.min(index, MAX_PER_PAGE);
 
                 index++;
 
-                if (page > 0 && page < 35) {
+                if (page > 0 && page < MAX_PER_PAGE) {
                     int drawX = (((page - 1) % 5) * LORE_BOX_GAP);
                     int drawY = 0;
                     if ((page - 1) > 4) {
@@ -210,7 +216,7 @@ public class GuiJournal extends GuiScreen {
             }
         }
 
-        // ARROWS - DIMENSION
+        // ARROWS - CATEGORY
         if (inBounds(left + TAB_BACK.getLeft(), top + TAB_BACK.getRight(), TAB_SIZE.getLeft(), TAB_SIZE.getRight(), x, y)) {
             ARROW_DIMENSION_BACK_MOUSEOVER.draw(left + ARROW_DIMENSION_BACK_POS.getLeft(), top + ARROW_DIMENSION_BACK_POS.getRight(), (int) zLevel);
         } else {
@@ -223,18 +229,24 @@ public class GuiJournal extends GuiScreen {
             ARROW_DIMENSION_FORWARD.draw(left + ARROW_DIMENSION_FORWARD_POS.getLeft(), top + ARROW_DIMENSION_FORWARD_POS.getRight(), (int) zLevel);
         }
 
-        // ARROWS - PAGE
-//		if (inBounds(left + ARROW_PAGE_BACK_POS.getLeft(), top + ARROW_PAGE_BACK_POS.getRight(), ARROW_PAGE_SIZE.getLeft(), ARROW_PAGE_SIZE.getRight(), x, y)) {
-//			ARROW_PAGE_BACK_MOUSEOVER.draw(left + ARROW_PAGE_BACK_POS.getLeft(), top + ARROW_PAGE_BACK_POS.getRight(), (int)zLevel);
-//		} else {
-//			ARROW_PAGE_BACK.draw(left + ARROW_PAGE_BACK_POS.getLeft(), top + ARROW_PAGE_BACK_POS.getRight(), (int)zLevel);
-//		}
+        // ARROWS - CATEGORY PAGE
+        if (loresForPage.size() > 1) {
+            if (categoryPage > 0) {
+                if (inBounds(left + ARROW_PAGE_BACK_POS.getLeft(), top + ARROW_PAGE_BACK_POS.getRight(), ARROW_PAGE_SIZE.getLeft(), ARROW_PAGE_SIZE.getRight(), x, y)) {
+                    ARROW_PAGE_BACK_MOUSEOVER.draw(left + ARROW_PAGE_BACK_POS.getLeft(), top + ARROW_PAGE_BACK_POS.getRight(), (int) zLevel);
+                } else {
+                    ARROW_PAGE_BACK.draw(left + ARROW_PAGE_BACK_POS.getLeft(), top + ARROW_PAGE_BACK_POS.getRight(), (int) zLevel);
+                }
+            }
 
-//		if (inBounds(left + ARROW_PAGE_FORWARD_POS.getLeft(), top + ARROW_PAGE_FORWARD_POS.getRight(), ARROW_PAGE_SIZE.getLeft(), ARROW_PAGE_SIZE.getRight(), x, y)) {
-//			ARROW_PAGE_FORWARD_MOUSEOVER.draw(left + ARROW_PAGE_FORWARD_POS.getLeft(), top + ARROW_PAGE_FORWARD_POS.getRight(), (int)zLevel);
-//		} else {
-//			ARROW_PAGE_FORWARD.draw(left + ARROW_PAGE_FORWARD_POS.getLeft(), top + ARROW_PAGE_FORWARD_POS.getRight(), (int)zLevel);
-//		}
+            if (categoryPage < maxCategoryPage - 1) {
+                if (inBounds(left + ARROW_PAGE_FORWARD_POS.getLeft(), top + ARROW_PAGE_FORWARD_POS.getRight(), ARROW_PAGE_SIZE.getLeft(), ARROW_PAGE_SIZE.getRight(), x, y)) {
+                    ARROW_PAGE_FORWARD_MOUSEOVER.draw(left + ARROW_PAGE_FORWARD_POS.getLeft(), top + ARROW_PAGE_FORWARD_POS.getRight(), (int) zLevel);
+                } else {
+                    ARROW_PAGE_FORWARD.draw(left + ARROW_PAGE_FORWARD_POS.getLeft(), top + ARROW_PAGE_FORWARD_POS.getRight(), (int) zLevel);
+                }
+            }
+        }
 
         // TEXT - LEFT
         String pretty = prettyCatCache.get(currentCategory);
@@ -251,9 +263,13 @@ public class GuiJournal extends GuiScreen {
             drawCenteredString(StringHelper.getLocalizedText(current.getContent().getTitle()), left + LEFT_SIZE.getLeft() + (RIGHT_SIZE.getLeft() / 2), top + TITLE_Y, 0x000000);
             for (int i = textScrollIndex; i < Math.min(textScrollIndex + LORE_ROW_COUNT, currentLoreText.size()); i++) {
                 String lore = new TextComponentString(currentLoreText.get(i)).getFormattedText();
-                drawString(lore, left + LEFT_SIZE.getLeft() + BODY_X, (top + BODY_y + ClientProxy.fontRendererSmall.FONT_HEIGHT) + ClientProxy.fontRendererSmall.FONT_HEIGHT * (i - textScrollIndex), TEXT_SCALE, 0x000000, true);
+                drawString(lore, left + LEFT_SIZE.getLeft() + BODY_X, (top + BODY_Y + ClientProxy.fontRendererSmall.FONT_HEIGHT) + ClientProxy.fontRendererSmall.FONT_HEIGHT * (i - textScrollIndex), TEXT_SCALE, 0x000000, true);
             }
         }
+
+        // TEXT - CATEGORY PAGE
+        if (maxCategoryPage > 1)
+            drawCenteredString((categoryPage + 1) + "/" + maxCategoryPage, (left + (LEFT_SIZE.getLeft() - 8) / 2) + 8, top + ARROW_PAGE_BACK_POS.getRight() + 2, 0x000000);
 
         // TOOLTIPS - They affect lighting, so happen at the end
         index = 1;
@@ -266,11 +282,11 @@ public class GuiJournal extends GuiScreen {
 
                 mc.getTextureManager().bindTexture(JOURNAL_RIGHT);
 
-                int page = Math.min(index, 35);
+                int page = Math.min(index, MAX_PER_PAGE);
 
                 index++;
 
-                if (page > 0 && page < 35) {
+                if (page > 0 && page < MAX_PER_PAGE) {
                     int drawX = (((page - 1) % 5) * LORE_BOX_GAP);
                     int drawY = 0;
                     if ((page - 1) > 4)
@@ -283,12 +299,23 @@ public class GuiJournal extends GuiScreen {
             }
         }
 
-        // ARROWS - DIMENSION
+        if (loresForPage.size() > 1) {
+            // ARROWS - CATEGORY PAGE
+            if (categoryPage > 0)
+                if (inBounds(left + ARROW_PAGE_BACK_POS.getLeft(), top + ARROW_PAGE_BACK_POS.getRight(), ARROW_PAGE_SIZE.getLeft(), ARROW_PAGE_SIZE.getRight(), x, y))
+                    drawHoveringText(Collections.singletonList(I18n.format("gui.loreexpansion.previous.page")), x, y, mc.fontRendererObj);
+
+            if (categoryPage < maxCategoryPage - 1)
+                if (inBounds(left + ARROW_PAGE_FORWARD_POS.getLeft(), top + ARROW_PAGE_FORWARD_POS.getRight(), ARROW_PAGE_SIZE.getLeft(), ARROW_PAGE_SIZE.getRight(), x, y))
+                    drawHoveringText(Collections.singletonList(I18n.format("gui.loreexpansion.next.page")), x, y, mc.fontRendererObj);
+        }
+
+        // ARROWS - CATEGORY
         if (inBounds(left + TAB_BACK.getLeft(), top + TAB_BACK.getRight(), TAB_SIZE.getLeft(), TAB_SIZE.getRight(), x, y))
-            drawHoveringText(Collections.singletonList(I18n.format("gui.loreexpansion.previous")), x, y, mc.fontRendererObj);
+            drawHoveringText(Collections.singletonList(I18n.format("gui.loreexpansion.previous.category")), x, y, mc.fontRendererObj);
 
         if (inBounds(left + TAB_FORWARD.getLeft(), top + TAB_FORWARD.getRight(), TAB_SIZE.getLeft(), TAB_SIZE.getRight(), x, y))
-            drawHoveringText(Collections.singletonList(I18n.format("gui.loreexpansion.next")), x, y, mc.fontRendererObj);
+            drawHoveringText(Collections.singletonList(I18n.format("gui.loreexpansion.next.category")), x, y, mc.fontRendererObj);
     }
 
     @Override
@@ -307,7 +334,7 @@ public class GuiJournal extends GuiScreen {
                 selectedLore = null;
         }
 
-        List<Lore> all = LoreLoader.getLoreForCategory(currentCategory);
+        List<Lore> all = loresForPage.get(categoryPage);
 
         int index = 1;
         for (Lore lore : all) {
@@ -317,11 +344,11 @@ public class GuiJournal extends GuiScreen {
                     continue;
                 }
 
-                int page = Math.min(index, 35);
+                int page = Math.min(index, MAX_PER_PAGE);
 
                 index++;
 
-                if (page > 0 && page < 35) {
+                if (page > 0 && page < MAX_PER_PAGE) {
                     int drawX = (((page - 1) % 5) * LORE_BOX_GAP);
                     int drawY = 0;
                     if ((page - 1) > 4) {
@@ -367,7 +394,24 @@ public class GuiJournal extends GuiScreen {
             }
         }
 
-        // ARROWS - DIMENSION
+        // ARROWS - CATEGORY PAGE
+        if (loresForPage.size() > 1) {
+            if (categoryPage > 0) {
+                if (inBounds(left + ARROW_PAGE_BACK_POS.getLeft(), top + ARROW_PAGE_BACK_POS.getRight(), ARROW_PAGE_SIZE.getLeft(), ARROW_PAGE_SIZE.getRight(), x, y)) {
+                    changeCategoryPage(categoryPage - 1);
+                    mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                }
+            }
+
+            if (categoryPage < maxCategoryPage - 1) {
+                if (inBounds(left + ARROW_PAGE_FORWARD_POS.getLeft(), top + ARROW_PAGE_FORWARD_POS.getRight(), ARROW_PAGE_SIZE.getLeft(), ARROW_PAGE_SIZE.getRight(), x, y)) {
+                    changeCategoryPage(categoryPage + 1);
+                    mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                }
+            }
+        }
+
+        // ARROWS - CATEGORY
         if (inBounds(left + TAB_BACK.getLeft(), top + TAB_BACK.getRight(), TAB_SIZE.getLeft(), TAB_SIZE.getRight(), x, y)) {
             changeCategory(categoryIndex - 1);
             mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
@@ -397,6 +441,9 @@ public class GuiJournal extends GuiScreen {
         String cat = LoreLoader.getCategories().get(categoryIndex);
         if (currentCategory == null || !currentCategory.equals(cat)) {
             currentCategory = cat;
+            categoryPage = 0;
+            loresForPage = Lists.partition(LoreLoader.getLoreForCategory(cat), 35);
+            maxCategoryPage = loresForPage.size();
             reset();
         }
     }
@@ -406,6 +453,19 @@ public class GuiJournal extends GuiScreen {
         categoryIndex = LoreLoader.getCategories().indexOf(currentCategory);
 
         reset();
+    }
+
+    public void changeCategoryPage(int index) {
+        if (index >= maxCategoryPage || index < 0)
+            return;
+
+        categoryPage = index;
+    }
+
+    public void updatePageInfo(String category) {
+        categoryPage = 0;
+        loresForPage = Lists.partition(LoreLoader.getLoreForCategory(category), 35);
+        maxCategoryPage = loresForPage.size();
     }
 
     public void changeLore(LoreKey key) {

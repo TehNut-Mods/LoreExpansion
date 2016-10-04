@@ -3,7 +3,6 @@ package me.dmillerw.loreexpansion.core;
 import com.google.common.collect.*;
 import com.google.gson.Gson;
 import me.dmillerw.loreexpansion.LoreExpansion;
-import me.dmillerw.loreexpansion.core.data.Content;
 import me.dmillerw.loreexpansion.core.data.Lore;
 import me.dmillerw.loreexpansion.core.data.LoreKey;
 import me.dmillerw.loreexpansion.core.json.Serializers;
