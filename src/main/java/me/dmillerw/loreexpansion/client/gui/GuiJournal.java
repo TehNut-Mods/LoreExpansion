@@ -112,6 +112,9 @@ public class GuiJournal extends GuiScreen {
 
     @Override
     public void initGui() {
+        if (!LoreLoader.getCategories().contains(currentCategory))
+            changeCategory(LoreLoader.getCategories().size() == 0 ? Lore.GLOBAL : LoreLoader.getCategories().get(0));
+
         if (selectedLore != null) {
             LoreKey copy = selectedLore.copy();
             if (!currentCategory.equalsIgnoreCase(selectedLore.getCategory()))
