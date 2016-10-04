@@ -41,7 +41,7 @@ public class LoreLoader {
             sortedLore.clear();
         }
 
-        Set<String> names = Sets.newHashSet();
+        Set<LoreKey> keys = Sets.newHashSet();
         File[] jsonFiles = loreDir.listFiles((FileFilter) FileFilterUtils.suffixFileFilter(".json"));
         if (jsonFiles == null)
             return;
@@ -49,10 +49,11 @@ public class LoreLoader {
         try {
             for (File file : jsonFiles) {
                 Lore lore = GSON.fromJson(new InputStreamReader(new FileInputStream(file), "UTF-8"), Lore.class);
-                if (names.contains(lore.getKey().getId())) {
+                if (keys.contains(lore.getKey())) {
                     LoreExpansion.LOGGER.error("Duplicate Lore id: {}", lore.getKey().getId());
                 } else {
                     LOADED_LORE.add(lore);
+                    keys.add(lore.getKey());
                 }
             }
         } catch (Exception e) {
