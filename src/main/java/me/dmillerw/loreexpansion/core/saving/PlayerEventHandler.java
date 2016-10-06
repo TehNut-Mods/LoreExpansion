@@ -1,6 +1,5 @@
 package me.dmillerw.loreexpansion.core.saving;
 
-import com.google.common.collect.Sets;
 import me.dmillerw.loreexpansion.LoreConfiguration;
 import me.dmillerw.loreexpansion.LoreExpansion;
 import me.dmillerw.loreexpansion.core.LoreLoader;
@@ -11,10 +10,6 @@ import me.dmillerw.loreexpansion.network.MessageSyncLoreRegistry;
 import me.dmillerw.loreexpansion.util.GeneralUtil;
 import me.dmillerw.loreexpansion.util.LoreUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiMainMenu;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiScreenServerList;
-import net.minecraft.client.gui.GuiWorldSelection;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -26,8 +21,6 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.Set;
 
 public class PlayerEventHandler {
 
@@ -93,13 +86,7 @@ public class PlayerEventHandler {
         if (MessageSyncLoreRegistry.LORE_BACKUP == null)
             return;
 
-        Set<Class<? extends GuiScreen>> menuScreens = Sets.newHashSet(
-                GuiMainMenu.class,
-                GuiScreenServerList.class,
-                GuiWorldSelection.class
-        );
-
-        if (Minecraft.getMinecraft().theWorld != null || !menuScreens.contains(event.getGui().getClass()))
+        if (Minecraft.getMinecraft().theWorld != null)
             return;
 
         LoreLoader.registerLore(MessageSyncLoreRegistry.LORE_BACKUP, false);
