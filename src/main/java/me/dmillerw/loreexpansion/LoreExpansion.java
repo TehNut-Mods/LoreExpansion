@@ -6,6 +6,7 @@ import me.dmillerw.loreexpansion.item.ItemScrap;
 import me.dmillerw.loreexpansion.network.MessageOverlayLore;
 import me.dmillerw.loreexpansion.network.MessagePlayLore;
 import me.dmillerw.loreexpansion.network.MessageSyncLore;
+import me.dmillerw.loreexpansion.network.MessageSyncLoreRegistry;
 import me.dmillerw.loreexpansion.proxy.CommonProxy;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -60,6 +61,7 @@ public class LoreExpansion {
         NETWORK_WRAPPER.registerMessage(MessageSyncLore.Handler.class, MessageSyncLore.class, 0, Side.CLIENT);
         NETWORK_WRAPPER.registerMessage(MessageOverlayLore.Handler.class, MessageOverlayLore.class, 1, Side.CLIENT);
         NETWORK_WRAPPER.registerMessage(MessagePlayLore.Handler.class, MessagePlayLore.class, 2, Side.CLIENT);
+        NETWORK_WRAPPER.registerMessage(MessageSyncLoreRegistry.Handler.class, MessageSyncLoreRegistry.class, 3, Side.CLIENT);
 
         PROXY.preInit();
     }

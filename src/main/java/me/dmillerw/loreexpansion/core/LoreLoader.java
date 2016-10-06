@@ -10,10 +10,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 
 import java.io.*;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class LoreLoader {
 
@@ -34,31 +31,38 @@ public class LoreLoader {
             }
         }
 
-        if (!initialRun) {
-            LOADED_LORE.clear();
-            categories.clear();
-            lore.clear();
-            sortedLore.clear();
-        }
-
         Set<LoreKey> keys = Sets.newHashSet();
         File[] jsonFiles = loreDir.listFiles((FileFilter) FileFilterUtils.suffixFileFilter(".json"));
         if (jsonFiles == null)
             return;
 
+        Set<Lore> loaded = Sets.newHashSet();
         try {
             for (File file : jsonFiles) {
                 Lore lore = GSON.fromJson(new InputStreamReader(new FileInputStream(file), "UTF-8"), Lore.class);
                 if (keys.contains(lore.getKey())) {
                     LoreExpansion.LOGGER.error("Duplicate Lore id: {}", lore.getKey().getId());
                 } else {
-                    LOADED_LORE.add(lore);
+                    loaded.add(lore);
                     keys.add(lore.getKey());
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        registerLore(loaded, initialRun);
+    }
+
+    // Sets the loaded lore to the new list
+    public static void registerLore(Collection<Lore> lores, boolean initialRun) {
+        if (!initialRun) {
+            LOADED_LORE.clear();
+            categories.clear();
+            lore.clear();
+            sortedLore.clear();
+        }
+        LOADED_LORE.addAll(lores);
 
         for (Lore loadedLore : LOADED_LORE) {
             lore.put(loadedLore.getKey(), loadedLore);

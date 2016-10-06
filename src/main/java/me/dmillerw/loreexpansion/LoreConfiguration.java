@@ -13,7 +13,9 @@ public class LoreConfiguration {
     public static Configuration config;
 
     public static String theme;
+
     public static boolean spawnWithJournal;
+    public static boolean syncLoresFromServer;
 
     public static void init(File file) {
         config = new Configuration(file);
@@ -29,7 +31,9 @@ public class LoreConfiguration {
                 "\n[default: default]");
         themeProp.setRequiresMcRestart(true);
         theme = themeProp.getString();
+
         spawnWithJournal = config.getBoolean("spawnWithJournal", Configuration.CATEGORY_GENERAL, true, "Whether the player should initially spawn with the Journal or not.");
+        syncLoresFromServer = config.getBoolean("syncLoresFromServer", Configuration.CATEGORY_GENERAL, false, "Syncs the Lore list when the client connects to the server.\nThis setting only has an effect on the server side.");
 
         config.save();
     }
