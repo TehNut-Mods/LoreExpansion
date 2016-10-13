@@ -1,4 +1,19 @@
 ------------------------------------------------------
+Version 1.1.4
+------------------------------------------------------
+
+- Lore can now be synced from the server to the client
+    - Sync happens when the client connects and when `/lore reload` is run
+    - Requires being enabled on the server-side
+    - Does not send audio files. That would be way too much network traffic
+    - Client lore resets to the local Lore when they disconnect from the server
+- Fixed duplicate lore detection
+- Pages in categories can now be scrolled through
+- Fixed crash when a non-existent category was opened
+- Fixed occasional crash when obtaining up Lore (#2)
+- Added missing requirement check when Lore is picked up or detected in the inventory
+
+------------------------------------------------------
 Version 1.1.3
 ------------------------------------------------------
 
