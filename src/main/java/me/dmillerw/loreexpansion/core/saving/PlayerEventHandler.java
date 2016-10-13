@@ -50,10 +50,8 @@ public class PlayerEventHandler {
         for (int i = 0; i < inventoryPlayer.getSizeInventory(); i++) {
             if (inventoryPlayer.getStackInSlot(i) != null && inventoryPlayer.getStackInSlot(i).getItem() == LoreExpansion.LORE_PAGE) {
                 Lore lore = LoreUtil.readLore(inventoryPlayer.getStackInSlot(i));
-                if (!lore.isNull() && lore.shouldAutoAdd() && !LoreUtil.getData(event.player.getEntityWorld()).getDataForPlayer(event.player).contains(lore.getKey())) {
-                    LoreUtil.provideLore(event.player, lore);
+                if (lore.shouldAutoAdd() && LoreUtil.provideLore(event.player, lore))
                     inventoryPlayer.setInventorySlotContents(i, null);
-                }
             }
         }
     }
@@ -66,8 +64,7 @@ public class PlayerEventHandler {
 
         if (stack.getItem() == LoreExpansion.LORE_PAGE && stack.hasTagCompound()) {
             Lore lore = LoreUtil.readLore(stack);
-            if (!lore.isNull() && lore.shouldAutoAdd() && !LoreUtil.getData(event.getEntityPlayer().getEntityWorld()).getDataForPlayer(event.getEntityPlayer()).contains(lore.getKey())) {
-                LoreUtil.provideLore(event.getEntityPlayer(), lore);
+            if (lore.shouldAutoAdd() && LoreUtil.provideLore(event.getEntityPlayer(), lore)) {
                 event.getItem().setDead();
                 event.setCanceled(true);
             }

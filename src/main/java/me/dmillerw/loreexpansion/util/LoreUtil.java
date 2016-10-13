@@ -23,9 +23,9 @@ import java.util.Set;
 
 public class LoreUtil {
 
-    public static void provideLore(EntityPlayer player, Lore lore) {
+    public static boolean provideLore(EntityPlayer player, Lore lore) {
         if (lore == null || lore.isNull())
-            return;
+            return false;
 
         if (player instanceof EntityPlayerMP) {
             LoreSaveData loreSaveData = getData(player.getEntityWorld());
@@ -35,9 +35,12 @@ public class LoreUtil {
                 if (!loreSaveData.getDataForPlayer(player).contains(requirement))
                     hasRequirement = false;
 
+            if (!hasRequirement)
+                return false;
+
             LoreObtainedEvent event = new LoreObtainedEvent((EntityPlayerMP) player, lore);
 
-            if (hasRequirement && loreSaveData.addData(player, lore.getKey()) && !MinecraftForge.EVENT_BUS.post(event)) {
+            if (loreSaveData.addData(player, lore.getKey()) && !MinecraftForge.EVENT_BUS.post(event)) {
                 if (lore.shouldNotify())
                     LoreExpansion.NETWORK_WRAPPER.sendTo(new MessageOverlayLore("chat.loreexpansion.lore.added", lore.getContent().getTitle()), (EntityPlayerMP) player);
                 LoreExpansion.NETWORK_WRAPPER.sendTo(new MessageSyncLore((EntityPlayerMP) player), (EntityPlayerMP) player);
@@ -46,8 +49,12 @@ public class LoreUtil {
 
                 if (lore.getLoreAction() != null)
                     Actions.LORE_ACTIONS.get(lore.getLoreAction().getActionId()).act(player, lore);
+
+                return true;
             }
         }
+
+        return false;
     }
 
     public static void provideLore(EntityPlayer player, LoreKey loreKey) {
