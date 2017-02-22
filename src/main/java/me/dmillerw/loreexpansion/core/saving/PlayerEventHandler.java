@@ -14,7 +14,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -33,10 +32,9 @@ public class PlayerEventHandler {
             LoreUtil.checkDefaults(player);
         }
 
-        NBTTagCompound persisted = getModPersistedTag(player, LoreExpansion.ID);
-        if (LoreConfiguration.spawnWithJournal && !persisted.hasKey("loreexpansion-spawn")) {
+        if (LoreConfiguration.spawnWithJournal && !player.getEntityData().hasKey("loreexpansion-spawn")) {
             GeneralUtil.giveStackToPlayer(player, new ItemStack(LoreExpansion.LORE_JOURNAL));
-            persisted.setBoolean("spawn", true);
+            player.getEntityData().setBoolean("loreexpansion-spawn", true);
         }
     }
 
@@ -51,10 +49,10 @@ public class PlayerEventHandler {
 
         for (int i = 0; i < inventoryPlayer.getSizeInventory(); i++) {
             ItemStack stack = inventoryPlayer.getStackInSlot(i);
-            if (stack != null && stack.getItem() == LoreExpansion.LORE_PAGE) {
+            if (!stack.isEmpty() && stack.getItem() == LoreExpansion.LORE_PAGE) {
                 Lore lore = LoreUtil.readLore(stack);
                 if (lore.shouldAutoAdd() && LoreUtil.provideLore(event.player, lore))
-                    inventoryPlayer.setInventorySlotContents(i, null);
+                    inventoryPlayer.setInventorySlotContents(i, ItemStack.EMPTY);
             }
         }
     }
@@ -91,23 +89,5 @@ public class PlayerEventHandler {
 
         LoreLoader.registerLore(MessageSyncLoreRegistry.LORE_BACKUP, false);
         MessageSyncLoreRegistry.LORE_BACKUP = null;
-    }
-
-    public NBTTagCompound getModPersistedTag(EntityPlayer player, String modid) {
-        NBTTagCompound tag = player.getEntityData();
-
-        NBTTagCompound persistTag;
-        if (tag.hasKey(EntityPlayer.PERSISTED_NBT_TAG))
-            persistTag = tag.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
-        else
-            tag.setTag(EntityPlayer.PERSISTED_NBT_TAG, persistTag = new NBTTagCompound());
-
-        NBTTagCompound modTag;
-        if (persistTag.hasKey(modid))
-            modTag = persistTag.getCompoundTag(modid);
-        else
-            persistTag.setTag(modid, modTag = new NBTTagCompound());
-
-        return modTag;
     }
 }

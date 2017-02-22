@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -30,7 +31,8 @@ public class ItemScrap extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
         if (world.isRemote || !stack.hasTagCompound())
             return ActionResult.newResult(EnumActionResult.FAIL, stack);
 
@@ -40,13 +42,13 @@ public class ItemScrap extends Item {
 
         LoreUtil.provideLore(player, lore);
         if (!player.capabilities.isCreativeMode)
-            stack.stackSize--;
-        return super.onItemRightClick(stack, world, player, hand);
+            stack.shrink(1);
+        return super.onItemRightClick(world, player, hand);
     }
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> subItems) {
+    public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
         for (String category : LoreLoader.getCategories())
             for (Lore lore : LoreLoader.getLoreForCategory(category))
                 if (!lore.isHidden())

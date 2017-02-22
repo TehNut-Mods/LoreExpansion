@@ -296,7 +296,7 @@ public class GuiJournal extends GuiScreen {
 
                     // TOOLTIPS
                     if (inBounds(left + BOX_START.getLeft() + drawX, top + BOX_START.getRight() + drawY, 17, 17, x, y))
-                        drawHoveringText(Collections.singletonList(StringHelper.getLocalizedText(lore.getContent().getTitle())), x, y, mc.fontRendererObj);
+                        drawHoveringText(Collections.singletonList(StringHelper.getLocalizedText(lore.getContent().getTitle())), x, y, mc.fontRenderer);
                 }
             }
         }
@@ -305,19 +305,19 @@ public class GuiJournal extends GuiScreen {
             // ARROWS - CATEGORY PAGE
             if (categoryPage > 0)
                 if (inBounds(left + ARROW_PAGE_BACK_POS.getLeft(), top + ARROW_PAGE_BACK_POS.getRight(), ARROW_PAGE_SIZE.getLeft(), ARROW_PAGE_SIZE.getRight(), x, y))
-                    drawHoveringText(Collections.singletonList(I18n.format("gui.loreexpansion.previous.page")), x, y, mc.fontRendererObj);
+                    drawHoveringText(Collections.singletonList(I18n.format("gui.loreexpansion.previous.page")), x, y, mc.fontRenderer);
 
             if (categoryPage < maxCategoryPage - 1)
                 if (inBounds(left + ARROW_PAGE_FORWARD_POS.getLeft(), top + ARROW_PAGE_FORWARD_POS.getRight(), ARROW_PAGE_SIZE.getLeft(), ARROW_PAGE_SIZE.getRight(), x, y))
-                    drawHoveringText(Collections.singletonList(I18n.format("gui.loreexpansion.next.page")), x, y, mc.fontRendererObj);
+                    drawHoveringText(Collections.singletonList(I18n.format("gui.loreexpansion.next.page")), x, y, mc.fontRenderer);
         }
 
         // ARROWS - CATEGORY
         if (inBounds(left + TAB_BACK.getLeft(), top + TAB_BACK.getRight(), TAB_SIZE.getLeft(), TAB_SIZE.getRight(), x, y))
-            drawHoveringText(Collections.singletonList(I18n.format("gui.loreexpansion.previous.category")), x, y, mc.fontRendererObj);
+            drawHoveringText(Collections.singletonList(I18n.format("gui.loreexpansion.previous.category")), x, y, mc.fontRenderer);
 
         if (inBounds(left + TAB_FORWARD.getLeft(), top + TAB_FORWARD.getRight(), TAB_SIZE.getLeft(), TAB_SIZE.getRight(), x, y))
-            drawHoveringText(Collections.singletonList(I18n.format("gui.loreexpansion.next.category")), x, y, mc.fontRendererObj);
+            drawHoveringText(Collections.singletonList(I18n.format("gui.loreexpansion.next.category")), x, y, mc.fontRenderer);
     }
 
     @Override
@@ -564,7 +564,7 @@ public class GuiJournal extends GuiScreen {
     }
 
     public void drawCenteredString(String str, int x, int y, int color) {
-        drawString(str, x - mc.fontRendererObj.getStringWidth(str) / 2, y, color);
+        drawString(str, x - mc.fontRenderer.getStringWidth(str) / 2, y, color);
     }
 
     public void drawString(String str, int x, int y, int color) {
@@ -577,7 +577,7 @@ public class GuiJournal extends GuiScreen {
         if (custom) {
             ClientProxy.fontRendererSmall.drawString(str, (int) ((x) / mult), (int) ((y) / mult), color);
         } else {
-            mc.fontRendererObj.drawString(str, (int) ((x) / mult), (int) ((y) / mult), color);
+            mc.fontRenderer.drawString(str, (int) ((x) / mult), (int) ((y) / mult), color);
         }
         GlStateManager.popMatrix();
     }

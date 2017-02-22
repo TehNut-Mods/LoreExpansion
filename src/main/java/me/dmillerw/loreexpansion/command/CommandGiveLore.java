@@ -11,14 +11,12 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.translation.I18n;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -62,7 +60,7 @@ public class CommandGiveLore extends CommandBase {
             LoreUtil.provideLore(player, loreKey);
         }
 
-        sender.sendMessage(new TextComponentTranslation("chat.loreexpansion.lore.given", loreKey.toString(), args[0]));
+        player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted("chat.loreexpansion.lore.given", loreKey.toString(), args[0])));
     }
 
     @Override

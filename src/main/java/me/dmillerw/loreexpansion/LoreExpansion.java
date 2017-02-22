@@ -3,13 +3,12 @@ package me.dmillerw.loreexpansion;
 import me.dmillerw.loreexpansion.command.CommandLoreExpansion;
 import me.dmillerw.loreexpansion.item.ItemJournal;
 import me.dmillerw.loreexpansion.item.ItemScrap;
-import me.dmillerw.loreexpansion.network.MessageOverlayLore;
 import me.dmillerw.loreexpansion.network.MessagePlayLore;
 import me.dmillerw.loreexpansion.network.MessageSyncLore;
 import me.dmillerw.loreexpansion.network.MessageSyncLoreRegistry;
 import me.dmillerw.loreexpansion.proxy.CommonProxy;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -23,7 +22,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
-@Mod(modid = LoreExpansion.ID, name = LoreExpansion.NAME, version = LoreExpansion.VERSION, dependencies = "required-after:Forge@[12.18.1.2092,);")
+@Mod(modid = LoreExpansion.ID, name = LoreExpansion.NAME, version = LoreExpansion.VERSION)
 public class LoreExpansion {
 
     public static final String ID = "loreexpansion";
@@ -33,8 +32,8 @@ public class LoreExpansion {
     public static final SimpleNetworkWrapper NETWORK_WRAPPER = new SimpleNetworkWrapper(ID);
     public static final CreativeTabs TAB_LORE = new CreativeTabs("loreexpansion") {
         @Override
-        public Item getTabIconItem() {
-            return LORE_JOURNAL;
+        public ItemStack getTabIconItem() {
+            return new ItemStack(LORE_JOURNAL);
         }
     };
     public static final ItemScrap LORE_PAGE = new ItemScrap();
@@ -59,9 +58,8 @@ public class LoreExpansion {
         LoreConfiguration.init(new File(configDir, ID + ".cfg"));
 
         NETWORK_WRAPPER.registerMessage(MessageSyncLore.Handler.class, MessageSyncLore.class, 0, Side.CLIENT);
-        NETWORK_WRAPPER.registerMessage(MessageOverlayLore.Handler.class, MessageOverlayLore.class, 1, Side.CLIENT);
-        NETWORK_WRAPPER.registerMessage(MessagePlayLore.Handler.class, MessagePlayLore.class, 2, Side.CLIENT);
-        NETWORK_WRAPPER.registerMessage(MessageSyncLoreRegistry.Handler.class, MessageSyncLoreRegistry.class, 3, Side.CLIENT);
+        NETWORK_WRAPPER.registerMessage(MessagePlayLore.Handler.class, MessagePlayLore.class, 1, Side.CLIENT);
+        NETWORK_WRAPPER.registerMessage(MessageSyncLoreRegistry.Handler.class, MessageSyncLoreRegistry.class, 2, Side.CLIENT);
 
         PROXY.preInit();
     }

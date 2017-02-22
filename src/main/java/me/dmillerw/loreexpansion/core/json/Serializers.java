@@ -215,7 +215,7 @@ public class Serializers {
         public JsonElement serialize(ItemStack src, Type typeOfSrc, JsonSerializationContext context) {
             JsonObject jsonObject = new JsonObject();
             jsonObject.add("id", context.serialize(src.getItem().getRegistryName()));
-            jsonObject.addProperty("amount", src.stackSize);
+            jsonObject.addProperty("amount", src.getCount());
             jsonObject.addProperty("meta", src.getItemDamage());
             if (src.hasTagCompound())
                 jsonObject.addProperty("nbt", src.getTagCompound().toString());

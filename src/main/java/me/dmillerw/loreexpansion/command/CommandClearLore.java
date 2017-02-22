@@ -11,7 +11,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -45,7 +46,7 @@ public class CommandClearLore extends CommandBase {
         LoreSaveData loreSaveData = LoreUtil.getData(world);
         loreSaveData.clearPlayer(player);
         LoreExpansion.NETWORK_WRAPPER.sendTo(new MessageSyncLore((EntityPlayerMP) player), (EntityPlayerMP) player);
-        sender.sendMessage(new TextComponentTranslation("chat.loreexpansion.lore.cleared", player.getName()));
+        player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted("chat.loreexpansion.lore.cleared", player.getName())));
     }
 
     @Override

@@ -27,7 +27,7 @@ public class CommandReloadLore extends CommandBase {
         LoreLoader.init(LoreExpansion.loreDir, false);
         for (EntityPlayer player : server.getPlayerList().getPlayers())
             LoreUtil.checkDefaults(player);
-        sender.sendMessage(new TextComponentTranslation("chat.loreexpansion.lore.reloaded"));
+        getCommandSenderAsPlayer(sender).sendMessage(new TextComponentTranslation("chat.loreexpansion.lore.reloaded"));
     }
 
     @Override
