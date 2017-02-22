@@ -28,19 +28,19 @@ import java.util.List;
 public class CommandGiveLore extends CommandBase {
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "give";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
+    public String getUsage(ICommandSender sender) {
         return "/lore give <player> <lore_category> <lore_id> [useItem]";
     }
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         if (args.length < 3)
-            throw new WrongUsageException(getCommandUsage(sender));
+            throw new WrongUsageException(getUsage(sender));
 
         if (args[0].equalsIgnoreCase("~"))
             args[0] = sender.getName();
@@ -62,7 +62,7 @@ public class CommandGiveLore extends CommandBase {
             LoreUtil.provideLore(player, loreKey);
         }
 
-        sender.addChatMessage(new TextComponentTranslation("chat.loreexpansion.lore.given", loreKey.toString(), args[0]));
+        sender.sendMessage(new TextComponentTranslation("chat.loreexpansion.lore.given", loreKey.toString(), args[0]));
     }
 
     @Override
@@ -71,10 +71,10 @@ public class CommandGiveLore extends CommandBase {
     }
 
     @Override
-    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
         switch (args.length) {
             case 1:
-                return getListOfStringsMatchingLastWord(args, server.getAllUsernames());
+                return getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
             case 2:
                 return getListOfStringsMatchingLastWord(args, LoreLoader.getCategories());
             case 3:

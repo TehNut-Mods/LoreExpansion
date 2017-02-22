@@ -49,7 +49,7 @@ public class MessageOverlayLore implements IMessage {
         @Override
         public IMessage onMessage(MessageOverlayLore message, MessageContext ctx) {
             String toDraw = StringHelper.getLocalizedText(message.getTextBody(), StringHelper.getLocalizedText(message.getLoreName()));
-            Minecraft.getMinecraft().ingameGUI.setRecordPlaying(toDraw, false);
+            Minecraft.getMinecraft().ingameGUI.setOverlayMessage(toDraw, false);
             return null;
         }
     }

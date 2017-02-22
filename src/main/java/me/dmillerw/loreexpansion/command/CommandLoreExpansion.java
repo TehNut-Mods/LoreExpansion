@@ -18,12 +18,12 @@ public class CommandLoreExpansion extends CommandTreeBase {
     }
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "lore";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
+    public String getUsage(ICommandSender sender) {
         return "/lore [clear|reload]";
     }
 }

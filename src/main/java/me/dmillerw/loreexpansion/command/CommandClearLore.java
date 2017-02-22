@@ -20,12 +20,12 @@ import java.util.List;
 public class CommandClearLore extends CommandBase {
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "clear";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
+    public String getUsage(ICommandSender sender) {
         return "/lore clear [player]";
     }
 
@@ -45,7 +45,7 @@ public class CommandClearLore extends CommandBase {
         LoreSaveData loreSaveData = LoreUtil.getData(world);
         loreSaveData.clearPlayer(player);
         LoreExpansion.NETWORK_WRAPPER.sendTo(new MessageSyncLore((EntityPlayerMP) player), (EntityPlayerMP) player);
-        sender.addChatMessage(new TextComponentTranslation("chat.loreexpansion.lore.cleared", player.getName()));
+        sender.sendMessage(new TextComponentTranslation("chat.loreexpansion.lore.cleared", player.getName()));
     }
 
     @Override
@@ -54,7 +54,7 @@ public class CommandClearLore extends CommandBase {
     }
 
     @Override
-    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
-        return getListOfStringsMatchingLastWord(args, server.getAllUsernames());
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
+        return getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
     }
 }

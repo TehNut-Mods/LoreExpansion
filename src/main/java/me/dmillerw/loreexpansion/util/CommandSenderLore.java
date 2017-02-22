@@ -33,12 +33,12 @@ public class CommandSenderLore implements ICommandSender {
     }
 
     @Override
-    public void addChatMessage(ITextComponent component) {
+    public void sendMessage(ITextComponent component) {
         // No-op
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(int permLevel, String commandName) {
+    public boolean canUseCommand(int permLevel, String commandName) {
         return true;
     }
 

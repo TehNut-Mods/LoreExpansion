@@ -19,7 +19,7 @@ public class GeneralUtil {
     public static void giveStackToPlayer(EntityPlayer player, ItemStack stack) {
         boolean didGive = player.inventory.addItemStackToInventory(stack);
         if (didGive) {
-            player.worldObj.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((player.getRNG().nextFloat() - player.getRNG().nextFloat()) * 0.7F + 1.0F) * 2.0F);
+            player.getEntityWorld().playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((player.getRNG().nextFloat() - player.getRNG().nextFloat()) * 0.7F + 1.0F) * 2.0F);
             player.inventoryContainer.detectAndSendChanges();
         }
 

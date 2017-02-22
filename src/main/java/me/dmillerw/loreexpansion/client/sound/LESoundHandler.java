@@ -125,7 +125,7 @@ public class LESoundHandler {
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
-        if (Minecraft.getMinecraft().theWorld == null && !nowPlaying.isEmpty()) {
+        if (Minecraft.getMinecraft().world == null && !nowPlaying.isEmpty()) {
             stop();
             return;
         }

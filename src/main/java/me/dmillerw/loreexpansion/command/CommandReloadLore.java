@@ -13,21 +13,21 @@ import net.minecraft.util.text.TextComponentTranslation;
 public class CommandReloadLore extends CommandBase {
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "reload";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
+    public String getUsage(ICommandSender sender) {
         return "/lore reload";
     }
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         LoreLoader.init(LoreExpansion.loreDir, false);
-        for (EntityPlayer player : server.getPlayerList().getPlayerList())
+        for (EntityPlayer player : server.getPlayerList().getPlayers())
             LoreUtil.checkDefaults(player);
-        sender.addChatMessage(new TextComponentTranslation("chat.loreexpansion.lore.reloaded"));
+        sender.sendMessage(new TextComponentTranslation("chat.loreexpansion.lore.reloaded"));
     }
 
     @Override

@@ -13,12 +13,12 @@ import java.util.Map;
 public class CommandDebug extends CommandBase {
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "debug";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
+    public String getUsage(ICommandSender sender) {
         return "/lore debug";
     }
 
