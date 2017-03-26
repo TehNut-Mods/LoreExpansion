@@ -36,7 +36,7 @@ public class PlayerEventHandler {
         NBTTagCompound persisted = getModPersistedTag(player, LoreExpansion.ID);
         if (LoreConfiguration.spawnWithJournal && !persisted.hasKey("loreexpansion-spawn")) {
             GeneralUtil.giveStackToPlayer(player, new ItemStack(LoreExpansion.LORE_JOURNAL));
-            persisted.setBoolean("spawn", true);
+            persisted.setBoolean("loreexpansion-spawn", true);
         }
     }
 
