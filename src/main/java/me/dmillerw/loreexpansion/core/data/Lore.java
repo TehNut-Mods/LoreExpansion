@@ -1,9 +1,9 @@
 package me.dmillerw.loreexpansion.core.data;
 
-import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 import me.dmillerw.loreexpansion.core.action.ActionData;
 import me.dmillerw.loreexpansion.core.trigger.TriggerData;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.annotation.Nullable;
 import java.util.Set;
@@ -107,9 +107,9 @@ public final class Lore implements Comparable<Lore> {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
-                .add("key", getKey())
-                .add("content", getContent())
+        return new ToStringBuilder(this)
+                .append("key", key)
+                .append("content", content)
                 .toString();
     }
 

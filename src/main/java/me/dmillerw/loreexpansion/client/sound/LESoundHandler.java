@@ -5,6 +5,8 @@ import me.dmillerw.loreexpansion.LoreExpansion;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
+import net.minecraft.util.SoundCategory;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
@@ -17,23 +19,17 @@ import java.net.URL;
 import java.util.Set;
 
 @SideOnly(Side.CLIENT)
+@Mod.EventBusSubscriber(Side.CLIENT)
 public class LESoundHandler {
 
     public static final LESoundHandler INSTANCE = new LESoundHandler();
 
     private static final String[] SOUND_MANAGER_MAPPING = new String[]{"sndManager", "field_147694_f"};
     private static final String[] SOUND_SYSTEM_MAPPING = new String[]{"sndSystem", "field_148620_e"};
-
     private static boolean gamePause = false;
-
     private Set<String> isLoaded = Sets.newHashSet();
-
-    private SoundManager soundManager;
-
     private SoundSystem soundSystem;
-
     private String nowPlaying = "";
-
     private boolean paused = false;
     private boolean loaded = false;
 
@@ -41,8 +37,8 @@ public class LESoundHandler {
         try {
             if (!LoreExpansion.audioDir.exists())
                 LoreExpansion.audioDir.mkdirs();
-            soundManager = (SoundManager) ReflectionHelper.findField(SoundHandler.class, SOUND_MANAGER_MAPPING).get(Minecraft.getMinecraft().getSoundHandler());
-            soundSystem = (SoundSystem) ReflectionHelper.findField(SoundManager.class, SOUND_SYSTEM_MAPPING).get(soundManager);
+            SoundManager soundManager = ReflectionHelper.getPrivateValue(SoundHandler.class, Minecraft.getMinecraft().getSoundHandler(), SOUND_MANAGER_MAPPING);
+            soundSystem = ReflectionHelper.getPrivateValue(SoundManager.class, soundManager, SOUND_SYSTEM_MAPPING);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -72,6 +68,7 @@ public class LESoundHandler {
             if (!isLoaded.contains(name)) {
                 getSoundSystem().newStreamingSource(true, name, url, file.getName(), false, 0F, 0F, 0F, 1, 0F);
                 getSoundSystem().activate(name);
+                isLoaded.add(name);
             }
 
             soundSystem.play(name);
@@ -88,8 +85,6 @@ public class LESoundHandler {
         }
 
         getSoundSystem().stop(nowPlaying);
-//		getSoundSystem().removeSource(nowPlaying);
-//		isLoaded.remove(nowPlaying);
         nowPlaying = "";
         gamePause = false;
         paused = false;
@@ -124,22 +119,24 @@ public class LESoundHandler {
     }
 
     @SubscribeEvent
-    public void onClientTick(TickEvent.ClientTickEvent event) {
-        if (Minecraft.getMinecraft().world == null && !nowPlaying.isEmpty()) {
-            stop();
+    public static void onClientTick(TickEvent.ClientTickEvent event) {
+
+        if (Minecraft.getMinecraft().world == null && !INSTANCE.nowPlaying.isEmpty()) {
+            INSTANCE.stop();
             return;
         }
 
+        INSTANCE.getSoundSystem().setVolume(INSTANCE.nowPlaying, Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.VOICE));
         boolean currentState = false;
-        if (Minecraft.getMinecraft().isGamePaused()) {
+        if (false && Minecraft.getMinecraft().isGamePaused()) {
             currentState = true;
         }
 
         if (currentState && !gamePause) {
-            pause();
+            INSTANCE.pause();
             gamePause = true;
         } else if (!currentState && gamePause) {
-            resume();
+            INSTANCE.resume();
             gamePause = false;
         }
     }

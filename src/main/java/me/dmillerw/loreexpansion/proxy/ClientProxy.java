@@ -12,17 +12,14 @@ import me.dmillerw.loreexpansion.core.data.LoreKey;
 import me.dmillerw.loreexpansion.core.json.Serializers;
 import me.dmillerw.loreexpansion.util.GeneralUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.FolderResourcePack;
 import net.minecraft.client.resources.IResourcePack;
-import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.compress.compressors.FileNameUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
@@ -41,14 +38,10 @@ public class ClientProxy extends CommonProxy {
     public void preInit() {
         super.preInit();
 
-        setModel(LoreExpansion.LORE_JOURNAL, 0, LoreExpansion.LORE_JOURNAL.getRegistryName());
-        setModel(LoreExpansion.LORE_JOURNAL, 1, new ResourceLocation(LoreExpansion.ID, LoreExpansion.LORE_JOURNAL.getRegistryName().getResourcePath() + "_creative"));
-        setModel(LoreExpansion.LORE_PAGE, 0, LoreExpansion.LORE_PAGE.getRegistryName());
-
         MinecraftForge.EVENT_BUS.register(LESoundHandler.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(new KeyHandler());
+        ClientRegistry.registerKeyBinding(KeyHandler.KEY_OPEN_JOURNAL);
 
-        if (!LoreConfiguration.theme.equalsIgnoreCase("default")) {
+        if (!LoreConfiguration.client.theme.equalsIgnoreCase("default")) {
 
             if (!LoreExpansion.themeDir.exists())
                 LoreExpansion.themeDir.mkdirs();
@@ -69,7 +62,7 @@ public class ClientProxy extends CommonProxy {
                 e.printStackTrace();
             }
 
-            File themeFolder = new File(LoreExpansion.themeDir, LoreConfiguration.theme);
+            File themeFolder = new File(LoreExpansion.themeDir, LoreConfiguration.client.theme);
             if (themeFolder.exists()) {
                 FolderResourcePack resourcePack = new FolderResourcePack(themeFolder);
                 Field _defaultResourcePacks = ReflectionHelper.findField(Minecraft.class, "defaultResourcePacks", "field_110449_ao");
@@ -82,7 +75,7 @@ public class ClientProxy extends CommonProxy {
                     e.printStackTrace();
                 }
             } else {
-                LoreExpansion.LOGGER.error("Error loading theme pack {}. Directory {} does not exist. Falling back to default theme.", LoreConfiguration.theme, themeFolder);
+                LoreExpansion.LOGGER.error("Error loading theme pack {}. Directory {} does not exist. Falling back to default theme.", LoreConfiguration.client.theme, themeFolder);
             }
         }
     }
@@ -97,10 +90,6 @@ public class ClientProxy extends CommonProxy {
         super.postInit();
 
         fontRendererSmall = new SmallFontRenderer(Minecraft.getMinecraft().gameSettings, new ResourceLocation("textures/font/ascii.png"), Minecraft.getMinecraft().renderEngine, false);
-    }
-
-    private void setModel(Item item, int meta, ResourceLocation location) {
-        ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(location, "inventory"));
     }
 
     private String resLocToResPath(ResourceLocation resourceLocation) {

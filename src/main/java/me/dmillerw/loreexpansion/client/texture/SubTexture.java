@@ -1,8 +1,8 @@
 package me.dmillerw.loreexpansion.client.texture;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -29,12 +29,12 @@ public class SubTexture {
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);
         float f = 0.00390625F;
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer vertexbuffer = tessellator.getBuffer();
-        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vertexbuffer.pos((double) xPos, (double) (yPos + textureHeight), zLevel).tex((double) ((float) (textureX) * f), (double) ((float) (textureY + textureHeight) * f)).endVertex();
-        vertexbuffer.pos((double) (xPos + textureWidth), (double) (yPos + textureHeight), zLevel).tex((double) ((float) (textureX + textureWidth) * f), (double) ((float) (textureY + textureHeight) * f)).endVertex();
-        vertexbuffer.pos((double) (xPos + textureWidth), (double) (yPos), zLevel).tex((double) ((float) (textureX + textureWidth) * f), (double) ((float) (textureY) * f)).endVertex();
-        vertexbuffer.pos((double) xPos, (double) (yPos), zLevel).tex((double) ((float) (textureX) * f), (double) ((float) (textureY) * f)).endVertex();
+        BufferBuilder bufferBuilder = tessellator.getBuffer();
+        bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+        bufferBuilder.pos((double) xPos, (double) (yPos + textureHeight), zLevel).tex((double) ((float) (textureX) * f), (double) ((float) (textureY + textureHeight) * f)).endVertex();
+        bufferBuilder.pos((double) (xPos + textureWidth), (double) (yPos + textureHeight), zLevel).tex((double) ((float) (textureX + textureWidth) * f), (double) ((float) (textureY + textureHeight) * f)).endVertex();
+        bufferBuilder.pos((double) (xPos + textureWidth), (double) (yPos), zLevel).tex((double) ((float) (textureX + textureWidth) * f), (double) ((float) (textureY) * f)).endVertex();
+        bufferBuilder.pos((double) xPos, (double) (yPos), zLevel).tex((double) ((float) (textureX) * f), (double) ((float) (textureY) * f)).endVertex();
         tessellator.draw();
     }
 }

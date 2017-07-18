@@ -6,6 +6,7 @@ import me.dmillerw.loreexpansion.core.data.Lore;
 import me.dmillerw.loreexpansion.util.LoreUtil;
 import me.dmillerw.loreexpansion.util.StringHelper;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -48,19 +49,22 @@ public class ItemScrap extends Item {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
+        if (!isInCreativeTab(tab))
+            return;
+
         for (String category : LoreLoader.getCategories())
             for (Lore lore : LoreLoader.getLoreForCategory(category))
                 if (!lore.isHidden())
-                    subItems.add(LoreUtil.attachLore(new ItemStack(item), lore.getKey()));
+                    subItems.add(LoreUtil.attachLore(new ItemStack(this), lore.getKey()));
 
         if (subItems.isEmpty())
-            subItems.add(LoreUtil.attachLore(new ItemStack(item), Lore.NULL_LORE.getKey()));
+            subItems.add(LoreUtil.attachLore(new ItemStack(this), Lore.NULL_LORE.getKey()));
     }
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag advanced) {
         if (!stack.hasTagCompound()) {
             tooltip.add(TextFormatting.RED + I18n.format("tooltip.loreexpansion.torn"));
             return;

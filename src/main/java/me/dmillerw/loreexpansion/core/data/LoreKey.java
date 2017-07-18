@@ -1,7 +1,7 @@
 package me.dmillerw.loreexpansion.core.data;
 
-import com.google.common.base.Objects;
 import net.minecraft.nbt.NBTTagCompound;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public final class LoreKey {
 
@@ -34,9 +34,9 @@ public final class LoreKey {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
-                .add("id", getId())
-                .add("category", getCategory())
+        return new ToStringBuilder(this)
+                .append("id", id)
+                .append("category", category)
                 .toString();
     }
 

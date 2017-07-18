@@ -2,6 +2,7 @@ package me.dmillerw.loreexpansion.item;
 
 import me.dmillerw.loreexpansion.LoreExpansion;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
@@ -28,9 +29,12 @@ public class ItemJournal extends Item {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        subItems.add(new ItemStack(item, 1, 0));
-        subItems.add(new ItemStack(item, 1, 1));
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
+        if (!isInCreativeTab(tab))
+            return;
+
+        subItems.add(new ItemStack(this, 1, 0));
+        subItems.add(new ItemStack(this, 1, 1));
     }
 
     @Override
@@ -50,7 +54,7 @@ public class ItemJournal extends Item {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag advanced) {
         if (stack.getItemDamage() == 1)
             tooltip.add(TextFormatting.GOLD + I18n.format("tooltip.loreexpansion.creatve"));
     }

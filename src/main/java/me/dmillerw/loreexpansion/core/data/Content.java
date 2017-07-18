@@ -1,6 +1,7 @@
 package me.dmillerw.loreexpansion.core.data;
 
-import com.google.common.base.Objects;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public final class Content {
 
@@ -34,11 +35,11 @@ public final class Content {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
-                .add("title", getTitle())
-                .add("body", getBody())
-                .add("audio", getAudio())
-                .add("autoplay", shouldAutoplay())
+        return new ToStringBuilder(this)
+                .append("title", title)
+                .append("body", StringEscapeUtils.escapeJava(body))
+                .append("audio", audio)
+                .append("autoplay", autoplay)
                 .toString();
     }
 

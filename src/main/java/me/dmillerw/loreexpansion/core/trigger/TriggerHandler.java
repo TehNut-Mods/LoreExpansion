@@ -6,25 +6,27 @@ import me.dmillerw.loreexpansion.core.data.LoreKey;
 import me.dmillerw.loreexpansion.util.LoreUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import net.minecraftforge.event.entity.player.AchievementEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.Set;
 
+@Mod.EventBusSubscriber
 public class TriggerHandler {
 
-    @SubscribeEvent
-    public void onAchievement(AchievementEvent event) {
-        EntityPlayer player = event.getEntityPlayer();
-        World world = player.getEntityWorld();
-        if (world.isRemote || player.hasAchievement(event.getAchievement()))
-            return;
-        runTrigger(Triggers.ACHIEVEMENT, player, event.getAchievement());
-    }
+    // TODO - Check back when it's possible to detect when an advancement has been made
+//    @SubscribeEvent
+//    public static void onAchievement(AchievementEvent event) {
+//        EntityPlayer player = event.getEntityPlayer();
+//        World world = player.getEntityWorld();
+//        if (world.isRemote || player.hasAchievement(event.getAchievement()))
+//            return;
+//        runTrigger(Triggers.ADVANCEMENT, player, event.getAchievement());
+//    }
 
     @SubscribeEvent
-    public void playerTick(TickEvent.PlayerTickEvent event) {
+    public static void playerTick(TickEvent.PlayerTickEvent event) {
         EntityPlayer player = event.player;
         World world = player.getEntityWorld();
         if (world.isRemote)
@@ -33,7 +35,7 @@ public class TriggerHandler {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> void runTrigger(LoreTrigger triggerType, EntityPlayer player, T type) {
+    private static <T> void runTrigger(LoreTrigger triggerType, EntityPlayer player, T type) {
         Set<LoreKey> discovered = LoreUtil.getData(player.getEntityWorld()).getDataForPlayer(player);
         for (Lore lore : LoreLoader.LOADED_LORE) {
             if (discovered.contains(lore.getKey()) || lore.getLoreTrigger() == null)

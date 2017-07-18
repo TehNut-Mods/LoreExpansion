@@ -4,6 +4,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -89,5 +90,23 @@ public class GeneralUtil {
         }
 
         return temp;
+    }
+
+    public static NBTTagCompound getModPersistedTag(EntityPlayer player, String modid) {
+        NBTTagCompound tag = player.getEntityData();
+
+        NBTTagCompound persistTag;
+        if (tag.hasKey(EntityPlayer.PERSISTED_NBT_TAG))
+            persistTag = tag.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+        else
+            tag.setTag(EntityPlayer.PERSISTED_NBT_TAG, persistTag = new NBTTagCompound());
+
+        NBTTagCompound modTag;
+        if (persistTag.hasKey(modid))
+            modTag = persistTag.getCompoundTag(modid);
+        else
+            persistTag.setTag(modid, modTag = new NBTTagCompound());
+
+        return modTag;
     }
 }

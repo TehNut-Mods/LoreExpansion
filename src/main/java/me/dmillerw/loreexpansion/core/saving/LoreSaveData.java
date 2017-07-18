@@ -8,8 +8,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.WorldSavedData;
+import net.minecraft.world.storage.WorldSavedData;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -30,7 +31,7 @@ public class LoreSaveData extends WorldSavedData {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
+    public void readFromNBT(@Nonnull NBTTagCompound tag) {
         NBTTagList entries = tag.getTagList("playerData", 10);
         for (int i = 0; i < entries.tagCount(); i++) {
             NBTTagCompound loreTag = entries.getCompoundTagAt(i);
@@ -44,8 +45,9 @@ public class LoreSaveData extends WorldSavedData {
         }
     }
 
+    @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound tag) {
         NBTTagList entries = new NBTTagList();
         for (Map.Entry<UUID, Set<LoreKey>> entry : playerData.entrySet()) {
             NBTTagCompound loreTag = new NBTTagCompound();

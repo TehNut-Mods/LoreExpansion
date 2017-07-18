@@ -1,8 +1,6 @@
 package me.dmillerw.loreexpansion;
 
 import me.dmillerw.loreexpansion.command.CommandLoreExpansion;
-import me.dmillerw.loreexpansion.item.ItemJournal;
-import me.dmillerw.loreexpansion.item.ItemScrap;
 import me.dmillerw.loreexpansion.network.MessagePlayLore;
 import me.dmillerw.loreexpansion.network.MessageSyncLore;
 import me.dmillerw.loreexpansion.network.MessageSyncLoreRegistry;
@@ -33,11 +31,9 @@ public class LoreExpansion {
     public static final CreativeTabs TAB_LORE = new CreativeTabs("loreexpansion") {
         @Override
         public ItemStack getTabIconItem() {
-            return new ItemStack(LORE_JOURNAL);
+            return new ItemStack(RegistrarLoreExpansion.JOURNAL);
         }
     };
-    public static final ItemScrap LORE_PAGE = new ItemScrap();
-    public static final ItemJournal LORE_JOURNAL = new ItemJournal();
 
     @SidedProxy(clientSide = "me.dmillerw.loreexpansion.proxy.ClientProxy", serverSide = "me.dmillerw.loreexpansion.proxy.CommonProxy")
     public static CommonProxy PROXY;
@@ -55,7 +51,6 @@ public class LoreExpansion {
         loreDir = new File(configDir, "lore");
         audioDir = new File(loreDir, "audio");
         themeDir = new File(configDir, "theme");
-        LoreConfiguration.init(new File(configDir, ID + ".cfg"));
 
         NETWORK_WRAPPER.registerMessage(MessageSyncLore.Handler.class, MessageSyncLore.class, 0, Side.CLIENT);
         NETWORK_WRAPPER.registerMessage(MessagePlayLore.Handler.class, MessagePlayLore.class, 1, Side.CLIENT);

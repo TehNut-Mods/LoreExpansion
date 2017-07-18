@@ -7,25 +7,29 @@ import me.dmillerw.loreexpansion.core.data.Lore;
 import me.dmillerw.loreexpansion.core.json.SerializerBase;
 import me.dmillerw.loreexpansion.core.json.Serializers;
 import me.dmillerw.loreexpansion.util.LoreUtil;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementList;
+import net.minecraft.advancements.AdvancementManager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.stats.Achievement;
-import net.minecraft.stats.AchievementList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
+
+import java.util.Collection;
+import java.util.Map;
 
 public class Triggers {
 
     public static final BiMap<ResourceLocation, LoreTrigger<?>> LORE_TRIGGERS = HashBiMap.create();
 
-    public static final LoreTrigger<Achievement> ACHIEVEMENT = new LoreTrigger<Achievement>() {
+    public static final LoreTrigger<Advancement> ADVANCEMENT = new LoreTrigger<Advancement>() {
         @Override
-        public boolean trigger(World world, EntityPlayer player, Lore lore, Achievement triggerTarget) {
-            if (Serializers.ACHIEVEMENT_MAP.size() != AchievementList.ACHIEVEMENTS.size())
-                buildAchievements();
+        public boolean trigger(World world, EntityPlayer player, Lore lore, Advancement triggerTarget) {
+            updateAdvancements();
 
-            Achievement achievement = (Achievement) lore.getLoreTrigger().getTarget();
-            if (achievement.equals(triggerTarget)) {
+            Advancement advancement = (Advancement) lore.getLoreTrigger().getTarget();
+            if (advancement.equals(triggerTarget)) {
                 LoreUtil.provideLore(player, lore);
                 return true;
             }
@@ -33,20 +37,16 @@ public class Triggers {
         }
 
         @Override
-        public SerializerBase<Achievement> getSerializer() {
-            return Serializers.ACHIEVEMENT;
+        public SerializerBase<Advancement> getSerializer() {
+            return Serializers.ADVANCEMENT;
         }
 
         @Override
-        public Class<Achievement> getType() {
-            return Achievement.class;
+        public Class<Advancement> getType() {
+            return Advancement.class;
         }
 
-        private void buildAchievements() {
-            Serializers.ACHIEVEMENT_MAP.clear();
-            for (Achievement achievement : AchievementList.ACHIEVEMENTS)
-                Serializers.ACHIEVEMENT_MAP.put(achievement.statId, achievement);
-        }
+
     };
     public static final LoreTrigger<BlockPos> BLOCKPOS = new LoreTrigger<BlockPos>() {
         @Override
@@ -71,7 +71,24 @@ public class Triggers {
     };
 
     static {
-        LORE_TRIGGERS.put(new ResourceLocation(LoreExpansion.ID, "achievement"), ACHIEVEMENT);
+        LORE_TRIGGERS.put(new ResourceLocation(LoreExpansion.ID, "achievement"), ADVANCEMENT);
         LORE_TRIGGERS.put(new ResourceLocation(LoreExpansion.ID, "location"), BLOCKPOS);
+    }
+
+    public static void updateAdvancements() {
+        try {
+            AdvancementList advancementList = ReflectionHelper.getPrivateValue(AdvancementManager.class, null, "field_192784_c", "ADVANCEMENT_LIST");
+            Map<ResourceLocation, Advancement> registry = ReflectionHelper.getPrivateValue(AdvancementList.class, advancementList, "field_192092_b", "advancements");
+            if (Serializers.ADVANCEMENT_MAP.size() != registry.size())
+                buildAchievements(registry.values());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void buildAchievements(Collection<Advancement> advancements) {
+        Serializers.ADVANCEMENT_MAP.clear();
+        for (Advancement advancement : advancements)
+            Serializers.ADVANCEMENT_MAP.put(advancement.getId(), advancement);
     }
 }

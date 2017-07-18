@@ -3,7 +3,7 @@ package me.dmillerw.loreexpansion.client.gui;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import me.dmillerw.loreexpansion.LoreExpansion;
+import me.dmillerw.loreexpansion.RegistrarLoreExpansion;
 import me.dmillerw.loreexpansion.client.sound.LESoundHandler;
 import me.dmillerw.loreexpansion.client.texture.SubTexture;
 import me.dmillerw.loreexpansion.core.LoreLoader;
@@ -182,7 +182,7 @@ public class GuiJournal extends GuiScreen {
 
                     // ICONS
                     if (playerLore.contains(lore.getKey()) || encyclopediaMode)
-                        mc.getRenderItem().renderItemIntoGUI(new ItemStack(LoreExpansion.LORE_PAGE), left + BOX_START.getLeft() + drawX + 1, top + BOX_START.getRight() + drawY + 1);
+                        mc.getRenderItem().renderItemIntoGUI(new ItemStack(RegistrarLoreExpansion.SCRAP), left + BOX_START.getLeft() + drawX + 1, top + BOX_START.getRight() + drawY + 1);
                 }
             }
         }
@@ -251,11 +251,7 @@ public class GuiJournal extends GuiScreen {
         }
 
         // TEXT - LEFT
-        String pretty = prettyCatCache.get(currentCategory);
-        if (pretty == null) {
-            pretty = StringHelper.pretty(currentCategory);
-            prettyCatCache.put(currentCategory, pretty);
-        }
+        String pretty = prettyCatCache.computeIfAbsent(currentCategory, StringHelper::pretty);
 
         String leftText = I18n.hasKey(currentCategory) ? I18n.format(currentCategory) : pretty;
         drawCenteredString(leftText, (left + (LEFT_SIZE.getLeft() - 8) / 2) + 8, top + TITLE_Y, 0x000000);

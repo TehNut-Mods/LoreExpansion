@@ -1,7 +1,7 @@
 package me.dmillerw.loreexpansion.command;
 
 import com.google.common.collect.Lists;
-import me.dmillerw.loreexpansion.LoreExpansion;
+import me.dmillerw.loreexpansion.RegistrarLoreExpansion;
 import me.dmillerw.loreexpansion.core.LoreLoader;
 import me.dmillerw.loreexpansion.core.data.Lore;
 import me.dmillerw.loreexpansion.core.data.LoreKey;
@@ -15,8 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.util.text.TextComponentTranslation;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -54,13 +53,13 @@ public class CommandGiveLore extends CommandBase {
             useItem = Boolean.parseBoolean(args[3]);
 
         if (useItem) { // Gives lore scrap item to player
-            ItemStack loreStack = LoreUtil.attachLore(new ItemStack(LoreExpansion.LORE_PAGE), loreKey);
+            ItemStack loreStack = LoreUtil.attachLore(new ItemStack(RegistrarLoreExpansion.SCRAP), loreKey);
             GeneralUtil.giveStackToPlayer(player, loreStack);
         } else { // Gives lore directly to player data
             LoreUtil.provideLore(player, loreKey);
         }
 
-        player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted("chat.loreexpansion.lore.given", loreKey.toString(), args[0])));
+        player.sendMessage(new TextComponentTranslation("chat.loreexpansion.lore.given", loreKey.toString(), args[0]));
     }
 
     @Override

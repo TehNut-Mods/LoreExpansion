@@ -9,9 +9,9 @@ import me.dmillerw.loreexpansion.core.data.Content;
 import me.dmillerw.loreexpansion.core.data.Lore;
 import me.dmillerw.loreexpansion.core.data.LoreKey;
 import me.dmillerw.loreexpansion.core.trigger.TriggerData;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.stats.Achievement;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -44,7 +44,7 @@ public class Serializers {
         return gsonBuilder.create();
     }
 
-    public static final Map<String, Achievement> ACHIEVEMENT_MAP = Maps.newHashMap();
+    public static final Map<ResourceLocation, Advancement> ADVANCEMENT_MAP = Maps.newHashMap();
     public static final SerializerBase<Lore> LORE = new SerializerBase<Lore>() {
         @Override
         public Lore deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
@@ -151,20 +151,20 @@ public class Serializers {
             return ActionData.class;
         }
     };
-    public static final SerializerBase<Achievement> ACHIEVEMENT = new SerializerBase<Achievement>() {
+    public static final SerializerBase<Advancement> ADVANCEMENT = new SerializerBase<Advancement>() {
         @Override
-        public Achievement deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            return ACHIEVEMENT_MAP.get(context.<String>deserialize(json.getAsJsonObject().get("id"), String.class));
+        public Advancement deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            return ADVANCEMENT_MAP.get(context.<String>deserialize(json.getAsJsonObject().get("id"), String.class));
         }
 
         @Override
-        public JsonElement serialize(Achievement src, Type typeOfSrc, JsonSerializationContext context) {
-            return context.serialize(src.statId);
+        public JsonElement serialize(Advancement src, Type typeOfSrc, JsonSerializationContext context) {
+            return context.serialize(src.getId());
         }
 
         @Override
         public Type getType() {
-            return Achievement.class;
+            return Advancement.class;
         }
     };
     public static final SerializerBase<BlockPos> BLOCKPOS = new SerializerBase<BlockPos>() {
@@ -233,7 +233,7 @@ public class Serializers {
             TRIGGER_DATA,
             ACTION_DATA,
             BLOCKPOS,
-            ACHIEVEMENT,
+            ADVANCEMENT,
             ITEMSTACK
     };
 }
