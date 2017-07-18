@@ -1,4 +1,12 @@
 ------------------------------------------------------
+Version 1.1.6
+------------------------------------------------------
+
+- Updated to 1.12
+    - Currently Advancement triggers are not working as there is no way to detect when an advancement has been made at the time of this release
+- Lore Audio now respects the Voice volume slider in Options
+
+------------------------------------------------------
 Version 1.1.5
 ------------------------------------------------------
 
