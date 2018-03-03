@@ -3,6 +3,7 @@ package me.dmillerw.loreexpansion;
 import me.dmillerw.loreexpansion.item.ItemJournal;
 import me.dmillerw.loreexpansion.item.ItemScrap;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -13,14 +14,13 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@Mod.EventBusSubscriber
+@SuppressWarnings("ConstantConditions")
+@Mod.EventBusSubscriber(modid = LoreExpansion.ID)
 @GameRegistry.ObjectHolder(LoreExpansion.ID)
 public class RegistrarLoreExpansion {
 
-    @GameRegistry.ObjectHolder("lore_journal")
-    public static final ItemJournal JOURNAL = new ItemJournal();
-    @GameRegistry.ObjectHolder("lore_scrap")
-    public static final ItemScrap SCRAP = new ItemScrap();
+    public static final Item LORE_JOURNAL = Items.AIR;
+    public static final Item LORE_SCRAP = Items.AIR;
 
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
@@ -31,8 +31,8 @@ public class RegistrarLoreExpansion {
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event) {
-        ModelLoader.setCustomModelResourceLocation(JOURNAL, 0, new ModelResourceLocation(JOURNAL.getRegistryName(), "inventory"));
-        ModelLoader.setCustomModelResourceLocation(JOURNAL, 1, new ModelResourceLocation(JOURNAL.getRegistryName().toString() + "_creative", "inventory"));
-        ModelLoader.setCustomModelResourceLocation(SCRAP, 0, new ModelResourceLocation(SCRAP.getRegistryName(), "inventory"));
+        ModelLoader.setCustomModelResourceLocation(LORE_JOURNAL, 0, new ModelResourceLocation(LORE_JOURNAL.getRegistryName(), "inventory"));
+        ModelLoader.setCustomModelResourceLocation(LORE_JOURNAL, 1, new ModelResourceLocation(LORE_JOURNAL.getRegistryName().toString() + "_creative", "inventory"));
+        ModelLoader.setCustomModelResourceLocation(LORE_SCRAP, 0, new ModelResourceLocation(LORE_SCRAP.getRegistryName(), "inventory"));
     }
 }

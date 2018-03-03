@@ -182,7 +182,7 @@ public class GuiJournal extends GuiScreen {
 
                     // ICONS
                     if (playerLore.contains(lore.getKey()) || encyclopediaMode)
-                        mc.getRenderItem().renderItemIntoGUI(new ItemStack(RegistrarLoreExpansion.SCRAP), left + BOX_START.getLeft() + drawX + 1, top + BOX_START.getRight() + drawY + 1);
+                        mc.getRenderItem().renderItemIntoGUI(new ItemStack(RegistrarLoreExpansion.LORE_SCRAP), left + BOX_START.getLeft() + drawX + 1, top + BOX_START.getRight() + drawY + 1);
                 }
             }
         }

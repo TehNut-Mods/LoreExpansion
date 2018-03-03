@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Config(modid = LoreExpansion.ID, name = LoreExpansion.ID + "/" + LoreExpansion.ID, category = "")
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = LoreExpansion.ID)
 public class LoreConfiguration {
 
     public static Client client = new Client();

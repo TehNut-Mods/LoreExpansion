@@ -6,7 +6,6 @@ import com.google.common.reflect.TypeToken;
 import me.dmillerw.loreexpansion.LoreConfiguration;
 import me.dmillerw.loreexpansion.LoreExpansion;
 import me.dmillerw.loreexpansion.client.KeyHandler;
-import me.dmillerw.loreexpansion.client.sound.LESoundHandler;
 import me.dmillerw.loreexpansion.client.texture.SmallFontRenderer;
 import me.dmillerw.loreexpansion.core.data.LoreKey;
 import me.dmillerw.loreexpansion.core.json.Serializers;
@@ -15,7 +14,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.FolderResourcePack;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,7 +36,6 @@ public class ClientProxy extends CommonProxy {
     public void preInit() {
         super.preInit();
 
-        MinecraftForge.EVENT_BUS.register(LESoundHandler.INSTANCE);
         ClientRegistry.registerKeyBinding(KeyHandler.KEY_OPEN_JOURNAL);
 
         if (!LoreConfiguration.client.theme.equalsIgnoreCase("default")) {

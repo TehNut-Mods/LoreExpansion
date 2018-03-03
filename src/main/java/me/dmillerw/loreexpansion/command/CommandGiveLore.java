@@ -53,7 +53,7 @@ public class CommandGiveLore extends CommandBase {
             useItem = Boolean.parseBoolean(args[3]);
 
         if (useItem) { // Gives lore scrap item to player
-            ItemStack loreStack = LoreUtil.attachLore(new ItemStack(RegistrarLoreExpansion.SCRAP), loreKey);
+            ItemStack loreStack = LoreUtil.attachLore(new ItemStack(RegistrarLoreExpansion.LORE_SCRAP), loreKey);
             GeneralUtil.giveStackToPlayer(player, loreStack);
         } else { // Gives lore directly to player data
             LoreUtil.provideLore(player, loreKey);

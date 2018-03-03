@@ -11,20 +11,13 @@ buildscript {
 
 plugins {
     id "net.minecraftforge.gradle.forge" version "2.0.2"
-    id 'com.matthewprenger.cursegradle' version '1.0.9'
+    id 'com.matthewprenger.cursegradle' version '1.0.10'
 }
 
 apply plugin: 'maven-publish'
 
-def build_number = 'CUSTOM'
-
-if (System.getenv('BUILD_NUMBER') != null)
-    build_number = System.getenv('BUILD_NUMBER')
-
-def username = 'LoreDevspansion'
-
-if (project.hasProperty('dev_username'))
-    username = "${dev_username}"
+def build_number = System.getenv('BUILD_NUMBER') != null ? System.getenv('BUILD_NUMBER') : 'CUSTOM'
+def username = project.hasProperty('dev_username') ? "${dev_username}" : 'LoreDevspansion'
 
 group = package_group
 archivesBaseName = mod_name

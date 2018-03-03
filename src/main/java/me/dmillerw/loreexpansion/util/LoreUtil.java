@@ -43,7 +43,7 @@ public class LoreUtil {
 
             if (loreSaveData.addData(player, lore.getKey()) && !MinecraftForge.EVENT_BUS.post(event)) {
                 if (lore.shouldNotify())
-                    player.sendStatusMessage(new TextComponentString(I18n.translateToLocalFormatted("chat.loreexpansion.lore.added", lore.getContent().getTitle())), true);
+                    player.sendStatusMessage(new TextComponentTranslation("chat.loreexpansion.lore.added", lore.getContent().getTitle()), true);
                 LoreExpansion.NETWORK_WRAPPER.sendTo(new MessageSyncLore((EntityPlayerMP) player), (EntityPlayerMP) player);
                 if (!Strings.isNullOrEmpty(lore.getContent().getAudio()) && lore.getContent().shouldAutoplay())
                     LoreExpansion.NETWORK_WRAPPER.sendTo(new MessagePlayLore(lore.getKey()), (EntityPlayerMP) player);

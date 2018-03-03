@@ -38,7 +38,7 @@ public class PlayerEventHandler {
 
         NBTTagCompound persisted = GeneralUtil.getModPersistedTag(player, LoreExpansion.ID);
         if (LoreConfiguration.general.spawnWithJournal && !persisted.hasKey("loreexpansion-spawn")) {
-            GeneralUtil.giveStackToPlayer(player, new ItemStack(RegistrarLoreExpansion.JOURNAL));
+            GeneralUtil.giveStackToPlayer(player, new ItemStack(RegistrarLoreExpansion.LORE_JOURNAL));
             persisted.setBoolean("loreexpansion-spawn", true);
         }
     }
@@ -54,7 +54,7 @@ public class PlayerEventHandler {
 
         for (int i = 0; i < inventoryPlayer.getSizeInventory(); i++) {
             ItemStack stack = inventoryPlayer.getStackInSlot(i);
-            if (!stack.isEmpty() && stack.getItem() == RegistrarLoreExpansion.SCRAP) {
+            if (!stack.isEmpty() && stack.getItem() == RegistrarLoreExpansion.LORE_SCRAP) {
                 Lore lore = LoreUtil.readLore(stack);
                 if (lore.shouldAutoAdd() && LoreUtil.provideLore(event.player, lore))
                     inventoryPlayer.setInventorySlotContents(i, ItemStack.EMPTY);
@@ -68,7 +68,7 @@ public class PlayerEventHandler {
             return;
         ItemStack stack = event.getItem().getItem();
 
-        if (stack.getItem() == RegistrarLoreExpansion.SCRAP && stack.hasTagCompound()) {
+        if (stack.getItem() == RegistrarLoreExpansion.LORE_SCRAP && stack.hasTagCompound()) {
             Lore lore = LoreUtil.readLore(stack);
             if (lore.shouldAutoAdd() && LoreUtil.provideLore(event.getEntityPlayer(), lore)) {
                 event.getItem().setDead();

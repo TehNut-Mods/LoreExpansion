@@ -5,6 +5,7 @@ import me.dmillerw.loreexpansion.client.sound.LESoundHandler;
 import me.dmillerw.loreexpansion.core.LoreLoader;
 import me.dmillerw.loreexpansion.core.data.Lore;
 import me.dmillerw.loreexpansion.core.data.LoreKey;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -45,8 +46,10 @@ public class MessagePlayLore implements IMessage {
         @SideOnly(Side.CLIENT)
         @Override
         public IMessage onMessage(MessagePlayLore message, MessageContext ctx) {
-            Lore lore = LoreLoader.getLore(message.getLoreKey());
-            LESoundHandler.INSTANCE.play(lore.getContent().getAudio());
+            Minecraft.getMinecraft().addScheduledTask(() -> {
+                Lore lore = LoreLoader.getLore(message.getLoreKey());
+                LESoundHandler.INSTANCE.play(lore.getContent().getAudio());
+            });
             return null;
         }
     }

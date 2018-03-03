@@ -6,6 +6,7 @@ import me.dmillerw.loreexpansion.client.gui.GuiJournal;
 import me.dmillerw.loreexpansion.client.sound.LESoundHandler;
 import me.dmillerw.loreexpansion.core.data.LoreKey;
 import me.dmillerw.loreexpansion.util.LoreUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -59,13 +60,15 @@ public class MessageSyncLore implements IMessage {
         @SideOnly(Side.CLIENT)
         @Override
         public IMessage onMessage(MessageSyncLore message, MessageContext ctx) {
-            GuiJournal.playerLore.clear();
-            GuiJournal.playerLore = message.getPlayerLore();
+            Minecraft.getMinecraft().addScheduledTask(() -> {
+                GuiJournal.playerLore.clear();
+                GuiJournal.playerLore = message.getPlayerLore();
 
-            if (!GuiJournal.playerLore.contains(GuiJournal.selectedLore)) {
-                GuiJournal.selectedLore = null;
-                LESoundHandler.INSTANCE.stop();
-            }
+                if (!GuiJournal.playerLore.contains(GuiJournal.selectedLore)) {
+                    GuiJournal.selectedLore = null;
+                    LESoundHandler.INSTANCE.stop();
+                }
+            });
             return null;
         }
     }

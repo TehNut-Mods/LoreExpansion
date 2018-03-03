@@ -31,7 +31,7 @@ public class LoreExpansion {
     public static final CreativeTabs TAB_LORE = new CreativeTabs("loreexpansion") {
         @Override
         public ItemStack getTabIconItem() {
-            return new ItemStack(RegistrarLoreExpansion.JOURNAL);
+            return new ItemStack(RegistrarLoreExpansion.LORE_JOURNAL);
         }
     };
 
