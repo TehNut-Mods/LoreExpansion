@@ -23,14 +23,6 @@ group = package_group
 archivesBaseName = mod_name
 version = "${mc_version}-${mod_version}-${build_number}"
 
-repositories {
-
-}
-
-dependencies {
-
-}
-
 minecraft {
     version = "${mc_version}-${forge_version}"
     runDir = "run"
@@ -61,16 +53,13 @@ processResources {
     }
 }
 
-if (JavaVersion.current().isJava8Compatible()) {
-    allprojects {
-        tasks.withType(Javadoc) {
-            options.addStringOption('Xdoclint:none', '-quiet')
-        }
+allprojects {
+    tasks.withType(Javadoc) {
+        options.addStringOption('Xdoclint:none', '-quiet')
     }
 }
 
 jar {
-    classifier = ''
     manifest.mainAttributes(
             "Built-By": System.getProperty('user.name'),
             "Created-By": "${System.getProperty('java.vm.version')} + (${System.getProperty('java.vm.vendor')})",
@@ -136,5 +125,8 @@ curseforge {
         releaseType = 'beta'
 
         addArtifact sourceJar
+
+        addGameVersion "1.12.1"
+        addGameVersion "1.12.2"
     }
 }
