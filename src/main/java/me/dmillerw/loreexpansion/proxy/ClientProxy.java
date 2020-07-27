@@ -90,6 +90,6 @@ public class ClientProxy extends CommonProxy {
     }
 
     private String resLocToResPath(ResourceLocation resourceLocation) {
-        return "/assets/" + resourceLocation.getResourceDomain() + "/defaults/theme/" + resourceLocation.getResourcePath();
+        return "/assets/" + resourceLocation.getNamespace() + "/defaults/theme/" + resourceLocation.getPath();
     }
 }

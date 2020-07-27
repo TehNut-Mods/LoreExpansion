@@ -6,9 +6,10 @@ import com.google.common.collect.Maps;
 import me.dmillerw.loreexpansion.RegistrarLoreExpansion;
 import me.dmillerw.loreexpansion.client.sound.LESoundHandler;
 import me.dmillerw.loreexpansion.client.texture.SubTexture;
-import me.dmillerw.loreexpansion.core.LoreLoader;
 import me.dmillerw.loreexpansion.core.data.Lore;
+import me.dmillerw.loreexpansion.core.data.LoreCachedData;
 import me.dmillerw.loreexpansion.core.data.LoreKey;
+import me.dmillerw.loreexpansion.core.loader.LoreManager;
 import me.dmillerw.loreexpansion.proxy.ClientProxy;
 import me.dmillerw.loreexpansion.util.StringHelper;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -91,7 +92,6 @@ public class GuiJournal extends GuiScreen {
     public static int textScrollIndex = 0;
 
     public static List<LoreKey> playerLore = Lists.newArrayList();
-    public static LoreKey selectedLore;
 
     private static Map<String, String> prettyCatCache = Maps.newHashMap();
 
@@ -104,31 +104,44 @@ public class GuiJournal extends GuiScreen {
     private static Lore currentLore;
     private List<String> currentLoreText = Lists.newArrayList();
 
-    private boolean encyclopediaMode;
+    private static final Map<LoreCachedData, CachedHistory> LAST_DISPLAYED = Maps.newHashMap();
 
-    public GuiJournal(boolean encyclopediaMode) {
-        this.encyclopediaMode = encyclopediaMode;
+    private final LoreCachedData cachedData;
+    private final CachedHistory history;
+    private final boolean creative;
+    private LoreKey selectedLore;
+
+    public GuiJournal(String ownerMod, int modIndex, boolean creative) {
+        this.cachedData = LoreManager.getLoreData(ownerMod, modIndex);
+        this.history = LAST_DISPLAYED.get(cachedData);
+        this.creative = creative;
+
+        LAST_DISPLAYED.computeIfAbsent(cachedData, v -> {
+            String lastCategory = v.getCategories().get(0);
+            LoreKey lastLore = v.getCateogry(lastCategory).get(0).getKey();
+            return new CachedHistory(lastCategory, lastLore);
+        });
     }
 
     @Override
     public void initGui() {
-        if (!LoreLoader.getCategories().contains(currentCategory))
-            changeCategory(LoreLoader.getCategories().size() == 0 ? Lore.GLOBAL : LoreLoader.getCategories().get(0));
+        if (!cachedData.getCategories().contains(history.category))
+            changeCategory(cachedData.getCategories().size() == 0 ? Lore.GLOBAL : cachedData.getCategories().get(0));
 
         if (selectedLore != null) {
             LoreKey copy = selectedLore.copy();
-            if (!currentCategory.equalsIgnoreCase(selectedLore.getCategory()))
+            if (!history.category.equalsIgnoreCase(selectedLore.getCategory()))
                 changeCategory(selectedLore.getCategory());
             changeLore(copy);
             ClientProxy.pickedUpPage = null;
         } else {
-            if (currentCategory == null || currentCategory.isEmpty())
-                changeCategory(LoreLoader.getCategories().size() == 0 ? Lore.GLOBAL : LoreLoader.getCategories().get(0));
+            if (Strings.isNullOrEmpty(history.category))
+                changeCategory(cachedData.getCategories().size() == 0 ? Lore.GLOBAL : cachedData.getCategories().get(0));
         }
 
         updatePageInfo(currentCategory);
 
-        if (!encyclopediaMode && !playerLore.contains(selectedLore))
+        if (!creative && !playerLore.contains(selectedLore))
             selectedLore = null;
     }
 
@@ -142,7 +155,7 @@ public class GuiJournal extends GuiScreen {
 
         Lore current = null;
         if (selectedLore != null) {
-            current = LoreLoader.getLore(selectedLore);
+            current = LoreManager.getLore(selectedLore);
 
             if (current == null) {
                 selectedLore = null;
@@ -181,7 +194,7 @@ public class GuiJournal extends GuiScreen {
                     }
 
                     // ICONS
-                    if (playerLore.contains(lore.getKey()) || encyclopediaMode)
+                    if (playerLore.contains(lore.getKey()) || creative)
                         mc.getRenderItem().renderItemIntoGUI(new ItemStack(RegistrarLoreExpansion.LORE_SCRAP), left + BOX_START.getLeft() + drawX + 1, top + BOX_START.getRight() + drawY + 1);
                 }
             }
@@ -273,7 +286,7 @@ public class GuiJournal extends GuiScreen {
         index = 1;
         for (Lore lore : all) {
             if (lore != null && !lore.isNull() && !lore.isHidden()) {
-                if (!playerLore.contains(lore.getKey()) && !encyclopediaMode) {
+                if (!playerLore.contains(lore.getKey()) && !creative) {
                     index++;
                     continue;
                 }
@@ -326,7 +339,7 @@ public class GuiJournal extends GuiScreen {
 
         Lore current = null;
         if (selectedLore != null) {
-            current = LoreLoader.getLore(selectedLore);
+            current = LoreManager.getLore(selectedLore);
 
             if (current == null)
                 selectedLore = null;
@@ -337,7 +350,7 @@ public class GuiJournal extends GuiScreen {
         int index = 1;
         for (Lore lore : all) {
             if (lore != null && !lore.isNull() && !lore.isHidden()) {
-                if (!playerLore.contains(lore.getKey()) && !encyclopediaMode) {
+                if (!playerLore.contains(lore.getKey()) && !creative) {
                     index++;
                     continue;
                 }
@@ -422,7 +435,7 @@ public class GuiJournal extends GuiScreen {
     }
 
     public void reset() {
-        maxPage = LoreLoader.getLoreForCategory(currentCategory).size();
+        maxPage = LoreManager.getLoreForCategory(currentCategory).size();
         selectedLore = null;
         textScrollIndex = 0;
         currentLoreText.clear();
@@ -430,17 +443,17 @@ public class GuiJournal extends GuiScreen {
     }
 
     public void changeCategory(int index) {
-        final int max = LoreLoader.getCategories().size() - 1;
+        final int max = LoreManager.getCategories().size() - 1;
 
         categoryIndex = index;
         if (categoryIndex < 0) categoryIndex = max;
         if (categoryIndex > max) categoryIndex = 0;
 
-        String cat = LoreLoader.getCategories().get(categoryIndex);
+        String cat = LoreManager.getCategories().get(categoryIndex);
         if (currentCategory == null || !currentCategory.equals(cat)) {
             currentCategory = cat;
             categoryPage = 0;
-            loresForPage = Lists.partition(LoreLoader.getLoreForCategory(cat), 35);
+            loresForPage = Lists.partition(LoreManager.getLoreForCategory(cat), 35);
             maxCategoryPage = loresForPage.size();
             reset();
         }
@@ -448,7 +461,7 @@ public class GuiJournal extends GuiScreen {
 
     public void changeCategory(String category) {
         currentCategory = category;
-        categoryIndex = LoreLoader.getCategories().indexOf(currentCategory);
+        categoryIndex = LoreManager.getCategories().indexOf(currentCategory);
 
         reset();
     }
@@ -462,12 +475,12 @@ public class GuiJournal extends GuiScreen {
 
     public void updatePageInfo(String category) {
         categoryPage = 0;
-        loresForPage = Lists.partition(LoreLoader.getLoreForCategory(category), 35);
+        loresForPage = Lists.partition(LoreManager.getLoreForCategory(category), 35);
         maxCategoryPage = loresForPage.size();
     }
 
     public void changeLore(LoreKey key) {
-        currentLore = LoreLoader.getLore(key);
+        currentLore = LoreManager.getLore(key);
         if (currentLore == null)
             return;
 
@@ -576,5 +589,16 @@ public class GuiJournal extends GuiScreen {
             mc.fontRenderer.drawString(str, (int) ((x) / mult), (int) ((y) / mult), color);
         }
         GlStateManager.popMatrix();
+    }
+
+    public static class CachedHistory {
+
+        private String category;
+        private LoreKey lore;
+
+        public CachedHistory(String category, LoreKey lore) {
+            this.category = category;
+            this.lore = lore;
+        }
     }
 }

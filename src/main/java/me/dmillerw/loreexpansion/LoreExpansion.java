@@ -1,6 +1,7 @@
 package me.dmillerw.loreexpansion;
 
 import me.dmillerw.loreexpansion.command.CommandLoreExpansion;
+import me.dmillerw.loreexpansion.core.loader.LoreManager;
 import me.dmillerw.loreexpansion.network.MessagePlayLore;
 import me.dmillerw.loreexpansion.network.MessageSyncLore;
 import me.dmillerw.loreexpansion.network.MessageSyncLoreRegistry;
@@ -30,7 +31,7 @@ public class LoreExpansion {
     public static final SimpleNetworkWrapper NETWORK_WRAPPER = new SimpleNetworkWrapper(ID);
     public static final CreativeTabs TAB_LORE = new CreativeTabs("loreexpansion") {
         @Override
-        public ItemStack getTabIconItem() {
+        public ItemStack createIcon() {
             return new ItemStack(RegistrarLoreExpansion.LORE_JOURNAL);
         }
     };
@@ -57,6 +58,9 @@ public class LoreExpansion {
         NETWORK_WRAPPER.registerMessage(MessageSyncLoreRegistry.Handler.class, MessageSyncLoreRegistry.class, 2, Side.CLIENT);
 
         PROXY.preInit();
+        LoreManager.initLoreDir();
+        LoreManager.gatherLoaders(event.getAsmData());
+        LoreManager.loadLore();
     }
 
     @Mod.EventHandler

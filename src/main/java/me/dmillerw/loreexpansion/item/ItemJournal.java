@@ -21,7 +21,7 @@ import java.util.List;
 public class ItemJournal extends Item {
 
     public ItemJournal() {
-        setUnlocalizedName(LoreExpansion.ID + ".journal");
+        setTranslationKey(LoreExpansion.ID + ".journal");
         setCreativeTab(LoreExpansion.TAB_LORE);
         setMaxStackSize(1);
         setHasSubtypes(true);

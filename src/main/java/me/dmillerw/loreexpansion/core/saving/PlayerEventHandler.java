@@ -1,11 +1,11 @@
 package me.dmillerw.loreexpansion.core.saving;
 
+import com.google.common.collect.Lists;
 import me.dmillerw.loreexpansion.LoreConfiguration;
 import me.dmillerw.loreexpansion.LoreExpansion;
 import me.dmillerw.loreexpansion.RegistrarLoreExpansion;
-import me.dmillerw.loreexpansion.core.LoreLoader;
 import me.dmillerw.loreexpansion.core.data.Lore;
-import me.dmillerw.loreexpansion.core.json.Serializers;
+import me.dmillerw.loreexpansion.core.loader.LoreManager;
 import me.dmillerw.loreexpansion.network.MessageSyncLore;
 import me.dmillerw.loreexpansion.network.MessageSyncLoreRegistry;
 import me.dmillerw.loreexpansion.util.GeneralUtil;
@@ -80,7 +80,7 @@ public class PlayerEventHandler {
     @SubscribeEvent
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         if (LoreConfiguration.general.syncLoresFromServer)
-            LoreExpansion.NETWORK_WRAPPER.sendTo(new MessageSyncLoreRegistry(Serializers.getStdGson().toJson(LoreLoader.LOADED_LORE)), (EntityPlayerMP) event.player);
+            LoreExpansion.NETWORK_WRAPPER.sendTo(new MessageSyncLoreRegistry(Lists.newArrayList(LoreManager.LORES.get(LoreExpansion.ID).get(0).getLore().values())), (EntityPlayerMP) event.player);
     }
 
     @SubscribeEvent
@@ -92,7 +92,7 @@ public class PlayerEventHandler {
         if (Minecraft.getMinecraft().world != null)
             return;
 
-        LoreLoader.registerLore(MessageSyncLoreRegistry.LORE_BACKUP, false);
+        LoreManager.LORES.get(LoreExpansion.ID).set(0, MessageSyncLoreRegistry.LORE_BACKUP);
         MessageSyncLoreRegistry.LORE_BACKUP = null;
     }
 }

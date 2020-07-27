@@ -99,8 +99,8 @@ public class Serializers {
         @Override
         public JsonElement serialize(ResourceLocation src, Type typeOfSrc, JsonSerializationContext context) {
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("domain", src.getResourceDomain());
-            jsonObject.addProperty("path", src.getResourcePath());
+            jsonObject.addProperty("domain", src.getNamespace());
+            jsonObject.addProperty("path", src.getPath());
             return jsonObject;
         }
 

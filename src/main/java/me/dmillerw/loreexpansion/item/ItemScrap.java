@@ -25,7 +25,7 @@ import java.util.List;
 public class ItemScrap extends Item {
 
     public ItemScrap() {
-        setUnlocalizedName(LoreExpansion.ID + ".scrap");
+        setTranslationKey(LoreExpansion.ID + ".scrap");
         setCreativeTab(LoreExpansion.TAB_LORE);
         setMaxStackSize(1);
         setHasSubtypes(true);
